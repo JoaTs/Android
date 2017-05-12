@@ -1,4 +1,4 @@
-package se.dake.taskmanager;
+package se.rejjd.taskmanager;
 
 import org.junit.Test;
 

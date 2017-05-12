@@ -1,4 +1,4 @@
-package se.dake.taskmanager;
+package se.rejjd.taskmanager;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

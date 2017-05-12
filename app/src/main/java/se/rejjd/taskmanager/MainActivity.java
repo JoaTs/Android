@@ -1,4 +1,4 @@
-package se.dake.taskmanager;
+package se.rejjd.taskmanager;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
