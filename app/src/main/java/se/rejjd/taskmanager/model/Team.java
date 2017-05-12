@@ -1,6 +1,6 @@
 package se.rejjd.taskmanager.model;
 
-public class Team {
+public final class Team {
 
     private int id;
     private String teamName;

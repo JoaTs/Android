@@ -1,6 +1,6 @@
 package se.rejjd.taskmanager.model;
 
-public class Issue {
+public final class Issue {
 
     private int id;
     private String description;

@@ -1,6 +1,6 @@
 package se.rejjd.taskmanager.model;
 
-public class WorkItem {
+public final class WorkItem {
 
     private int id;
     private String title;
