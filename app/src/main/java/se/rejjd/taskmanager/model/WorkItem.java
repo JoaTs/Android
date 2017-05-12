@@ -2,17 +2,17 @@ package se.rejjd.taskmanager.model;
 
 public class WorkItem {
 
-    private int id;
+    private String id;
     private String title;
     private String description;
 
-    public WorkItem(int id, String title, String description) {
+    public WorkItem(String id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -24,7 +24,7 @@ public class WorkItem {
         return description;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -53,10 +53,5 @@ public class WorkItem {
 
         return id == workItem.id;
 
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
     }
 }
