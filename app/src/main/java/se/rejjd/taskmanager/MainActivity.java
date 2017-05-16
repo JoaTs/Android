@@ -2,8 +2,11 @@ package se.rejjd.taskmanager;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import se.rejjd.taskmanager.repository.InMemoryRepository;
+import se.rejjd.taskmanager.repository.WorkItemRepository;
 
 import java.util.List;
 
@@ -11,20 +14,25 @@ import se.rejjd.taskmanager.http.GetTask;
 import se.rejjd.taskmanager.http.HttpHelper;
 
 public class MainActivity extends AppCompatActivity {
-private String TAG = "hello";
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    private WorkItemRepository workItemRepository;
+    private RecyclerView recyclerView;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final TextView textView = (TextView) findViewById(R.id.tv);
 
-        new GetTask(new GetTask.OnResultListener() {
-            @Override
-            public void onResult(List<String> string) {
-                textView.setText(string.toString());
-                Log.d(TAG, "onResult: " + string.toString());
-            }
-        }).execute();
+            workItemRepository = new InMemoryRepository();
+
+            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            
+            updateAdapter();
+
+    }
+
+    private void updateAdapter() {
+        recyclerView.setAdapter(new WorkItemAdapter(workItemRepository.getWorkItems()));
     }
 }
+
