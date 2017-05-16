@@ -2,17 +2,17 @@ package se.rejjd.taskmanager.model;
 
 public final class WorkItem {
 
-    private String id;
+    private int id;
     private String title;
     private String description;
 
-    public WorkItem(String id, String title, String description) {
+    public WorkItem(int id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -22,18 +22,6 @@ public final class WorkItem {
 
     public String getDescription() {
         return description;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     @Override
