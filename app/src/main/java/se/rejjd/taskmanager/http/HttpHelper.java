@@ -36,7 +36,7 @@ public class HttpHelper {
 
     private static void writeToOutputStream(InputStream inputStream, OutputStream outputStream) throws IOException {
         int bytesRead = 0;
-        byte[] buffer = new byte[2048];
+        byte[] buffer = new byte[1024];
 
         while((bytesRead = inputStream.read(buffer)) > 0) {
             outputStream.write(buffer, 0, bytesRead);
