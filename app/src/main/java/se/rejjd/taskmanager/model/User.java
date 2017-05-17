@@ -2,14 +2,14 @@ package se.rejjd.taskmanager.model;
 
 public final class User {
 
-    private int id;
+    private long id;
     private String username;
     private String firstaname;
     private String lastname;
     private String userId;
     private boolean activeUser;
 
-    public User(int id, String username, String firstaname, String lastname, String userId, boolean activeUser) {
+    public User(long id, String username, String firstaname, String lastname, String userId, boolean activeUser) {
         this.id = id;
         this.username = username;
         this.firstaname = firstaname;
@@ -18,7 +18,7 @@ public final class User {
         this.activeUser = true;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -75,6 +75,6 @@ public final class User {
 
     @Override
     public int hashCode() {
-        return id;
+        return (int) (id ^ (id >>> 32));
     }
 }

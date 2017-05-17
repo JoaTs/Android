@@ -8,9 +8,9 @@ public interface WorkItemRepository {
 
         List<WorkItem> getWorkItems();
 
-        WorkItem getWorkItem(int id);
+        WorkItem getWorkItem(String id);
 
-        int addWorkItem(WorkItem workItem);
+        Long addWorkItem(WorkItem workItem);
 
         WorkItem updateWorkItem(WorkItem workItem);
     }
