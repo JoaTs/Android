@@ -10,7 +10,7 @@ public interface WorkItemRepository {
 
         WorkItem getWorkItem(String id);
 
-        String addWorkItem(WorkItem workItem);
+        Long addWorkItem(WorkItem workItem);
 
     }
 

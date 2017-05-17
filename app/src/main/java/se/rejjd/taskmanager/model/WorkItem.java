@@ -2,18 +2,18 @@ package se.rejjd.taskmanager.model;
 
 public final class WorkItem {
 
-    private String id;
+    private Long _ID;
     private String title;
     private String description;
 
-    public WorkItem(String id, String title, String description) {
-        this.id = id;
+    public WorkItem(Long _ID, String title, String description) {
+        this._ID = _ID;
         this.title = title;
         this.description = description;
     }
 
-    public String getId() {
-        return id;
+    public Long get_ID() {
+        return _ID;
     }
 
     public String getTitle() {
@@ -24,8 +24,8 @@ public final class WorkItem {
         return description;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void set_ID(Long _ID) {
+        this._ID = _ID;
     }
 
     public void setTitle(String title) {
@@ -37,21 +37,32 @@ public final class WorkItem {
     }
 
     @Override
-    public String toString() {
-        return "WorkItem{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         WorkItem workItem = (WorkItem) o;
 
-        return id == workItem.id;
+        if (_ID != null ? !_ID.equals(workItem._ID) : workItem._ID != null) return false;
+        if (title != null ? !title.equals(workItem.title) : workItem.title != null) return false;
+        return description != null ? description.equals(workItem.description) : workItem.description == null;
 
+    }
+
+    @Override
+    public int hashCode() {
+        int result = _ID != null ? _ID.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "WorkItem{" +
+                "_ID=" + _ID +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

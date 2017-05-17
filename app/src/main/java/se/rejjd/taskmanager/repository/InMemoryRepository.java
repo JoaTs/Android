@@ -9,17 +9,10 @@ import se.rejjd.taskmanager.model.WorkItem;
 
 public class InMemoryRepository implements WorkItemRepository {
 
-    private static final Map<String, WorkItem> workitems = new HashMap<>();
-
-    static {
-        for(int i = 0; i < 10; i++) {
-            WorkItem workItem = new WorkItem("test","test","test");
-            workitems.put(workItem.getId(), workItem);
-        }
-    }
+    private static final Map<Long, WorkItem> workitems = new HashMap<>();
 
     @Override
-    public List<WorkItem> getWorkItems() {
+   public List<WorkItem> getWorkItems() {
         return new ArrayList<>(workitems.values());
     }
 
@@ -29,8 +22,8 @@ public class InMemoryRepository implements WorkItemRepository {
     }
 
     @Override
-    public String addWorkItem(WorkItem workItem) {
-        workitems.put(workItem.getId(), workItem);
-        return workItem.getId();
+    public Long addWorkItem(WorkItem workItem) {
+        workitems.put(workItem.get_ID(), workItem);
+        return workItem.get_ID();
     }
 }
