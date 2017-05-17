@@ -44,7 +44,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
 
 
     @Override
-    public WorkItem getWorkItem(final int id) {
+    public WorkItem getWorkItem(final String id) {
 
         HttpResponse httpResponse = null;
         try {
@@ -62,13 +62,13 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
     }
 
     @Override
-    public int addWorkItem(WorkItem workItem) {
+    public Long addWorkItem(WorkItem workItem) {
         HttpResponse httpResponse = null;
 
         final String body =
 
                 "{" +
-                        "\"id\": " + workItem.getId() + "," +
+                        "\"id\": " + workItem.get_ID() + "," +
                         "\"title\": \"" + workItem.getTitle() + "\"," +
                         "\"description\": \"" + workItem.getDescription() + "\"" +
                         "}";
@@ -93,15 +93,45 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
 
             String returnValue = splitArray[splitArray.length - 1].toString();
 
-            return Integer.valueOf(returnValue);
+            return Long.valueOf(returnValue);
         }
 
-        return 0;
+        return 0L;
     }
 
+    //This method update only the workItems status
     @Override
-    public WorkItem updateWorkItem(WorkItem workItem) {
-        return null;
+    public boolean updateWorkItemStatus(final WorkItem workItem) {
+        HttpResponse httpResponse = null;
+
+        final String body =
+                "{" +
+                "\"id\": \"" + workItem.get_ID() + "\","+
+                "\"createdDate\": \"2017-05-17\","+
+                "\"createdBy\": \"DreamierTeam\","+
+                "\"lastModifiedDate\": \"2017-05-17\","+
+                "\"lastModifiedBy\": \"DreamierTeam\","+
+                "\"title\": \"en title\","+
+                "\"description\": \"Uppdate?\","+
+                "\"status\": \""+ workItem.getStatus() +"\","+
+                "\"user\": null,"+
+                "\"dateOfCompletion\": \"\""+
+                "}";
+
+        try {
+            httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return put(URL + "workitems/" + workItem.get_ID() , body);
+                }
+            }).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return (httpResponse.getStatusCode() == 200)? true : false;
     }
 
     private WorkItem parserWorkItem(String jsonString) {
@@ -109,7 +139,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         try {
             jsonObject = new JSONObject(jsonString);
 
-            int id = jsonObject.getInt("id");
+            long id = jsonObject.getLong("id");
             String title = jsonObject.getString("title");
             String description = jsonObject.getString("description");
             WorkItem workitem = new WorkItem(id, title, description);
@@ -126,7 +156,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
             JSONArray jsonArray = new JSONArray(jsonString);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                int id = jsonObject.getInt("id");
+                long id = jsonObject.getLong("id");
                 String title = jsonObject.getString("title");
                 String description = jsonObject.getString("description");
                 WorkItem workitem = new WorkItem(id, title, description);
@@ -139,7 +169,6 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         }
         return null;
     }
-
 
 }
 

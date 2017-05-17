@@ -76,12 +76,25 @@ public class HttpHelper {
         return new HttpResponse(responseMessage, statusCode, headers, response);
     }
 
-    private static void writeToOutputStream(InputStream inputStream, OutputStream outputStream) throws IOException {
-        int bytesRead = 0;
+//    private static void writeToOutputStream(InputStream inputStream, OutputStream outputStream) throws IOException {
+//        int bytesRead = 0;
+//        byte[] buffer = new byte[1024];
+//
+//        while ((bytesRead = inputStream.read(buffer)) > 0) {
+//            outputStream.write(buffer, 0, bytesRead);
+//        }
+//    }
+
+    private void writeToOutputStream(InputStream is, OutputStream os) throws IOException {
+        int bytesRead;
         byte[] buffer = new byte[1024];
 
-        while ((bytesRead = inputStream.read(buffer)) > 0) {
-            outputStream.write(buffer, 0, bytesRead);
+        try {
+            while((bytesRead = is.read(buffer)) > 0) {
+                os.write(buffer, 0, bytesRead);
+            }
+        } finally {
+            os.close();
         }
     }
 

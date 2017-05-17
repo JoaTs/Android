@@ -28,7 +28,7 @@ public class InMemoryRepository implements WorkItemRepository {
     }
 
     @Override
-    public WorkItem updateWorkItem(WorkItem workItem) {
-        return null;
+    public boolean updateWorkItemStatus(WorkItem workItem) {
+        return false;
     }
 }

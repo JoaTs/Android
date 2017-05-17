@@ -5,6 +5,7 @@ public final class WorkItem {
     private Long _ID;
     private String title;
     private String description;
+    private Status status;
 
     public WorkItem(Long _ID, String title, String description) {
         this._ID = _ID;
@@ -24,6 +25,10 @@ public final class WorkItem {
         return description;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
     public void set_ID(Long _ID) {
         this._ID = _ID;
     }
@@ -34,6 +39,14 @@ public final class WorkItem {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public enum Status {
+        DONE, UNSTARTED, STARTED, ARCHIVED
     }
 
     @Override
@@ -63,6 +76,7 @@ public final class WorkItem {
                 "_ID=" + _ID +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

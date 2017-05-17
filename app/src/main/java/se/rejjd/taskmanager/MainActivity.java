@@ -44,13 +44,17 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this, httpWorkItemRepository.getWorkItems().toString(), Toast.LENGTH_LONG).show();
 
+        WorkItem workitemUpdateStatus = new WorkItem(45L,"d","c");
+        workitemUpdateStatus.setStatus(WorkItem.Status.DONE);
+
+        httpWorkItemRepository.updateWorkItemStatus(workitemUpdateStatus);
 
         updateAdapter();
 
     }
 
     private void updateAdapter() {
-        recyclerView.setAdapter(new WorkItemAdapter(workItemRepository.getWorkItems()));
+//        recyclerView.setAdapter(new WorkItemAdapter(workItemRepository.getWorkItems()));
     }
 }
 
