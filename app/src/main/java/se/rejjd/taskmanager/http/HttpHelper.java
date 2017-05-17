@@ -28,12 +28,12 @@ public class HttpHelper {
     }
 
 
-    public HttpResponse doRequest(String url, String requestTyp, String body) {
+    public HttpResponse doRequest(String url, String requestType, String body) {
         HttpURLConnection connection = null;
         try {
             URL requestUrl = new URL(url);
             connection = (HttpURLConnection) requestUrl.openConnection();
-            connection.setRequestMethod(requestTyp);
+            connection.setRequestMethod(requestType);
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-type", "application/json");
 

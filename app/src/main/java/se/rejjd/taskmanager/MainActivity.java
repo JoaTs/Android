@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        httpWorkItemRepository.getWorkItems();
         Toast.makeText(this, httpWorkItemRepository.getWorkItems().toString(), Toast.LENGTH_LONG).show();
 
 
