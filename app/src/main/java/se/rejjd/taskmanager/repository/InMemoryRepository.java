@@ -24,7 +24,7 @@ public class InMemoryRepository implements WorkItemRepository {
     }
 
     @Override
-    public WorkItem getWorkItem(String id) {
+    public WorkItem getWorkItem(int id) {
         return workitems.get(id);
     }
 
