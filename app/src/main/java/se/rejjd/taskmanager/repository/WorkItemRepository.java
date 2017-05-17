@@ -12,5 +12,6 @@ public interface WorkItemRepository {
 
         int addWorkItem(WorkItem workItem);
 
+        WorkItem updateWorkItem(WorkItem workItem);
     }
 

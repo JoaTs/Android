@@ -19,6 +19,7 @@ import se.rejjd.taskmanager.http.HttpResponse;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 
+
 public class HttpWorkItemRepository extends HttpHelper implements WorkItemRepository {
 
     private final String URL = "http://10.0.2.2:8080/";
@@ -27,18 +28,18 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
     public List<WorkItem> getWorkItems() {
 
         HttpResponse httpResponse = null;
-            try {
-                httpResponse = new GetTask(new HttpHelperCommand() {
-                    @Override
-                    public HttpResponse execute() {
-                        return get(URL + "workitems");
-                    }
-                }).execute().get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+        try {
+            httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return get(URL + "workitems");
+                }
+            }).execute().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
-        return parserWorkItem(httpResponse.getResponseAsString());
+        return parserWorkItems(httpResponse.getResponseAsString());
     }
 
 
@@ -56,8 +57,8 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
-        return parserWorkItem(httpResponse.getResponseAsString()).get(0);
+        Log.d("johan", "" + httpResponse.getResponseAsString());
+        return parserWorkItem(httpResponse.getResponseAsString());
     }
 
     @Override
@@ -66,17 +67,17 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
 
         final String body =
 
-                "{"+
-                "\"id\": " + workItem.getId() + "," +
-                "\"title\": \""+ workItem.getTitle()+"\","+
-                "\"description\": \""+workItem.getDescription()+"\""+
-                "}";
+                "{" +
+                        "\"id\": " + workItem.getId() + "," +
+                        "\"title\": \"" + workItem.getTitle() + "\"," +
+                        "\"description\": \"" + workItem.getDescription() + "\"" +
+                        "}";
 
         try {
             httpResponse = new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
-                    return post(URL + "/workitems",body);
+                    return post(URL + "workitems", body);
                 }
             }).execute().get();
         } catch (InterruptedException e) {
@@ -85,16 +86,41 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
             e.printStackTrace();
         }
 
-        Log.d("johan", "did we get a Status Code??:" + httpResponse.getStatusCode());
+        if (httpResponse.getStatusCode() == 201) {
 
-        Log.d("johan", "did we get the ID?:" + httpResponse.getHeaders().get("Location").toString());
+
+            String[] splitArray = httpResponse.getHeaders().get("Location").get(0).toString().split("/");
+
+            String returnValue = splitArray[splitArray.length - 1].toString();
+
+            return Integer.valueOf(returnValue);
+        }
 
         return 0;
     }
 
+    @Override
+    public WorkItem updateWorkItem(WorkItem workItem) {
+        return null;
+    }
 
-    //PARSER TODO RETURN VALUE
-    private List<WorkItem> parserWorkItem(String jsonString) {
+    private WorkItem parserWorkItem(String jsonString) {
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(jsonString);
+
+            int id = jsonObject.getInt("id");
+            String title = jsonObject.getString("title");
+            String description = jsonObject.getString("description");
+            WorkItem workitem = new WorkItem(id, title, description);
+            return workitem;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private List<WorkItem> parserWorkItems(String jsonString) {
         try {
             List<WorkItem> workItems = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(jsonString);
@@ -111,9 +137,8 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return null; //TODO
+        return null;
     }
-
 
 
 }

@@ -33,4 +33,9 @@ public class InMemoryRepository implements WorkItemRepository {
         workitems.put(workItem.getId(), workItem);
         return workItem.getId();
     }
+
+    @Override
+    public WorkItem updateWorkItem(WorkItem workItem) {
+        return null;
+    }
 }

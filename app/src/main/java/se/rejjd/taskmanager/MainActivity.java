@@ -21,15 +21,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-            workItemRepository = new InMemoryRepository();
+        workItemRepository = new InMemoryRepository();
 
-            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        httpWorkItemRepository.addWorkItem(new WorkItem(-1,"en tiitle", "vadskaviskrivahärdå?"));
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        WorkItem workItemDB = httpWorkItemRepository.getWorkItem(41);
+
+        Toast.makeText(this, "" + workItemDB.toString(),Toast.LENGTH_LONG).show();
+
+        WorkItem workItem = new WorkItem(-1, "en tiitle", "vadskaviskrivahärdå?");
+        int result = httpWorkItemRepository.addWorkItem(new WorkItem(-1, "en tiitle", "vadskaviskrivahärdå?"));
+
+        Toast.makeText(this, "" + result,Toast.LENGTH_LONG).show();
+
         Toast.makeText(this, httpWorkItemRepository.getWorkItems().toString(), Toast.LENGTH_LONG).show();
 
 
-            updateAdapter();
+        updateAdapter();
 
     }
 

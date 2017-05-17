@@ -1,5 +1,6 @@
 package se.rejjd.taskmanager.http;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,11 +37,17 @@ public class HttpHelper {
             connection.setRequestMethod(requestType);
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-type", "application/json");
-            if(body != null){
-                // TODO use the body??
+
+            if(body != null) {
+                connection.setDoOutput(true);
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(body.getBytes());
+                writeToOutputStream(inputStream, connection.getOutputStream());
             }
 
-            return getAsHttpResponse(connection);
+            InputStream in = connection.getInputStream();
+            return getAsHttpResponse(in, connection);
+
+//            return getAsHttpResponse(connection, inputStream);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -52,10 +59,12 @@ public class HttpHelper {
         return null;
     }
 
-    private HttpResponse getAsHttpResponse(HttpURLConnection connection) throws IOException {
-        InputStream inputStream = connection.getInputStream();
+    private HttpResponse getAsHttpResponse(InputStream inputStream, HttpURLConnection connection) throws IOException {
+
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         writeToOutputStream(inputStream, outputStream);
+
+
 
         final int statusCode = connection.getResponseCode();
         final String responseMessage = connection.getResponseMessage();
