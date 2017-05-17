@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import se.rejjd.taskmanager.http.GetTask;
 import se.rejjd.taskmanager.http.HttpHelper;
 import se.rejjd.taskmanager.http.HttpHelperCommand;
 import se.rejjd.taskmanager.http.HttpResponse;
@@ -20,56 +21,80 @@ import se.rejjd.taskmanager.repository.WorkItemRepository;
 
 public class HttpWorkItemRepository extends HttpHelper implements WorkItemRepository {
 
-    private final String URL = "http://127.0.0.1:8080/";
+    private final String URL = "http://10.0.2.2:8080/";
 
     @Override
     public List<WorkItem> getWorkItems() {
 
-        HttpResponse httpResponse1 = null;
-
-
-        try {
+        HttpResponse httpResponse = null;
             try {
-                httpResponse1 = new GetTask(new HttpHelperCommand() {
+                httpResponse = new GetTask(new HttpHelperCommand() {
                     @Override
                     public HttpResponse execute() {
-                        Log.d("johan", "Exeuted get");
-                        return get("http://10.0.2.2:8080/workitems");
-                    }
-                }, new GetTask.OnResultListener() {
-                    @Override
-                    public HttpResponse onResult(HttpResponse httpResponse) {
-                        Log.d("johan", " test " + httpResponse.getResponseAsString());
-                        return null;
+                        return get(URL + "workitems");
                     }
                 }).execute().get();
-            } catch (InterruptedException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
 
-
-//        return parsrWorkItem(response.getResponseAsString());
-
-        return parsrWorkItem(httpResponse1.getResponseAsString());
+        return parserWorkItem(httpResponse.getResponseAsString());
     }
 
 
     @Override
-    public WorkItem getWorkItem(int id) {
-        return null;
+    public WorkItem getWorkItem(final int id) {
+
+        HttpResponse httpResponse = null;
+        try {
+            httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return get(URL + "workitems/" + id);
+                }
+            }).execute().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return parserWorkItem(httpResponse.getResponseAsString()).get(0);
     }
 
     @Override
     public int addWorkItem(WorkItem workItem) {
+        HttpResponse httpResponse = null;
+
+        final String body =
+
+                "{"+
+                "\"id\": " + workItem.getId() + "," +
+                "\"title\": \""+ workItem.getTitle()+"\","+
+                "\"description\": \""+workItem.getDescription()+"\""+
+                "}";
+
+        try {
+            httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return post(URL + "/workitems",body);
+                }
+            }).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("johan", "did we get a Status Code??:" + httpResponse.getStatusCode());
+
+        Log.d("johan", "did we get the ID?:" + httpResponse.getHeaders().get("Location").toString());
+
         return 0;
     }
 
 
     //PARSER TODO RETURN VALUE
-    private List<WorkItem> parsrWorkItem(String jsonString) {
+    private List<WorkItem> parserWorkItem(String jsonString) {
         try {
             List<WorkItem> workItems = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(jsonString);
@@ -90,35 +115,6 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
     }
 
 
-    public static class GetTask extends AsyncTask<Void, HttpResponse, HttpResponse> {
-        HttpHelperCommand httpHelperCommand;
-        private final HttpHelper httpHelper;
-        OnResultListener onResultListener;
-
-
-        public GetTask(HttpHelperCommand httpHelperCommand, OnResultListener onResultListener) {
-            this.httpHelperCommand = httpHelperCommand;
-            httpHelper = new HttpHelper();
-            this.onResultListener =  onResultListener;
-        }
-
-        @Override
-        protected HttpResponse doInBackground(Void... params) {
-//            Log.d("johan", "begor doInBackgroundget" + httpHelper.get("http://10.0.2.2:8080/workitems").getResponseAsString());
-            Log.d("johan", "begor doInBackgroundget" + httpHelperCommand.execute().getResponseAsString());
-//            httpResponseResult = httpHelperCommand.execute();
-            return httpHelperCommand.execute();
-        }
-
-        @Override
-        protected void onPostExecute(HttpResponse httpResponse) {
-            onResultListener.onResult(httpResponse);
-        }
-
-        interface OnResultListener {
-            HttpResponse onResult(HttpResponse httpResponse);
-        }
-    }
 
 }
 

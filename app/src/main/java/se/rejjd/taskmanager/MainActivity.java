@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
+import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.InMemoryRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        httpWorkItemRepository.getWorkItems();
+        httpWorkItemRepository.addWorkItem(new WorkItem(-1,"en tiitle", "vadskaviskrivahärdå?"));
         Toast.makeText(this, httpWorkItemRepository.getWorkItems().toString(), Toast.LENGTH_LONG).show();
 
 

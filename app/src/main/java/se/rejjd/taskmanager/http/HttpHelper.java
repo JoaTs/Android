@@ -36,6 +36,9 @@ public class HttpHelper {
             connection.setRequestMethod(requestType);
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-type", "application/json");
+            if(body != null){
+                // TODO use the body??
+            }
 
             return getAsHttpResponse(connection);
         } catch (IOException e) {
