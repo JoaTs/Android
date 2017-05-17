@@ -7,9 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
@@ -63,13 +61,15 @@ public class SqlWorkItemRepository implements WorkItemRepository{
 
     @Override
     public Long addWorkItem(WorkItem workItem) {
+//        TODO: IF PERSIST
         ContentValues cv = getContentValues(workItem);
         return database.insert(ModelEntry.WORK_ITEMS_TABLE_NAME, null, cv);
     }
 
     @Override
     public boolean updateWorkItemStatus(WorkItem workItem) {
-        return false;
+//        TODO: UPDATE
+        return true;
     }
 
     private ContentValues getContentValues(WorkItem workItem) {

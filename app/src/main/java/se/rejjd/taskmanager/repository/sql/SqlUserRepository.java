@@ -1,15 +1,18 @@
 package se.rejjd.taskmanager.repository.sql;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.sql.DatabaseContract;
+import se.rejjd.taskmanager.sql.UserDbHelper;
 import se.rejjd.taskmanager.sql.WorkItemDbHelper;
 
 public class SqlUserRepository implements UserRepository {
@@ -27,24 +30,52 @@ public class SqlUserRepository implements UserRepository {
     private final SQLiteDatabase database;
 
     private SqlUserRepository(Context context) {
-        database = WorkItemDbHelper.getInstance(context).getWritableDatabase();
+        database = UserDbHelper.getInstance(context).getWritableDatabase();
     }
 
     @Override
     public List<User> getUsers() {
         UserCursorWrapper cursor = queryUsers(null, null);
 
-        return null;
+        List<User> users = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                users.add(cursor.getUser());
+            }
+        }
+        cursor.close();
+        return users;
     }
 
     @Override
     public User getUser(String id) {
+        UserCursorWrapper cursor = queryUsers(DatabaseContract.ModelEntry._ID + " = ?", new String[]{id});
+        if(cursor.getCount() > 0){
+            User user = cursor.getFirstUser();
+            cursor.close();
+            return user;
+
+        }
+        cursor.close();
         return null;
     }
 
     @Override
     public Long addUser(User user) {
-        return null;
+//        TODO: IF PERSIST
+        ContentValues cv = getContentValues(user);
+        return database.insert(DatabaseContract.ModelEntry.USERS_TABLE_NAME, null, cv);
+    }
+
+    private ContentValues getContentValues(User user) {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USERNAME, user.getUsername());
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_FIRSTNAME, user.getFirstaname());
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_LASTNAME, user.getLastname());
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USER_ID, user.getUserId());
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ACTIVE_USER, user.isActiveUser());
+
+        return cv;
     }
 
     private UserCursorWrapper queryUsers(String where, String[] whereArg) {

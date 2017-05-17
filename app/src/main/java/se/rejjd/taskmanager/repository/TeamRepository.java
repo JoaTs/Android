@@ -1,0 +1,16 @@
+package se.rejjd.taskmanager.repository;
+
+import java.util.List;
+
+import se.rejjd.taskmanager.model.Team;
+
+public interface TeamRepository {
+
+    List<Team> getTeams();
+
+    Team getTeam(String id);
+
+    Long addTeam(Team team);
+
+}
+

@@ -50,6 +50,10 @@ public final class User {
         this.lastname = lastname;
     }
 
+    public boolean isActiveUser() {
+        return activeUser;
+    }
+
     @Override
     public String toString() {
         return "User{" +
