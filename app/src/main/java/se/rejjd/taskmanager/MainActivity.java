@@ -33,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        WorkItem workItemDB = httpWorkItemRepository.getWorkItem(41);
+//        WorkItem workItemDB = httpWorkItemRepository.getWorkItem(41);
 
-        Toast.makeText(this, "" + workItemDB.toString(),Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "" + workItemDB.toString(),Toast.LENGTH_LONG).show();
 
 //        WorkItem workItem = new WorkItem(-1, "en tiitle", "vadskaviskrivahärdå?");
 //        int result = httpWorkItemRepository.addWorkItem(new WorkItem(-1, "en tiitle", "vadskaviskrivahärdå?"));
