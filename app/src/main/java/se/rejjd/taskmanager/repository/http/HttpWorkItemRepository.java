@@ -99,9 +99,39 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         return 0;
     }
 
+    //This method update only the workItems status
     @Override
-    public WorkItem updateWorkItem(WorkItem workItem) {
-        return null;
+    public boolean updateWorkItemStatus(final WorkItem workItem) {
+        HttpResponse httpResponse = null;
+
+        final String body =
+                "{" +
+                "\"id\": \"" + workItem.getId() + "\","+
+                "\"createdDate\": \"2017-05-17\","+
+                "\"createdBy\": \"DreamierTeam\","+
+                "\"lastModifiedDate\": \"2017-05-17\","+
+                "\"lastModifiedBy\": \"DreamierTeam\","+
+                "\"title\": \"en title\","+
+                "\"description\": \"Uppdate?\","+
+                "\"status\": \""+ workItem.getStatus() +"\","+
+                "\"user\": null,"+
+                "\"dateOfCompletion\": \"\""+
+                "}";
+
+        try {
+            httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return put(URL + "workitems/" + workItem.getId() , body);
+                }
+            }).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return (httpResponse.getStatusCode() == 200)? true : false;
     }
 
     private WorkItem parserWorkItem(String jsonString) {
@@ -139,7 +169,6 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         }
         return null;
     }
-
 
 }
 

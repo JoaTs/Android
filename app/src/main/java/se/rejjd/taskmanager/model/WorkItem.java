@@ -5,6 +5,7 @@ public final class WorkItem {
     private int id;
     private String title;
     private String description;
+    private Status status;
 
     public WorkItem(int id, String title, String description) {
         this.id = id;
@@ -24,11 +25,24 @@ public final class WorkItem {
         return description;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public enum Status {
+        DONE, UNSTARTED, STARTED, ARCHIVED
+    }
+
     @Override
     public String toString() {
         return "WorkItem{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 

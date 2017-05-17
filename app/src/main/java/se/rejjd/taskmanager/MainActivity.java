@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this, httpWorkItemRepository.getWorkItems().toString(), Toast.LENGTH_LONG).show();
 
+        WorkItem workitemUpdateStatus = new WorkItem(45,"d","c");
+        workitemUpdateStatus.setStatus(WorkItem.Status.DONE);
+
+        httpWorkItemRepository.updateWorkItemStatus(workitemUpdateStatus);
 
         updateAdapter();
 
