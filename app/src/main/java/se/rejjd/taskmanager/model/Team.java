@@ -6,7 +6,7 @@ public final class Team {
     private String teamName;
     private boolean activeTeam;
 
-    public Team(int id, String teamName, boolean activeTeam) {
+    public Team(long id, String teamName, boolean activeTeam) {
         this.teamName = teamName;
         this.activeTeam = true;
     }
@@ -17,6 +17,10 @@ public final class Team {
 
     public String getTeamName() {
         return teamName;
+    }
+
+    public boolean isActiveTeam() {
+        return activeTeam;
     }
 
     public void setId(int id) {

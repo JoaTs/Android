@@ -2,22 +2,26 @@ package se.rejjd.taskmanager.model;
 
 public final class Issue {
 
-    private int id;
+    private long id;
     private String description;
     private boolean openIssue;
 
-    public Issue(int id, String description, boolean openIssue) {
+    public Issue(long id, String description, boolean openIssue) {
         this.id = id;
         this.description = description;
         this.openIssue = true;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isOpenIssue() {
+        return openIssue;
     }
 
     public void setId(int id) {
@@ -47,12 +51,17 @@ public final class Issue {
 
         Issue issue = (Issue) o;
 
-        return id == issue.id;
+        if (id != issue.id) return false;
+        if (openIssue != issue.openIssue) return false;
+        return description != null ? description.equals(issue.description) : issue.description == null;
 
     }
 
     @Override
     public int hashCode() {
-        return id;
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (openIssue ? 1 : 0);
+        return result;
     }
 }
