@@ -24,18 +24,6 @@ public final class Issue {
         return openIssue;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setOpenIssue(boolean openIssue) {
-        this.openIssue = openIssue;
-    }
-
     @Override
     public String toString() {
         return "Issue{" +

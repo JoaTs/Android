@@ -11,9 +11,9 @@ import java.util.List;
 
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.UserRepository;
+import se.rejjd.taskmanager.repository.sql.wrapper.UserCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseContract;
-import se.rejjd.taskmanager.sql.UserDbHelper;
-import se.rejjd.taskmanager.sql.WorkItemDbHelper;
+import se.rejjd.taskmanager.sql.DatabaseHelper;
 
 public class SqlUserRepository implements UserRepository {
 
@@ -30,7 +30,7 @@ public class SqlUserRepository implements UserRepository {
     private final SQLiteDatabase database;
 
     private SqlUserRepository(Context context) {
-        database = UserDbHelper.getInstance(context).getWritableDatabase();
+        database = DatabaseHelper.getInstance(context).getWritableDatabase();
     }
 
     @Override

@@ -11,8 +11,9 @@ import java.util.List;
 
 import se.rejjd.taskmanager.model.Issue;
 import se.rejjd.taskmanager.repository.IssueRepository;
+import se.rejjd.taskmanager.repository.sql.wrapper.IssuesCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseContract;
-import se.rejjd.taskmanager.sql.WorkItemDbHelper;
+import se.rejjd.taskmanager.sql.DatabaseHelper;
 
 public class SqlIssueRepository implements IssueRepository {
 
@@ -29,7 +30,7 @@ public class SqlIssueRepository implements IssueRepository {
     private final SQLiteDatabase database;
 
     private SqlIssueRepository(Context context) {
-        database = WorkItemDbHelper.getInstance(context).getWritableDatabase();
+        database = DatabaseHelper.getInstance(context).getWritableDatabase();
     }
 
     @Override

@@ -11,7 +11,8 @@ import java.util.List;
 
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
-import se.rejjd.taskmanager.sql.WorkItemDbHelper;
+import se.rejjd.taskmanager.repository.sql.wrapper.WorkItemCursorWrapper;
+import se.rejjd.taskmanager.sql.DatabaseHelper;
 import se.rejjd.taskmanager.sql.DatabaseContract.ModelEntry;
 
 public class SqlWorkItemRepository implements WorkItemRepository{
@@ -29,7 +30,7 @@ public class SqlWorkItemRepository implements WorkItemRepository{
     private final SQLiteDatabase database;
 
     private SqlWorkItemRepository(Context context) {
-        database = WorkItemDbHelper.getInstance(context).getWritableDatabase();
+        database = DatabaseHelper.getInstance(context).getWritableDatabase();
     }
 
     @Override
@@ -67,7 +68,7 @@ public class SqlWorkItemRepository implements WorkItemRepository{
     }
 
     @Override
-    public boolean updateWorkItemStatus(WorkItem workItem) {
+    public boolean updateWorkItem(WorkItem workItem) {
 //        TODO: UPDATE
         return true;
     }

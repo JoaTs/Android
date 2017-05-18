@@ -11,8 +11,9 @@ import java.util.List;
 
 import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.repository.TeamRepository;
+import se.rejjd.taskmanager.repository.sql.wrapper.TeamCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseContract;
-import se.rejjd.taskmanager.sql.WorkItemDbHelper;
+import se.rejjd.taskmanager.sql.DatabaseHelper;
 
 public class SqlTeamRepository implements TeamRepository {
 
@@ -29,7 +30,7 @@ public class SqlTeamRepository implements TeamRepository {
     private final SQLiteDatabase database;
 
     private SqlTeamRepository(Context context) {
-        database = WorkItemDbHelper.getInstance(context).getWritableDatabase();
+        database = DatabaseHelper.getInstance(context).getWritableDatabase();
     }
 
     @Override

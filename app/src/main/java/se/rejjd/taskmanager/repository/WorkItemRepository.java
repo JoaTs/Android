@@ -12,6 +12,6 @@ public interface WorkItemRepository {
 
         Long addWorkItem(WorkItem workItem);
 
-        boolean updateWorkItemStatus(WorkItem workItem);
+        boolean updateWorkItem(WorkItem workItem);
     }
 

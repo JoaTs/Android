@@ -38,18 +38,6 @@ public final class User {
         return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setFirstaname(String firstaname) {
-        this.firstaname = firstaname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
     public boolean isActiveUser() {
         return activeUser;
     }

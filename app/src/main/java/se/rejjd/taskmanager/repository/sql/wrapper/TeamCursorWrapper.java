@@ -1,10 +1,9 @@
-package se.rejjd.taskmanager.repository.sql;
+package se.rejjd.taskmanager.repository.sql.wrapper;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import se.rejjd.taskmanager.model.Team;
-import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.sql.DatabaseContract;
 
 public class TeamCursorWrapper extends CursorWrapper {

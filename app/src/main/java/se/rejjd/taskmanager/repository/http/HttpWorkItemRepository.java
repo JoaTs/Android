@@ -20,6 +20,8 @@ import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 
 
+//TODO: WARNINGS
+
 public class HttpWorkItemRepository extends HttpHelper implements WorkItemRepository {
 
     private final String URL = "http://10.0.2.2:8080/";
@@ -46,19 +48,18 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
     @Override
     public WorkItem getWorkItem(final String id) {
 
-        HttpResponse httpResponse = null;
         try {
-            httpResponse = new GetTask(new HttpHelperCommand() {
+            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return get(URL + "workitems/" + id);
                 }
             }).execute().get();
+            return parserWorkItem(httpResponse.getResponseAsString());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        Log.d("johan", "" + httpResponse.getResponseAsString());
-        return parserWorkItem(httpResponse.getResponseAsString());
+        return null;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         final String body =
 
                 "{" +
-                        "\"id\": " + workItem.get_ID() + "," +
+                        "\"id\": " + workItem.getId() + "," +
                         "\"title\": \"" + workItem.getTitle() + "\"," +
                         "\"description\": \"" + workItem.getDescription() + "\"" +
                         "}";
@@ -101,12 +102,12 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
 
     //This method update only the workItems status
     @Override
-    public boolean updateWorkItemStatus(final WorkItem workItem) {
+    public boolean updateWorkItem(final WorkItem workItem) {
         HttpResponse httpResponse = null;
 
         final String body =
                 "{" +
-                "\"id\": \"" + workItem.get_ID() + "\","+
+                "\"id\": \"" + workItem.getId() + "\","+
                 "\"createdDate\": \"2017-05-17\","+
                 "\"createdBy\": \"DreamierTeam\","+
                 "\"lastModifiedDate\": \"2017-05-17\","+
@@ -122,7 +123,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
             httpResponse = new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
-                    return put(URL + "workitems/" + workItem.get_ID() , body);
+                    return put(URL + "workitems/" + workItem.getId() , body);
                 }
             }).execute().get();
         } catch (InterruptedException e) {

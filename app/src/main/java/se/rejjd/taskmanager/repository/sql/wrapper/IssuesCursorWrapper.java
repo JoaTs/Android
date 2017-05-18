@@ -1,4 +1,4 @@
-package se.rejjd.taskmanager.repository.sql;
+package se.rejjd.taskmanager.repository.sql.wrapper;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;

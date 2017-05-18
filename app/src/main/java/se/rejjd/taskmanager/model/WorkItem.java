@@ -2,21 +2,20 @@ package se.rejjd.taskmanager.model;
 
 public final class WorkItem {
 
-    private Long _ID;
+    private long id;
     private String title;
     private String description;
     private Status status;
 
-    public WorkItem(Long _ID, String title, String description) {
-        this._ID = _ID;
+    public WorkItem(long id, String title, String description) {
+        this.id = id;
         this.title = title;
         this.description = description;
     }
 
-    public Long get_ID() {
-        return _ID;
+    public long getId() {
+        return id;
     }
-
     public String getTitle() {
         return title;
     }
@@ -27,10 +26,6 @@ public final class WorkItem {
 
     public Status getStatus() {
         return status;
-    }
-
-    public void set_ID(Long _ID) {
-        this._ID = _ID;
     }
 
     public void setTitle(String title) {
@@ -56,7 +51,7 @@ public final class WorkItem {
 
         WorkItem workItem = (WorkItem) o;
 
-        if (_ID != null ? !_ID.equals(workItem._ID) : workItem._ID != null) return false;
+        if (id != workItem.id) return false;
         if (title != null ? !title.equals(workItem.title) : workItem.title != null) return false;
         return description != null ? description.equals(workItem.description) : workItem.description == null;
 
@@ -64,16 +59,13 @@ public final class WorkItem {
 
     @Override
     public int hashCode() {
-        int result = _ID != null ? _ID.hashCode() : 0;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        return result;
+        return (int) (id ^ (id >>> 32));
     }
 
     @Override
     public String toString() {
         return "WorkItem{" +
-                "_ID=" + _ID +
+                "_ID=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +

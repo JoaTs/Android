@@ -24,12 +24,7 @@ public class HttpHelper {
         return doRequest(url, "PUT", body);
     }
 
-    public HttpResponse delete(String url) {
-        return doRequest(url, "DELETE", null);
-    }
-
-
-    public HttpResponse doRequest(String url, String requestType, String body) {
+    private HttpResponse doRequest(String url, String requestType, String body) {
         HttpURLConnection connection = null;
         try {
             URL requestUrl = new URL(url);
@@ -47,7 +42,6 @@ public class HttpHelper {
             InputStream in = connection.getInputStream();
             return getAsHttpResponse(in, connection);
 
-//            return getAsHttpResponse(connection, inputStream);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -63,9 +57,6 @@ public class HttpHelper {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         writeToOutputStream(inputStream, outputStream);
-
-
-
         final int statusCode = connection.getResponseCode();
         final String responseMessage = connection.getResponseMessage();
         final Map<String, List<String>> headers = connection.getHeaderFields();
@@ -75,15 +66,6 @@ public class HttpHelper {
 
         return new HttpResponse(responseMessage, statusCode, headers, response);
     }
-
-//    private static void writeToOutputStream(InputStream inputStream, OutputStream outputStream) throws IOException {
-//        int bytesRead = 0;
-//        byte[] buffer = new byte[1024];
-//
-//        while ((bytesRead = inputStream.read(buffer)) > 0) {
-//            outputStream.write(buffer, 0, bytesRead);
-//        }
-//    }
 
     private void writeToOutputStream(InputStream is, OutputStream os) throws IOException {
         int bytesRead;

@@ -2,7 +2,7 @@ package se.rejjd.taskmanager.model;
 
 public final class Team {
 
-    private int id;
+    private long id;
     private String teamName;
     private boolean activeTeam;
 
@@ -11,7 +11,7 @@ public final class Team {
         this.activeTeam = true;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -21,10 +21,6 @@ public final class Team {
 
     public boolean isActiveTeam() {
         return activeTeam;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setTeamName(String teamName) {
@@ -56,6 +52,6 @@ public final class Team {
 
     @Override
     public int hashCode() {
-        return id;
+        return (int) (id ^ (id >>> 32));
     }
 }
