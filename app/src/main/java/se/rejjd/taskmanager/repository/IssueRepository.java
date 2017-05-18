@@ -13,5 +13,7 @@ public interface IssueRepository {
 
     Long addIssue(Issue issue);
 
+    Issue updateIssue(Issue issue);
+
 }
 

@@ -1,5 +1,7 @@
 package se.rejjd.taskmanager.repository.http;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,24 +14,22 @@ import se.rejjd.taskmanager.http.GetTask;
 import se.rejjd.taskmanager.http.HttpHelper;
 import se.rejjd.taskmanager.http.HttpHelperCommand;
 import se.rejjd.taskmanager.http.HttpResponse;
-import se.rejjd.taskmanager.model.WorkItem;
-import se.rejjd.taskmanager.repository.WorkItemRepository;
+import se.rejjd.taskmanager.model.Team;
+import se.rejjd.taskmanager.repository.TeamRepository;
 
-public class HttpWorkItemRepository extends HttpHelper implements WorkItemRepository {
-
+public final class HttpTeamRepository extends HttpHelper implements TeamRepository{
     private final String URL = "http://10.0.2.2:8080/";
 
     @Override
-    public List<WorkItem> getWorkItems() {
-
+    public List<Team> getTeams() {
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
-                    return get(URL + "workitems");
+                    return get(URL + "teams");
                 }
             }).execute().get();
-            return parserWorkItems(httpResponse.getResponseAsString());
+            return parserTeams(httpResponse.getResponseAsString());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -37,18 +37,16 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         return null;
     }
 
-
     @Override
-    public WorkItem getWorkItem(final String id) {
-
+    public Team getTeam(final String id) {
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
-                    return get(URL + "workitems/" + id);
+                    return get(URL + "teams/" + id);
                 }
             }).execute().get();
-            return parserWorkItem(httpResponse.getResponseAsString());
+            return parserTeam(httpResponse.getResponseAsString());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -56,26 +54,28 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
     }
 
     @Override
-    public Long addWorkItem(WorkItem workItem) {
-
+    public Long addTeam(Team team) {
         final String body =
-                "{" +
-                        "\"id\": " + workItem.getId() + "," +
-                        "\"title\": \"" + workItem.getTitle() + "\"," +
-                        "\"description\": \"" + workItem.getDescription() + "\"" +
-                        "}";
+                "{"+
+                "\"id\": -1,"+
+                "\"createdDate\": null,"+
+                "\"createdBy\": null,"+
+                "\"lastModifiedDate\": null,"+
+                "\"lastModifiedBy\": null,"+
+                "\"teamName\": \""+team.getTeamName()+"\","+
+                "\"activeTeam\": "+ team.isActiveTeam()+
+                "}";
 
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
-                    return post(URL + "workitems", body);
+                    return post(URL + "teams", body);
                 }
             }).execute().get();
 
             if (httpResponse.getStatusCode() == 201) {
-                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/")
-                        ;
+                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/");
                 String returnValue = splitArray[splitArray.length - 1];
                 return Long.valueOf(returnValue);
             }
@@ -83,74 +83,75 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return 0L;
+        return -1L;
     }
 
-    //This method update only the workItems status
+    //TODO This one must customize => will it update Date and other final values
     @Override
-    public WorkItem updateWorkItem(final WorkItem workItem) {
-
+    public Team updateTeam(final Team team) {
         final String body =
-                "{" +
-                "\"id\": \"" + workItem.getId() + "\","+
-                "\"createdDate\": \"2017-05-17\","+
-                "\"createdBy\": \"DreamierTeam\","+
-                "\"lastModifiedDate\": \"2017-05-17\","+
-                "\"lastModifiedBy\": \"DreamierTeam\","+
-                "\"title\": \"en title\","+
-                "\"description\": \"Uppdate?\","+
-                "\"status\": \""+ workItem.getStatus() +"\","+
-                "\"user\": null,"+
-                "\"dateOfCompletion\": \"\""+
-                "}";
+                        "{"+
+                        "\"id\": "+team.getId()+","+
+                        "\"createdDate\": null,"+
+                        "\"createdBy\": null,"+
+                        "\"lastModifiedDate\": null,"+
+                        "\"lastModifiedBy\": null,"+
+                        "\"teamName\": \""+team.getTeamName()+"\","+
+                        "\"activeTeam\": "+ team.isActiveTeam()+
+                        "}";
 
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
-                    return put(URL + "workitems/" + workItem.getId() , body);
+                    return put(URL + "teams/" + team.getId() , body);
                 }
             }).execute().get();
 
-            return (httpResponse.getStatusCode() == 200)? workItem : null;
+            return (httpResponse.getStatusCode() == 200)? team : null;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private WorkItem parserWorkItem(String jsonString) {
+    private Team parserTeam(String jsonString) {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
 
             long id = jsonObject.getLong("id");
-            String title = jsonObject.getString("title");
-            String description = jsonObject.getString("description");
-            return new WorkItem(id, title, description);
+            String teamName = jsonObject.getString("teamName");
+            boolean activeTeam = jsonObject.getBoolean("activeTeam");
+
+            //(long id, String teamName, boolean activeTeam
+            return new Team(id, teamName, activeTeam);
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private List<WorkItem> parserWorkItems(String jsonString) {
+    private List<Team> parserTeams(String jsonString) {
         try {
-            List<WorkItem> workItems = new ArrayList<>();
+            List<Team> teamItems = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(jsonString);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+
                 long id = jsonObject.getLong("id");
-                String title = jsonObject.getString("title");
-                String description = jsonObject.getString("description");
-                WorkItem workitem = new WorkItem(id, title, description);
-                workItems.add(workitem);
+                String teamName = jsonObject.getString("teamName");
+                boolean activeTeam = jsonObject.getBoolean("activeTeam");
+
+                teamItems.add(new Team(id, teamName, activeTeam));
             }
 
-            return workItems;
+            return teamItems;
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
-}
 
+}
