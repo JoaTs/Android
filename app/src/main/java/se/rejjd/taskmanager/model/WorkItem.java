@@ -1,6 +1,9 @@
 package se.rejjd.taskmanager.model;
 
-public final class WorkItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public final class WorkItem implements Parcelable{
 
     private long id;
     private String title;
@@ -12,6 +15,24 @@ public final class WorkItem {
         this.title = title;
         this.description = description;
     }
+
+    protected WorkItem(Parcel in) {
+        id = in.readLong();
+        title = in.readString();
+        description = in.readString();
+    }
+
+    public static final Creator<WorkItem> CREATOR = new Creator<WorkItem>() {
+        @Override
+        public WorkItem createFromParcel(Parcel in) {
+            return new WorkItem(in);
+        }
+
+        @Override
+        public WorkItem[] newArray(int size) {
+            return new WorkItem[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -39,6 +60,19 @@ public final class WorkItem {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(description);
+    }
+
 
     public enum Status {
         DONE, UNSTARTED, STARTED, ARCHIVED

@@ -1,5 +1,6 @@
 package se.rejjd.taskmanager;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,7 +34,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recyclerView.setAdapter(new WorkItemAdapter(repository.getWorkItems()));
+        recyclerView.setAdapter(new WorkItemAdapter(repository.getWorkItems(), new WorkItemAdapter.onCLickResultListener() {
+            @Override
+            public void onClickResult(WorkItem workitem) {
+                Intent intent =  DetailViewActivity.createIntent(MainActivity.this,workitem);
+                startActivity(intent);
+            }
+        }));
         
 //        WorkItem workItemDB = httpWorkItemRepository.getWorkItem(41);
 
