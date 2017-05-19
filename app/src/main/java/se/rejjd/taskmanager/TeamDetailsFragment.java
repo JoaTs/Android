@@ -16,6 +16,7 @@ import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
 
 public final class TeamDetailsFragment extends Fragment{
     private static final String BUNDLE_TEAM_ID = "team_id";
+    TeamRepository teamRepository = SqlTeamRepository.getInstance(getContext());
     private Team team;
 
     public static Fragment newInstance(long id){
@@ -27,22 +28,18 @@ public final class TeamDetailsFragment extends Fragment{
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TeamRepository teamRepository = SqlTeamRepository.getInstance(getContext());
-        long id = getArguments().getLong(BUNDLE_TEAM_ID);
-        Team team = new Team(10L, "hej",true);
+        team = new Team(1L, "test", true);
         teamRepository.addTeam(team);
-        Log.d("hej", "onCreate: " + teamRepository.getTeams().toString());
-        team = teamRepository.getTeam(String.valueOf(id));
+        Log.d("hej", "onCreate: " + teamRepository.getTeam("1").toString());
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.team_details_fragment,container,false);
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_team_detail_title);
-        tvTitle.setText(team.getTeamName());
+        tvTitle.setText(team.getTeamName().toString());
         return view;
     }
 }
