@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
         switch(item.getItemId()){
             case R.id.team_view:
-                Intent intent = DetailViewActivity.createIntentWithTeam(this,0L);
+                Intent intent = DetailViewActivity.createIntentWithTeam(this,1L);
                 startActivity(intent);
                 break;
         }
