@@ -99,7 +99,7 @@ public final class WorkItem implements Parcelable{
     @Override
     public String toString() {
         return "WorkItem{" +
-                "_ID=" + id +
+                "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +

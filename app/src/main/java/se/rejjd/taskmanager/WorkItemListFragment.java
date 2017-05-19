@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public final class WorkItemListFragment extends Fragment {
         for (int i = 0; i <= 10; i++) {
             workItemRepository.addWorkItem(new WorkItem(i, "test" + i,"test" + i));
         }
+        Log.d("hej", "onCreate: " + workItemRepository.getWorkItems().toString());
     }
 
 
