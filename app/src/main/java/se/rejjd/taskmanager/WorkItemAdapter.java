@@ -16,13 +16,12 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
     private final List<WorkItem> workItems;
     private onCLickResultListener onCLickResultListener;
 
-    interface onCLickResultListener{
-        void onClickResult(WorkItem workitem);
-    }
-
     WorkItemAdapter(List<WorkItem> workItems,onCLickResultListener onCLickResultListener) {
         this.workItems = workItems;
         this.onCLickResultListener = onCLickResultListener;
+    }
+    interface onCLickResultListener{
+        void onClickResult(WorkItem workitem);
     }
 
     @Override

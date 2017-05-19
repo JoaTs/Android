@@ -1,6 +1,8 @@
 package se.rejjd.taskmanager;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +15,7 @@ import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
@@ -24,24 +26,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        WorkItemRepository repository = SqlWorkItemRepository.getInstance(this);
-
-        for (int i = 0; i <= 10; i++) {
-            repository.addWorkItem(new WorkItem(i, "test","test"));
-        }
-        Log.d(TAG, "onCreate: TAG" + repository.getWorkItems().toString());
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        recyclerView.setAdapter(new WorkItemAdapter(repository.getWorkItems(), new WorkItemAdapter.onCLickResultListener() {
-            @Override
-            public void onClickResult(WorkItem workitem) {
-                Intent intent =  DetailViewActivity.createIntent(MainActivity.this,workitem);
-                startActivity(intent);
-            }
-        }));
-        
 //        WorkItem workItemDB = httpWorkItemRepository.getWorkItem(41);
 
 //        Toast.makeText(this, "" + workItemDB.toString(),Toast.LENGTH_LONG).show();
@@ -53,8 +37,26 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this,"welvome", Toast.LENGTH_LONG).show();
 
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
+
+        if(fragment == null){
+            fragment = WorkItemListFragment.newInstance();
+            fm.beginTransaction()
+                    .add(R.id.workitem_list_container,fragment)
+                    .commit();
+        }
+
+
+
         updateAdapter();
 
+    }
+
+    @Override
+    public void onListItemClicked(WorkItem workItem) {
+        Intent intent =  DetailViewActivity.createIntent(MainActivity.this,workItem);
+        startActivity(intent);
     }
 
     private void updateAdapter() {
