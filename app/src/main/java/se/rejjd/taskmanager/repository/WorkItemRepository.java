@@ -6,12 +6,12 @@ import se.rejjd.taskmanager.model.WorkItem;
 
 public interface WorkItemRepository {
 
-        List<WorkItem> getWorkItems();
+    List<WorkItem> getWorkItems();
 
-        WorkItem getWorkItem(String id);
+    WorkItem getWorkItem(String id);
 
-        Long addWorkItem(WorkItem workItem);
+    Long addWorkItem(WorkItem workItem);
 
-        boolean updateWorkItem(WorkItem workItem);
-    }
+    WorkItem updateWorkItem(WorkItem workItem);
+}
 

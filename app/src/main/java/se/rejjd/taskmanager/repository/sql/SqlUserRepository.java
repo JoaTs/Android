@@ -67,6 +67,11 @@ public class SqlUserRepository implements UserRepository {
         return database.insert(DatabaseContract.ModelEntry.USERS_TABLE_NAME, null, cv);
     }
 
+    @Override
+    public User updateUser(User user) {
+        return null;
+    }
+
     private ContentValues getContentValues(User user) {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USERNAME, user.getUsername());

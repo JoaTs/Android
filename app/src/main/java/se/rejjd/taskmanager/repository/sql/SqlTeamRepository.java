@@ -67,6 +67,10 @@ public class SqlTeamRepository implements TeamRepository {
         return database.insert(DatabaseContract.ModelEntry.TEAM_TABLE_NAME, null, cv);
     }
 
+    @Override
+    public Team updateTeam(Team team) {
+        return null;
+    }
 
 
     private ContentValues getContentValues(Team team) {

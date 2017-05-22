@@ -12,4 +12,6 @@ public interface UserRepository {
 
     Long addUser(User user);
 
+    User updateUser(User user);
+
 }

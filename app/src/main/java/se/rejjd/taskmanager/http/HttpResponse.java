@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Map;
 
-public class HttpResponse {
+public final class HttpResponse {
 
     private static final String TAG = HttpResponse.class.getSimpleName();
     private final String responseMessage;
@@ -44,29 +44,6 @@ public class HttpResponse {
         return new String(response);
     }
 
-//    public JSONObject getResponseAsJsonObject() {
-//        final String responseString = getResponseAsString();
-//
-//        try {
-//            return new JSONObject(responseString);
-//        } catch (JSONException e) {
-//            Log.e(TAG, "getResponseAsJsonObject: ", e);
-//        }
-//
-//        return null;
-//    }
-//
-//    public JSONArray getResponseAsJsonArray() {
-//        final String responseString = getResponseAsString();
-//
-//        try {
-//            return new JSONArray(responseString);
-//        } catch (JSONException e) {
-//            Log.e(TAG, "getResponseAsJsonArray: Error", e);
-//        }
-//
-//        return null;
-//    }
 }
 
 

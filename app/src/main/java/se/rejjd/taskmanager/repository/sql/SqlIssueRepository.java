@@ -67,6 +67,11 @@ public class SqlIssueRepository implements IssueRepository {
         return database.insert(DatabaseContract.ModelEntry.ISSUES_TABLE_NAME, null, cv);
     }
 
+    @Override
+    public Issue updateIssue(Issue issue) {
+        return null;
+    }
+
     private ContentValues getContentValues(Issue issue) {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseContract.ModelEntry.ISSUES_COLUMN_NAME_DESCRIPTION, issue.getDescription());

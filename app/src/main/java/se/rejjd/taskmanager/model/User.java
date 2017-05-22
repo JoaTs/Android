@@ -4,15 +4,15 @@ public final class User {
 
     private long id;
     private String username;
-    private String firstaname;
+    private String firstname;
     private String lastname;
     private String userId;
     private boolean activeUser;
 
-    public User(long id, String username, String firstaname, String lastname, String userId, boolean activeUser) {
+    public User(long id, String username, String firstname, String lastname, String userId, boolean activeUser) {
         this.id = id;
         this.username = username;
-        this.firstaname = firstaname;
+        this.firstname = firstname;
         this.lastname = lastname;
         this.userId = userId;
         this.activeUser = true;
@@ -27,7 +27,7 @@ public final class User {
     }
 
     public String getFirstaname() {
-        return firstaname;
+        return firstname;
     }
 
     public String getLastname() {
@@ -47,7 +47,7 @@ public final class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", firstaname='" + firstaname + '\'' +
+                ", firstaname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", userId='" + userId + '\'' +
                 ", activeUser=" + activeUser +

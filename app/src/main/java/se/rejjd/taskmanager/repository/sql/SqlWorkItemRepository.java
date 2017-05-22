@@ -68,9 +68,9 @@ public class SqlWorkItemRepository implements WorkItemRepository{
     }
 
     @Override
-    public boolean updateWorkItem(WorkItem workItem) {
+    public WorkItem updateWorkItem(WorkItem workItem) {
 //        TODO: UPDATE
-        return true;
+        return null;
     }
 
     private ContentValues getContentValues(WorkItem workItem) {
