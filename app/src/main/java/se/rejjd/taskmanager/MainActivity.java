@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
 //        Toast.makeText(this, "" + result,Toast.LENGTH_LONG).show();
 
-        Toast.makeText(this,"welvome", Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"welcome", Toast.LENGTH_LONG).show();
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
@@ -54,9 +54,6 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
                     .add(R.id.workitem_list_container,fragment)
                     .commit();
         }
-
-
-
         updateAdapter();
 
     }
