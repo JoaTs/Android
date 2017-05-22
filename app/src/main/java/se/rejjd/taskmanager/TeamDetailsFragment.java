@@ -1,16 +1,25 @@
 package se.rejjd.taskmanager;
 
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.ActivityChooserView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import se.rejjd.taskmanager.model.Team;
+import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.TeamRepository;
 import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
 
@@ -41,6 +50,16 @@ public final class TeamDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.team_details_fragment, container, false);
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_team_detail_title);
         tvTitle.setText(team.getTeamName());
+        RecyclerView rvUsers = (RecyclerView) view.findViewById(R.id.rv_users);
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < 10; i++){
+            users.add(new User(i, "@LukSky"+i, "Luke ", "Skywalker", "userId", true));
+        }
+        UserAdapter userAdapter = new UserAdapter();
+        userAdapter.setData(users);
+        rvUsers.setAdapter(userAdapter);
+        rvUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
+        getActivity().setTitle(team.getTeamName());
         return view;
     }
 }
