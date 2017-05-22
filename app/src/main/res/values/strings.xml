@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Taskmanager</string>
     <string name="team_details">Team Details</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="add_workitem_button">Add</string>
 </resources>

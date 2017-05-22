@@ -16,9 +16,11 @@
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:clickable="true"
-        android:src="@android:drawable/ic_menu_add"
-        app:backgroundTint="@android:color/holo_blue_dark"
-        app:fabSize="mini"
+        android:src="@android:drawable/ic_input_add"
+        android:tint="@color/white"
+        app:backgroundTint="@color/primary_orange"
+        app:fabSize="normal"
+        android:onClick="onFabClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>

@@ -10,4 +10,5 @@
     <color name="green_light">#D8F1BC</color>
     <color name="primary_blue">#5F45FF</color>
     <color name="blue_light">#CFC7FF</color>
+    <color name="white">#ffffff</color>
 </resources>

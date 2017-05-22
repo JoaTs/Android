@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import se.rejjd.taskmanager.model.Team;
@@ -28,20 +29,11 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     private RecyclerView recyclerView;
     private Team team1;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-//        WorkItem workItemDB = httpWorkItemRepository.getWorkItem(41);
-
-//        Toast.makeText(this, "" + workItemDB.toString(),Toast.LENGTH_LONG).show();
-
-//        WorkItem workItem = new WorkItem(-1, "en tiitle", "vadskaviskrivahärdå?");
-//        int result = httpWorkItemRepository.addWorkItem(new WorkItem(-1, "en tiitle", "vadskaviskrivahärdå?"));
-
-//        Toast.makeText(this, "" + result,Toast.LENGTH_LONG).show();
 
         Toast.makeText(this,"welvome", Toast.LENGTH_LONG).show();
 
@@ -85,6 +77,11 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     @Override
     public void onListItemClicked(WorkItem workItem) {
         Intent intent =  DetailViewActivity.createIntentWithWorkItem(MainActivity.this,workItem);
+        startActivity(intent);
+    }
+
+    public void onFabClicked(View view) {
+        Intent intent = AddWorkitemActivity.getIntent(MainActivity.this);
         startActivity(intent);
     }
 
