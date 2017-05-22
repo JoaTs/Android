@@ -37,6 +37,7 @@ public final class Team {
         return "Team{" +
                 "id=" + id +
                 ", teamName='" + teamName + '\'' +
+                ", activeTeam=" + activeTeam +
                 '}';
     }
 
@@ -47,7 +48,9 @@ public final class Team {
 
         Team team = (Team) o;
 
-        return id == team.id;
+        if (id != team.id) return false;
+        if (activeTeam != team.activeTeam) return false;
+        return teamName != null ? teamName.equals(team.teamName) : team.teamName == null;
 
     }
 

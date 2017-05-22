@@ -23,8 +23,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(DatabaseQueries.CREATE_TABLE_WORK_ITEMS + DatabaseQueries.CREATE_TABLES_USERS +
-                DatabaseQueries.CREATE_TABLE_TEAMS + DatabaseQueries.CREATE_TABLE_ISSUES);
+        db.execSQL(DatabaseQueries.CREATE_TABLE_WORK_ITEMS);
+        db.execSQL(DatabaseQueries.CREATE_TABLE_TEAMS);
+        db.execSQL(DatabaseQueries.CREATE_TABLE_ISSUES);
+        db.execSQL(DatabaseQueries.CREATE_TABLES_USERS);
+
     }
 
     @Override

@@ -14,9 +14,14 @@ import se.rejjd.taskmanager.model.WorkItem;
 public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkItemViewHolder> {
 
     private final List<WorkItem> workItems;
+    private onCLickResultListener onCLickResultListener;
 
-    WorkItemAdapter(List<WorkItem> workItems) {
+    WorkItemAdapter(List<WorkItem> workItems,onCLickResultListener onCLickResultListener) {
         this.workItems = workItems;
+        this.onCLickResultListener = onCLickResultListener;
+    }
+    interface onCLickResultListener{
+        void onClickResult(WorkItem workitem);
     }
 
     @Override
@@ -29,7 +34,7 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
     @Override
     public void onBindViewHolder(WorkItemAdapter.WorkItemViewHolder holder, int position) {
         WorkItem workItem = workItems.get(position);
-        holder.bindView(workItem);
+        holder.bindView(workItem,onCLickResultListener);
     }
 
     @Override
@@ -48,9 +53,16 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
             this.tvDescription = (TextView) itemView.findViewById(R.id.tv_description);
         }
 
-        void bindView(WorkItem workItem) {
+        void bindView(final WorkItem workItem, final onCLickResultListener onCLickResultListener) {
             tvTitle.setText(workItem.getTitle());
             tvDescription.setText(workItem.getDescription());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onCLickResultListener.onClickResult(workItem);
+                }
+            });
         }
+
     }
 }
