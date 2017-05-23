@@ -25,7 +25,8 @@ import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
 
 public final class TeamDetailsFragment extends Fragment {
     private static final String BUNDLE_TEAM_ID = "team_id";
-    private TeamRepository teamRepository = SqlTeamRepository.getInstance(getContext());
+
+    private TeamRepository teamRepository;
     private Team team;
 
     public static Fragment newInstance(long id) {
@@ -39,7 +40,12 @@ public final class TeamDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Team team1 = new Team(10L, "hello", true);
+
+        Log.d("johan", "" + getContext());
+        //TODO TEST
+        teamRepository = SqlTeamRepository.getInstance(getContext());
+
+        Team team1 = new Team(1L, "hello", true);
         teamRepository.addTeam(team1);
         Log.d("test", "onCreate: " + teamRepository.getTeams());
         team = teamRepository.getTeam(String.valueOf(getArguments().getLong(BUNDLE_TEAM_ID)));

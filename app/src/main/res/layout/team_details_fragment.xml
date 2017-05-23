@@ -22,8 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4sp"
                 android:text="Team name"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:textSize="20sp"/>
 
             <TextView
                 android:id="@+id/tv_team_detail_title"
@@ -50,7 +49,6 @@
                 android:layout_margin="4sp"
                 android:layout_marginBottom="10sp"
                 android:text="Users"
-                android:textStyle="bold"
                 android:textSize="20sp"/>
 
             <TextView
