@@ -46,9 +46,6 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
                     .add(R.id.workitem_list_container,fragment)
                     .commit();
         }
-
-
-
         updateAdapter();
 
     }

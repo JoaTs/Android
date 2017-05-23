@@ -4,4 +4,5 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="add_workitem_button">Add</string>
+    <string name="slogan">Manage your work</string>
 </resources>
