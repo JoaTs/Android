@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailViewActivity"></activity>
+        <activity android:name=".AddWorkitemActivity"></activity>
     </application>
 
 </manifest>

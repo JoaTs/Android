@@ -58,10 +58,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
         final String body =
                 "{"+
                 "\"id\": "+user.getId()+","+
-                "\"createdDate\": null,"+
-                "\"createdBy\": null,"+
-                "\"lastModifiedDate\": null,"+
-                "\"lastModifiedBy\": null,"+
                 "\"username\": \""+user.getUsername()+"\","+
                 "\"firstname\": \""+user.getFirstaname()+"\","+
                 "\"lastname\": \""+user.getLastname()+"\","+
@@ -95,10 +91,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
         final String body =
                 "{"+
                         "\"id\": "+user.getId()+","+
-                        "\"createdDate\": null,"+
-                        "\"createdBy\": null,"+
-                        "\"lastModifiedDate\": null,"+
-                        "\"lastModifiedBy\": null,"+
                         "\"username\": \""+user.getUsername()+"\","+
                         "\"firstname\": \""+user.getFirstaname()+"\","+
                         "\"lastname\": \""+user.getLastname()+"\","+

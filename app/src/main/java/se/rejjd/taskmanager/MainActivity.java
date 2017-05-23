@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(this,"welvome", Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"welcome", Toast.LENGTH_LONG).show();
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);

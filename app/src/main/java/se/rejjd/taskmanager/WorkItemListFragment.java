@@ -13,11 +13,13 @@ import android.view.ViewGroup;
 
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
+import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
 public final class WorkItemListFragment extends Fragment {
 
     private WorkItemRepository workItemRepository;
+
     private CallBacks callBacks;
 
     public static Fragment newInstance(){
@@ -42,10 +44,10 @@ public final class WorkItemListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        workItemRepository = SqlWorkItemRepository.getInstance(getContext());
-        for (int i = 0; i <= 10; i++) {
-            workItemRepository.addWorkItem(new WorkItem(i, "test" + i,"test" + i));
-        }
+        workItemRepository = new HttpWorkItemRepository();
+//        for (int i = 0; i <= 10; i++) {
+//            workItemRepository.addWorkItem(new WorkItem(i, "test" + i,"test" + i));
+//        }
         Log.d("hej", "onCreate: " + workItemRepository.getWorkItems().toString());
     }
 

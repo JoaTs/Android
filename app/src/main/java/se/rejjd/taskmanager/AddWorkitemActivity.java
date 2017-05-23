@@ -12,11 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import se.rejjd.taskmanager.model.WorkItem;
+import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 
 public final class AddWorkitemActivity extends AppCompatActivity {
 
-    private HttpWorkItemRepository repository;
+    private WorkItemRepository repository;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, AddWorkitemActivity.class);
@@ -41,6 +42,7 @@ public final class AddWorkitemActivity extends AppCompatActivity {
                 String workitemDescription = description.getText().toString();
 
                 repository.addWorkItem(new WorkItem(-1, workitemTitle, workitemDescription));
+                finish();
             }
         });
     }
