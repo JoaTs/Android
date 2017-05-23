@@ -2,4 +2,5 @@
     <string name="app_name">Taskmanager</string>
     <string name="team_details">Team Details</string>
     <string name="slogan">Manage your work</string>
+    <string name="add_member">+ Add user</string>
 </resources>
