@@ -58,10 +58,6 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
         final String body =
                 "{"+
                 "\"id\": -1,"+
-                "\"createdDate\": null,"+
-                "\"createdBy\": null,"+
-                "\"lastModifiedDate\": null,"+
-                "\"lastModifiedBy\": null,"+
                 "\"teamName\": \""+team.getTeamName()+"\","+
                 "\"activeTeam\": "+ team.isActiveTeam()+
                 "}";
@@ -92,10 +88,6 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
         final String body =
                         "{"+
                         "\"id\": "+team.getId()+","+
-                        "\"createdDate\": null,"+
-                        "\"createdBy\": null,"+
-                        "\"lastModifiedDate\": null,"+
-                        "\"lastModifiedBy\": null,"+
                         "\"teamName\": \""+team.getTeamName()+"\","+
                         "\"activeTeam\": "+ team.isActiveTeam()+
                         "}";
