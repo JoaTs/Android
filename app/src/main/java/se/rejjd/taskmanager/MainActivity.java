@@ -21,6 +21,7 @@ import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
+import se.rejjd.taskmanager.service.SqlLoader;
 
 public class MainActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     private WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
     private RecyclerView recyclerView;
     private Team team1;
+    private SqlLoader sqlLoader;
 
 
     @Override
@@ -48,7 +50,15 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
         }
         updateAdapter();
 
+        //TODO TEST TO UPDATE SQLite
+//        if(sqlLoader == null) {
+            new SqlLoader(this, 2002L).updateSqlFromHttp();
+//        }
+
+
+
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

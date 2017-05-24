@@ -37,6 +37,24 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         return null;
     }
 
+    //TODO Should this method be added to Interface????
+    public List<WorkItem> getWorkItemsFromTeam(final long teamId) {
+
+        try {
+            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return get(URL + "teams/" + teamId + "/workitems");
+                }
+            }).execute().get();
+            return parserWorkItems(httpResponse.getResponseAsString());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     @Override
     public WorkItem getWorkItem(final String id) {
@@ -126,7 +144,14 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
             long id = jsonObject.getLong("id");
             String title = jsonObject.getString("title");
             String description = jsonObject.getString("description");
-            return new WorkItem(id, title, description);
+
+            WorkItem workItem = new WorkItem(id, title, description);
+            if(!jsonObject.isNull("user")) {
+                JSONObject jsonUserObject = new JSONObject(jsonObject.getString("user"));
+                workItem.userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
+            }
+
+            return workItem;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -142,8 +167,14 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                 long id = jsonObject.getLong("id");
                 String title = jsonObject.getString("title");
                 String description = jsonObject.getString("description");
-                WorkItem workitem = new WorkItem(id, title, description);
-                workItems.add(workitem);
+
+                WorkItem workItem = new WorkItem(id, title, description);
+                if(!jsonObject.isNull("user")) {
+                    JSONObject jsonUserObject = new JSONObject(jsonObject.getString("user"));
+                    workItem.userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
+                }
+
+                workItems.add(workItem);
             }
 
             return workItems;

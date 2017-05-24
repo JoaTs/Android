@@ -8,6 +8,7 @@ public final class User {
     private String lastname;
     private String userId;
     private boolean activeUser;
+    public long teamId; //TODO Test Johan
 
     public User(long id, String username, String firstname, String lastname, String userId, boolean activeUser) {
         this.id = id;
@@ -51,6 +52,7 @@ public final class User {
                 ", lastname='" + lastname + '\'' +
                 ", userId='" + userId + '\'' +
                 ", activeUser=" + activeUser +
+                ", team=" + teamId +
                 '}';
     }
 

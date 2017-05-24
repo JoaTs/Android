@@ -9,6 +9,8 @@ public final class WorkItem implements Parcelable{
     private String title;
     private String description;
     private Status status;
+    public long userLongId; //TODO Test Johan
+
 
     public WorkItem(long id, String title, String description) {
         this.id = id;
@@ -103,6 +105,7 @@ public final class WorkItem implements Parcelable{
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
+                ", userLongId='" + userLongId + '\'' +
                 '}';
     }
 }

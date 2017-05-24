@@ -44,11 +44,11 @@ public final class WorkItemListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        workItemRepository = new HttpWorkItemRepository();
+        workItemRepository = SqlWorkItemRepository.getInstance(getActivity());
 //        for (int i = 0; i <= 10; i++) {
 //            workItemRepository.addWorkItem(new WorkItem(i, "test" + i,"test" + i));
 //        }
-        Log.d("hej", "onCreate: " + workItemRepository.getWorkItems().toString());
+        Log.d("WorkItemListFra row 51 ", "onCreate: " + "" + workItemRepository.getWorkItems().toString());
     }
 
 

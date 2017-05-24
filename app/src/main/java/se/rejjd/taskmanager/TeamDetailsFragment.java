@@ -45,9 +45,6 @@ public final class TeamDetailsFragment extends Fragment {
         //TODO TEST
         teamRepository = SqlTeamRepository.getInstance(getContext());
 
-        Team team1 = new Team(1L, "hello", true);
-        teamRepository.addTeam(team1);
-        Log.d("test", "onCreate: " + teamRepository.getTeams());
         team = teamRepository.getTeam(String.valueOf(getArguments().getLong(BUNDLE_TEAM_ID)));
     }
 
