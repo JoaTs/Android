@@ -8,15 +8,16 @@ public final class User {
     private String lastname;
     private String userId;
     private boolean activeUser;
-    public long teamId; //TODO Test Johan
+    private long teamId; //TODO Test Johan
 
-    public User(long id, String username, String firstname, String lastname, String userId, boolean activeUser) {
+    public User(long id, String username, String firstname, String lastname, String userId, boolean activeUser, long teamId) {
         this.id = id;
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.userId = userId;
         this.activeUser = true;
+        this.teamId = teamId;
     }
 
     public long getId() {
@@ -41,6 +42,10 @@ public final class User {
 
     public boolean isActiveUser() {
         return activeUser;
+    }
+
+    public long getTeamId() {
+        return teamId;
     }
 
     @Override

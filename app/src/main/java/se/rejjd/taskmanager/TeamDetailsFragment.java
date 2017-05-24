@@ -21,7 +21,9 @@ import java.util.List;
 import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.TeamRepository;
+import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
+import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 
 public final class TeamDetailsFragment extends Fragment {
     private static final String BUNDLE_TEAM_ID = "team_id";
@@ -54,12 +56,13 @@ public final class TeamDetailsFragment extends Fragment {
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_team_detail_title);
         tvTitle.setText(team.getTeamName());
         RecyclerView rvUsers = (RecyclerView) view.findViewById(R.id.rv_users);
-        List<User> users = new ArrayList<>();
-        for (int i = 0; i < 10; i++){
-            users.add(new User(i, "@LukSky"+i, "Luke ", "Skywalker", "userId", true));
-        }
+//        List<User> users = new ArrayList<>();
+//        for (int i = 0; i < 10; i++){
+//            users.add(new User(i, "@LukSky"+i, "Luke ", "Skywalker", "userId", true,100));
+//        }
+        UserRepository userRepository = SqlUserRepository.getInstance(getContext());
         UserAdapter userAdapter = new UserAdapter();
-        userAdapter.setData(users);
+        userAdapter.setData(userRepository.getUsers());
         rvUsers.setAdapter(userAdapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
         getActivity().setTitle(team.getTeamName());

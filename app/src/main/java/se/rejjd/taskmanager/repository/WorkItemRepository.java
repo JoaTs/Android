@@ -13,5 +13,7 @@ public interface WorkItemRepository {
     Long addWorkItem(WorkItem workItem);
 
     WorkItem updateWorkItem(WorkItem workItem);
+
+    List<WorkItem> getWorkItemsFromTeam(long teamId);
 }
 

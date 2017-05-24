@@ -73,6 +73,11 @@ public class SqlWorkItemRepository implements WorkItemRepository{
         return null;
     }
 
+    @Override
+    public List<WorkItem> getWorkItemsFromTeam(long teamId) {
+        return null;
+    }
+
     private ContentValues getContentValues(WorkItem workItem) {
         ContentValues cv = new ContentValues();
         cv.put(ModelEntry.WORK_ITEMS_COLUMN_NAME_TITLE, workItem.getTitle());

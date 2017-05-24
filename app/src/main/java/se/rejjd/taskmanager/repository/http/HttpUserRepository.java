@@ -1,5 +1,7 @@
 package se.rejjd.taskmanager.repository.http;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,11 +14,13 @@ import se.rejjd.taskmanager.http.GetTask;
 import se.rejjd.taskmanager.http.HttpHelper;
 import se.rejjd.taskmanager.http.HttpHelperCommand;
 import se.rejjd.taskmanager.http.HttpResponse;
+import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.UserRepository;
 
 public final class HttpUserRepository extends HttpHelper implements UserRepository{
     private final String URL = "http://10.0.2.2:8080/";
+    private static final String TAG = HttpUserRepository.class.getSimpleName();
 
     @Override
     public List<User> getUsers() {
@@ -38,6 +42,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
     }
 
     //TODO Should this method be added in interface??
+    @Override
     public List<User> getUsersFromTeam(final long teamId) {
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
@@ -65,6 +70,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                     return get(URL + "users/" + id);
                 }
             }).execute().get();
+            Log.d(TAG, "getUser: id " + id + "response" + parserUser(httpResponse.getResponseAsString()));
             return parserUser(httpResponse.getResponseAsString());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -143,14 +149,11 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
             String lastname = jsonObject.getString("lastname");
             String userId = jsonObject.getString("userId");
             boolean activeUser = jsonObject.getBoolean("activeUser");
+            JSONObject team = jsonObject.getJSONObject("team");
+            long teamid = team.getLong("id");
 
-            User user = new User(id,username,firstname,lastname,userId,activeUser);
-
-            if(!jsonObject.isNull("team"));  //TODO MAKE NICER johan  (ADD TO CONSTRUCTOR)
-            {
-                JSONObject jsonTeamObject = new JSONObject(jsonObject.getString("team"));
-                user.teamId = jsonTeamObject.getLong("id");
-            }
+            User user = new User(id,username,firstname,lastname,userId,activeUser,teamid);
+            Log.d(TAG, "parserUser: ");
 
             return user;
         } catch (JSONException e) {
@@ -172,15 +175,11 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 String lastname = jsonObject.getString("lastname");
                 String userId = jsonObject.getString("userId");
                 boolean activeUser = jsonObject.getBoolean("activeUser");
+                JSONObject team = jsonObject.getJSONObject("team");
+                long teamid = team.getLong("id");
 
 
-                User user = new User(id,username,firstname,lastname,userId,activeUser);
-
-                if(!jsonObject.isNull("team"));  //TODO MAKE NICER johan  (ADD TO CONSTRUCTOR)
-                {
-                    JSONObject jsonTeamObject = new JSONObject(jsonObject.getString("team"));
-                    user.teamId = jsonTeamObject.getLong("id");
-                }
+                User user = new User(id,username,firstname,lastname,userId,activeUser,teamid);
 
                 userItems.add(user);
             }

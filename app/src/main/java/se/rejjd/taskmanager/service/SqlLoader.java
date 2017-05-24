@@ -31,13 +31,13 @@ public final class SqlLoader {
 
     private final Context context;
 
-    private final HttpUserRepository httpUserRepository;
+    private final UserRepository httpUserRepository;
     private final UserRepository sqlUserRepository;
 
-    private final HttpTeamRepository httpTeamRepository;
+    private final TeamRepository httpTeamRepository;
     private final TeamRepository sqlTeamRepository;
 
-    private final HttpWorkItemRepository httpWorkItemRepository;
+    private final WorkItemRepository httpWorkItemRepository;
     private final WorkItemRepository sqlWorkItemRepository;
 
     //TODO. ONLY ONE INSTANCE OF THIS SHOULD BE ALLOWED
@@ -63,12 +63,16 @@ public final class SqlLoader {
     public boolean updateSqlFromHttp() {
         if (AppStatus.getInstance(context).isOnline()) {
             Log.d("johanSqlLoader", "You got Internet!!!!");
-             //TODO REMOVE OLD DATA ON SQLite
+            //TODO REMOVE OLD DATA ON SQLite
             //TODO BAAAAD PRATIC   I NEED YOR HELP JOAKIM!!
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.TEAM_TABLE_NAME);
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.USERS_TABLE_NAME);
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.WORK_ITEMS_TABLE_NAME);
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.ISSUES_TABLE_NAME);
+            database.execSQL("Delete FROM sqlite_sequence where name='" + DatabaseContract.ModelEntry.USERS_TABLE_NAME + "'");
+            database.execSQL("Delete FROM sqlite_sequence where name='" + DatabaseContract.ModelEntry.TEAM_TABLE_NAME + "'");
+            database.execSQL("Delete FROM sqlite_sequence where name='" + DatabaseContract.ModelEntry.WORK_ITEMS_TABLE_NAME + "'");
+            database.execSQL("Delete FROM sqlite_sequence where name='" + DatabaseContract.ModelEntry.ISSUES_TABLE_NAME + "'");
 
 
             update();
@@ -79,34 +83,31 @@ public final class SqlLoader {
         return false;
     }
 
-    private void update(){
+    private void update() {
+        Toast.makeText(context, "" + userLoggedIn, Toast.LENGTH_SHORT).show();
         User user = httpUserRepository.getUser(String.valueOf(userLoggedIn));
         Log.d("johanSqlLoader", user.toString());
 
         //TODO LISTS IN USE:
         //One Team
-        Team team = httpTeamRepository.getTeam(String.valueOf(user.teamId));
+        Team team = httpTeamRepository.getTeam(String.valueOf(user.getTeamId()));
         Log.d("johanSqlLoader", team.toString());
         sqlTeamRepository.addTeam(team);
-        Log.d("johanSqlLoaderSQL",sqlTeamRepository.getTeams().toString());
+        Log.d("johanSqlLoaderSQL", sqlTeamRepository.getTeams().toString());
 
-        //@Path("{id}/workitems")
-        //TeamResource = getWorkItemsFromTeam();
-        //WorkItems from Team
-        List<WorkItem> workitemListAll = httpWorkItemRepository.getWorkItems();
-        Log.d("johanSqlLoader", workitemListAll.toString());
-
-        List<WorkItem> workitemList = httpWorkItemRepository.getWorkItemsFromTeam(user.teamId);
+        List<WorkItem> workitemList = httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId());
         Log.d("johanSqlLoader", workitemList.toString());
-        for(WorkItem w : workitemList){
+        for (WorkItem w : workitemList) {
             sqlWorkItemRepository.addWorkItem(w);
         }
+        Log.d("johanSqlLoaderSql", sqlWorkItemRepository.getWorkItems().toString());
 
         List<User> userList = httpUserRepository.getUsersFromTeam(team.getId());
         Log.d("johanSqlLoader", userList.toString());
 
-        for(User u : userList){
+        for (User u : userList) {
             sqlUserRepository.addUser(u);
         }
+        Log.d("johanSqlLoadesql", sqlUserRepository.getUsers().toString());
     }
 }

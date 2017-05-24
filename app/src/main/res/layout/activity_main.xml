@@ -20,7 +20,6 @@
         android:tint="@color/white"
         app:backgroundTint="@color/primary_orange"
         app:fabSize="normal"
-        android:onClick="onFabClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>

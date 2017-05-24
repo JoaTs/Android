@@ -72,6 +72,11 @@ public class SqlUserRepository implements UserRepository {
         return null;
     }
 
+    @Override
+    public List<User> getUsersFromTeam(long teamId) {
+        return null;
+    }
+
     private ContentValues getContentValues(User user) {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USERNAME, user.getUsername());

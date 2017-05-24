@@ -14,4 +14,7 @@ public interface UserRepository {
 
     User updateUser(User user);
 
+    List<User> getUsersFromTeam(long teamId);
+
+
 }
