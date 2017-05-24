@@ -9,13 +9,14 @@ public final class WorkItem implements Parcelable{
     private String title;
     private String description;
     private Status status;
-    public long userLongId; //TODO Test Johan
+    private long userId;
 
 
-    public WorkItem(long id, String title, String description) {
+    public WorkItem(long id, String title, String description, long userId) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.userId = userId;
     }
 
     protected WorkItem(Parcel in) {
@@ -39,6 +40,7 @@ public final class WorkItem implements Parcelable{
     public long getId() {
         return id;
     }
+
     public String getTitle() {
         return title;
     }
@@ -49,6 +51,10 @@ public final class WorkItem implements Parcelable{
 
     public Status getStatus() {
         return status;
+    }
+
+    public long getUserId() {
+        return userId;
     }
 
     public void setTitle(String title) {
@@ -105,7 +111,7 @@ public final class WorkItem implements Parcelable{
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
-                ", userLongId='" + userLongId + '\'' +
+                ", userLongId='" + userId + '\'' +
                 '}';
     }
 }

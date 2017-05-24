@@ -12,12 +12,15 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import se.rejjd.taskmanager.model.WorkItem;
+import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
+import se.rejjd.taskmanager.repository.http.HttpUserRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 
 public final class AddWorkitemActivity extends AppCompatActivity {
 
-    private WorkItemRepository repository;
+    private UserRepository userRepository;
+    private WorkItemRepository workItemRepository;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, AddWorkitemActivity.class);
@@ -29,7 +32,8 @@ public final class AddWorkitemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_item_add_view);
 
-        repository = new HttpWorkItemRepository();
+        workItemRepository = new HttpWorkItemRepository();
+        userRepository = new HttpUserRepository();
 
         final EditText title = (EditText) findViewById(R.id.edit_workitem_title);
         final EditText description = (EditText) findViewById(R.id.edit_workitem_description);
@@ -40,8 +44,16 @@ public final class AddWorkitemActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String workitemTitle = title.getText().toString();
                 String workitemDescription = description.getText().toString();
+                Intent intent = getIntent();
+                Bundle bundle = intent.getExtras();
+//                String userId = bundle.getString(MainActivity.USER_ID);
+                String userId = "2002";
+                        WorkItem workItem = new WorkItem(-1L,workitemTitle,workitemDescription,Long.valueOf(userId));
 
-                repository.addWorkItem(new WorkItem(-1, workitemTitle, workitemDescription));
+                long newId =  workItemRepository.addWorkItem(workItem);
+//                WorkItem workItemDb  = workItemRepository.getWorkItem(String.valueOf(workItem.getId()));
+                userRepository.addUserToWorkItem(userId, newId);
+
                 finish();
             }
         });

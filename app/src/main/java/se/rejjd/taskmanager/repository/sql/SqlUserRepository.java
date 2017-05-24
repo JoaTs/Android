@@ -72,6 +72,12 @@ public class SqlUserRepository implements UserRepository {
         return null;
     }
 
+    @Override
+    public boolean addUserToWorkItem(String userId, long workItemId) {
+
+        return false;
+    }
+
     private ContentValues getContentValues(User user) {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USERNAME, user.getUsername());

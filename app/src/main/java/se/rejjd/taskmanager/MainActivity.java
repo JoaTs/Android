@@ -1,5 +1,6 @@
 package se.rejjd.taskmanager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,14 +31,24 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     private RecyclerView recyclerView;
     private Team team1;
     private SqlLoader sqlLoader;
+    private String userLoggedIn;
 
+    public static final String USER_ID = "userId";
+
+    public static Intent createIntentMainActivity(Context context, String userId) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(USER_ID, userId);
+        return intent;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(this,"welcome", Toast.LENGTH_LONG).show();
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        userLoggedIn = bundle.getString(USER_ID);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
@@ -52,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
         //TODO TEST TO UPDATE SQLite
 //        if(sqlLoader == null) {
-            new SqlLoader(this, 2002L).updateSqlFromHttp();
+            new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
 //        }
 
 
@@ -92,8 +103,9 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
         startActivity(intent);
     }
 
-    private void updateAdapter() {
-//        recyclerView.setAdapter(new WorkItemAdapter(workItemRepository.getWorkItems()));
+    public void updateAdapter() {
+//        WorkItemRepository workItemRepository = new HttpWorkItemRepository();
+//        recyclerView.setAdapter(workItemRepository.getWorkItems());
     }
 }
 

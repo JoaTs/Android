@@ -34,7 +34,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
 
         return null;
 
-
     }
 
     //TODO Should this method be added in interface??
@@ -52,7 +51,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
         }
 
         return null;
-
 
     }
 
@@ -106,6 +104,24 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
     }
 
     @Override
+    public boolean addUserToWorkItem(final String userId,final long workItemId){
+
+        try {
+            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return put(URL + "users/"+ userId +"/workitems/" + workItemId, null);
+                }
+            }).execute().get();
+            return httpResponse.getStatusCode() == 200;
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+
+    @Override
     public User updateUser(final User user) {
         final String body =
                 "{"+
@@ -144,13 +160,15 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
             String userId = jsonObject.getString("userId");
             boolean activeUser = jsonObject.getBoolean("activeUser");
 
-            User user = new User(id,username,firstname,lastname,userId,activeUser);
+            long teamId = 0;
 
             if(!jsonObject.isNull("team"));  //TODO MAKE NICER johan  (ADD TO CONSTRUCTOR)
             {
                 JSONObject jsonTeamObject = new JSONObject(jsonObject.getString("team"));
-                user.teamId = jsonTeamObject.getLong("id");
+                teamId = jsonTeamObject.getLong("id");
             }
+
+            User user = new User(id,username,firstname,lastname,userId,activeUser, teamId);
 
             return user;
         } catch (JSONException e) {
@@ -174,13 +192,15 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 boolean activeUser = jsonObject.getBoolean("activeUser");
 
 
-                User user = new User(id,username,firstname,lastname,userId,activeUser);
+                long teamId = 0;
 
                 if(!jsonObject.isNull("team"));  //TODO MAKE NICER johan  (ADD TO CONSTRUCTOR)
                 {
                     JSONObject jsonTeamObject = new JSONObject(jsonObject.getString("team"));
-                    user.teamId = jsonTeamObject.getLong("id");
+                     teamId = jsonTeamObject.getLong("id");
                 }
+
+                User user = new User(id,username,firstname,lastname,userId,activeUser, teamId);
 
                 userItems.add(user);
             }

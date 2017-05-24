@@ -19,8 +19,9 @@ public class WorkItemCursorWrapper extends CursorWrapper{
         long id = getLong(getColumnIndex(ModelEntry._ID));
         String title = getString(getColumnIndexOrThrow(ModelEntry.WORK_ITEMS_COLUMN_NAME_TITLE));
         String description = getString(getColumnIndexOrThrow(ModelEntry.WORK_ITEMS_COLUMN_NAME_DESCRIPTION));
+        long userId = getLong(getColumnIndexOrThrow(ModelEntry.WORK_ITEMS_COLUMN_NAME_USER_ID));
 
-        return new WorkItem(id, title, description);
+        return new WorkItem(id, title, description,userId);
     }
     public WorkItem getFirstWorkItem() {
         moveToFirst();

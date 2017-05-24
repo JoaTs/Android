@@ -13,11 +13,13 @@ public class DatabaseContract {
         public static final String USERS_COLUMN_NAME_FIRSTNAME = "firstname";
         public static final String USERS_COLUMN_NAME_LASTNAME = "lastname";
         public static final String USERS_COLUMN_NAME_USER_ID = "userId";
+        public static final String USERS_COLUMN_NAME_TEAM_ID = "teamId";
         public static final String USERS_COLUMN_NAME_ACTIVE_USER = "activeUser";
 
         public static final String WORK_ITEMS_TABLE_NAME = "workItems";
         public static final String WORK_ITEMS_COLUMN_NAME_TITLE = "title";
         public static final String WORK_ITEMS_COLUMN_NAME_DESCRIPTION = "description";
+        public static final String WORK_ITEMS_COLUMN_NAME_USER_ID = "userId";
 
         public static final String ISSUES_TABLE_NAME = "issues";
         public static final String ISSUES_COLUMN_NAME_DESCRIPTION = "description";

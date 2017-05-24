@@ -15,9 +15,11 @@ public class UserCursorWrapper extends CursorWrapper{
         String firstname = getString(getColumnIndexOrThrow(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_FIRSTNAME));
         String lastname = getString(getColumnIndexOrThrow(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_LASTNAME));
         String userId = getString(getColumnIndexOrThrow(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USER_ID));
+        long teamId = getLong(getColumnIndexOrThrow(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_TEAM_ID));
         boolean activeUser = getInt(getColumnIndexOrThrow(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ACTIVE_USER)) > 0;
 
-        return new User(id, username, firstname, lastname, userId, activeUser);
+
+        return new User(id, username, firstname, lastname, userId, activeUser, teamId);
     }
 
     public UserCursorWrapper(Cursor cursor) {

@@ -27,7 +27,7 @@ public final class SqlLoader {
 
     private final SQLiteDatabase database;
 
-    private final long userLoggedIn;
+    private final String userLoggedIn;
 
     private final Context context;
 
@@ -43,7 +43,7 @@ public final class SqlLoader {
     //TODO. ONLY ONE INSTANCE OF THIS SHOULD BE ALLOWED
     //CREATE GET INSTANCE OF. STATIC LOGGED IN
 
-    public SqlLoader(Context context, long userLoggedIn) {
+    public SqlLoader(Context context, String userLoggedIn) {
 
         database = DatabaseHelper.getInstance(context).getWritableDatabase();
 
@@ -85,7 +85,7 @@ public final class SqlLoader {
 
         //TODO LISTS IN USE:
         //One Team
-        Team team = httpTeamRepository.getTeam(String.valueOf(user.teamId));
+        Team team = httpTeamRepository.getTeam(String.valueOf(user.getTeamId()));
         Log.d("johanSqlLoader", team.toString());
         sqlTeamRepository.addTeam(team);
         Log.d("johanSqlLoaderSQL",sqlTeamRepository.getTeams().toString());
@@ -96,7 +96,7 @@ public final class SqlLoader {
         List<WorkItem> workitemListAll = httpWorkItemRepository.getWorkItems();
         Log.d("johanSqlLoader", workitemListAll.toString());
 
-        List<WorkItem> workitemList = httpWorkItemRepository.getWorkItemsFromTeam(user.teamId);
+        List<WorkItem> workitemList = httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId());
         Log.d("johanSqlLoader", workitemList.toString());
         for(WorkItem w : workitemList){
             sqlWorkItemRepository.addWorkItem(w);

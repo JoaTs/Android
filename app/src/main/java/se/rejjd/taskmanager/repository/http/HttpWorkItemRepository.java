@@ -145,11 +145,13 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
             String title = jsonObject.getString("title");
             String description = jsonObject.getString("description");
 
-            WorkItem workItem = new WorkItem(id, title, description);
+            long userLongId = 0;
+
             if(!jsonObject.isNull("user")) {
                 JSONObject jsonUserObject = new JSONObject(jsonObject.getString("user"));
-                workItem.userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
+                userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
             }
+            WorkItem workItem = new WorkItem(id, title, description, userLongId);
 
             return workItem;
         } catch (JSONException e) {
@@ -168,11 +170,13 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                 String title = jsonObject.getString("title");
                 String description = jsonObject.getString("description");
 
-                WorkItem workItem = new WorkItem(id, title, description);
+                long userLongId = 0;
+
                 if(!jsonObject.isNull("user")) {
                     JSONObject jsonUserObject = new JSONObject(jsonObject.getString("user"));
-                    workItem.userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
+                    userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
                 }
+                WorkItem workItem = new WorkItem(id, title, description, userLongId);
 
                 workItems.add(workItem);
             }
