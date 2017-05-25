@@ -3,7 +3,6 @@ package se.rejjd.taskmanager.service;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -70,7 +69,6 @@ public final class SqlLoader {
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.WORK_ITEMS_TABLE_NAME);
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.ISSUES_TABLE_NAME);
 
-
             update();
             return true;
         } else {
@@ -102,11 +100,13 @@ public final class SqlLoader {
             sqlWorkItemRepository.addWorkItem(w);
         }
 
+        //TODO Dose not work....
         List<User> userList = httpUserRepository.getUsersFromTeam(team.getId());
         Log.d("johanSqlLoader", userList.toString());
 
         for(User u : userList){
             sqlUserRepository.addUser(u);
         }
+        Log.d("johanSqlLoeaderSQL", sqlUserRepository.getUsers().toString());
     }
 }

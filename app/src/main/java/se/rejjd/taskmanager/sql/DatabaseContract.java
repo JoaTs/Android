@@ -8,7 +8,9 @@ public class DatabaseContract {
 
     public static class ModelEntry implements BaseColumns {
 
+
         public static final String USERS_TABLE_NAME = "users";
+        public static final String USERS_COLUMN_NAME_ID = "id";
         public static final String USERS_COLUMN_NAME_USERNAME = "username";
         public static final String USERS_COLUMN_NAME_FIRSTNAME = "firstname";
         public static final String USERS_COLUMN_NAME_LASTNAME = "lastname";

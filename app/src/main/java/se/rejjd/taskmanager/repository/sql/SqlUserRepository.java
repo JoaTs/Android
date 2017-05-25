@@ -80,6 +80,7 @@ public class SqlUserRepository implements UserRepository {
 
     private ContentValues getContentValues(User user) {
         ContentValues cv = new ContentValues();
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ID, user.getId());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USERNAME, user.getUsername());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_FIRSTNAME, user.getFirstname());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_LASTNAME, user.getLastname());
