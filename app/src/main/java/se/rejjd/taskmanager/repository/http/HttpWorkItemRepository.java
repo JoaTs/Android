@@ -1,5 +1,7 @@
 package se.rejjd.taskmanager.repository.http;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -110,7 +112,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
 
         final String body =
                 "{" +
-                "\"id\": \"" + workItem.getId() + "\","+
+                "\"id\": \"" + ": \"82\","+
                 "\"createdDate\": \"2017-05-17\","+
                 "\"createdBy\": \"DreamierTeam\","+
                 "\"lastModifiedDate\": \"2017-05-17\","+
@@ -129,7 +131,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                     return put(URL + "workitems/" + workItem.getId() , body);
                 }
             }).execute().get();
-
+            Log.d("johan", "updateWorkItem: " + httpResponse.getStatusCode());
             return (httpResponse.getStatusCode() == 200)? workItem : null;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();

@@ -111,7 +111,7 @@ public final class WorkItem implements Parcelable{
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
-                ", userLongId='" + userId + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 }

@@ -86,6 +86,7 @@ public class SqlUserRepository implements UserRepository {
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_LASTNAME, user.getLastname());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USER_ID, user.getUserId());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ACTIVE_USER, user.isActiveUser());
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_TEAM_ID,user.getTeamId());
 
         return cv;
     }

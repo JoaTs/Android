@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     private Team team1;
     private SqlLoader sqlLoader;
     private String userLoggedIn;
+    private FragmentManager fm;
 
     public static final String USER_ID = "userId";
 
@@ -45,12 +46,11 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        fm = getSupportFragmentManager();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         userLoggedIn = bundle.getString(USER_ID);
 
-        FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment == null){
@@ -70,6 +70,23 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
     }
 
+    //temp Solution
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
+        Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
+
+        if(fragment != null){
+            fragment = WorkItemListFragment.newInstance();
+            fm.beginTransaction()
+                    .replace(R.id.workitem_list_container,fragment)
+                    .commit();
+
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -84,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
         switch(item.getItemId()){
             case R.id.team_view:
-                Intent intent = DetailViewActivity.createIntentWithTeam(this,1L);
+                Intent intent = DetailViewActivity.createIntentWithTeam(this,13L);
                 startActivity(intent);
                 break;
         }
@@ -95,6 +112,12 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     @Override
     public void onListItemClicked(WorkItem workItem) {
         Intent intent =  DetailViewActivity.createIntentWithWorkItem(MainActivity.this,workItem);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onListItemLongClicked(WorkItem workItem) {
+        Intent intent = DetailViewActivity.createIntentForUpdate(MainActivity.this, workItem);
         startActivity(intent);
     }
 

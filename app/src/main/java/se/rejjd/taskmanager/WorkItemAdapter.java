@@ -15,26 +15,33 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
 
     private final List<WorkItem> workItems;
     private onCLickResultListener onCLickResultListener;
+    private onLongClickListener onLongClickListener;
 
-    WorkItemAdapter(List<WorkItem> workItems,onCLickResultListener onCLickResultListener) {
+    WorkItemAdapter(List<WorkItem> workItems, onCLickResultListener onCLickResultListener, onLongClickListener onLongClickListener) {
         this.workItems = workItems;
         this.onCLickResultListener = onCLickResultListener;
+        this.onLongClickListener = onLongClickListener;
     }
-    interface onCLickResultListener{
+
+    interface onCLickResultListener {
         void onClickResult(WorkItem workitem);
+    }
+
+    interface onLongClickListener {
+        void onLongClickResult(WorkItem workItem);
     }
 
     @Override
     public WorkItemAdapter.WorkItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.work_item_list_view, parent,  false);
+        View view = inflater.inflate(R.layout.work_item_list_view, parent, false);
         return new WorkItemAdapter.WorkItemViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(WorkItemAdapter.WorkItemViewHolder holder, int position) {
         WorkItem workItem = workItems.get(position);
-        holder.bindView(workItem,onCLickResultListener);
+        holder.bindView(workItem, onCLickResultListener, onLongClickListener);
     }
 
     @Override
@@ -53,7 +60,7 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
             this.tvDescription = (TextView) itemView.findViewById(R.id.tv_description);
         }
 
-        void bindView(final WorkItem workItem, final onCLickResultListener onCLickResultListener) {
+        void bindView(final WorkItem workItem, final onCLickResultListener onCLickResultListener, final WorkItemAdapter.onLongClickListener onLongClickListener) {
             tvTitle.setText(workItem.getTitle());
             tvDescription.setText(workItem.getDescription());
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +69,14 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
                     onCLickResultListener.onClickResult(workItem);
                 }
             });
-        }
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onLongClickListener.onLongClickResult(workItem);
+                    return true;
+                }
+            });
 
+        }
     }
 }

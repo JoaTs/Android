@@ -75,6 +75,7 @@ public class SqlTeamRepository implements TeamRepository {
 
     private ContentValues getContentValues(Team team) {
         ContentValues cv = new ContentValues();
+        cv.put(DatabaseContract.ModelEntry._ID,team.getId());
         cv.put(DatabaseContract.ModelEntry.TEAM_COLUMN_NAME_TEAM_NAME, team.getTeamName());
         cv.put(DatabaseContract.ModelEntry.TEAM_COLUMN_NAME_ACTIVE_TEAM, team.isActiveTeam());
 
