@@ -8,8 +8,10 @@ public final class WorkItem implements Parcelable{
     private long id;
     private String title;
     private String description;
-    private Status status;
+//    private Status status;
+    private String status;
     private long userId;
+
 
 
     public WorkItem(long id, String title, String description, long userId) {
@@ -49,7 +51,7 @@ public final class WorkItem implements Parcelable{
         return description;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -65,7 +67,7 @@ public final class WorkItem implements Parcelable{
         this.description = description;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

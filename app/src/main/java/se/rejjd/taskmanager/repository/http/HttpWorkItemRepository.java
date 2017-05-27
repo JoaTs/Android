@@ -110,19 +110,35 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
     @Override
     public WorkItem updateWorkItem(final WorkItem workItem) {
 
+//        final String body =
+//                "{" +
+//                "\"id\": \"" + ": \"82\","+
+//                "\"createdDate\": \"2017-05-17\","+
+//                "\"createdBy\": \"DreamierTeam\","+
+//                "\"lastModifiedDate\": \"2017-05-17\","+
+//                "\"lastModifiedBy\": \"DreamierTeam\","+
+//                "\"title\": \"en title\","+
+//                "\"description\": \"Uppdate?\","+
+//                "\"status\": \""+ workItem.getStatus() +"\","+
+//                "\"user\": null,"+
+//                "\"dateOfCompletion\": \"\""+
+//                "}";
+
         final String body =
-                "{" +
-                "\"id\": \"" + ": \"82\","+
-                "\"createdDate\": \"2017-05-17\","+
-                "\"createdBy\": \"DreamierTeam\","+
-                "\"lastModifiedDate\": \"2017-05-17\","+
-                "\"lastModifiedBy\": \"DreamierTeam\","+
-                "\"title\": \"en title\","+
-                "\"description\": \"Uppdate?\","+
-                "\"status\": \""+ workItem.getStatus() +"\","+
+                "{"+
+                "\"id\": "+workItem.getId()+","+
+                "\"createdDate\": null,"+
+                "\"createdBy\": null,"+
+                "\"lastModifiedDate\": null,"+
+                "\"lastModifiedBy\": null,"+
+                "\"title\": \""+workItem.getTitle()+"\","+
+                "\"description\": \""+workItem.getDescription()+"\","+
+                "\"status\": \""+workItem.getStatus()+"\","+
                 "\"user\": null,"+
-                "\"dateOfCompletion\": \"\""+
+                "\"dateOfCompletion\": null"+
                 "}";
+
+        Log.d("johanHttpWorkRepRow127",body);
 
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
@@ -146,7 +162,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
             long id = jsonObject.getLong("id");
             String title = jsonObject.getString("title");
             String description = jsonObject.getString("description");
-
+            String status = jsonObject.getString("status");
             long userLongId = 0;
 
             if(!jsonObject.isNull("user")) {
@@ -154,6 +170,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                 userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
             }
             WorkItem workItem = new WorkItem(id, title, description, userLongId);
+            workItem.setStatus(status);
 
             return workItem;
         } catch (JSONException e) {
@@ -171,6 +188,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                 long id = jsonObject.getLong("id");
                 String title = jsonObject.getString("title");
                 String description = jsonObject.getString("description");
+                String status = jsonObject.getString("status");
 
                 long userLongId = 0;
 
@@ -179,6 +197,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                     userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
                 }
                 WorkItem workItem = new WorkItem(id, title, description, userLongId);
+                workItem.setStatus(status);
 
                 workItems.add(workItem);
             }

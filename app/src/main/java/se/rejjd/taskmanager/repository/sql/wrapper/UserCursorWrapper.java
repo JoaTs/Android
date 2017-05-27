@@ -10,7 +10,7 @@ public class UserCursorWrapper extends CursorWrapper{
 
     public User getUser() {
 
-        long id = getLong(getColumnIndex(DatabaseContract.ModelEntry._ID));
+        long id = getLong(getColumnIndex(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ID));
         String username = getString(getColumnIndexOrThrow(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USERNAME));
         String firstname = getString(getColumnIndexOrThrow(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_FIRSTNAME));
         String lastname = getString(getColumnIndexOrThrow(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_LASTNAME));

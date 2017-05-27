@@ -16,11 +16,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import se.rejjd.taskmanager.model.Team;
+import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.TeamRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
+import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.SqlLoader;
 
@@ -28,11 +30,12 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
+    private SqlUserRepository sqlUserRepository;
     private RecyclerView recyclerView;
-    private Team team1;
     private SqlLoader sqlLoader;
     private String userLoggedIn;
     private FragmentManager fm;
+
 
     public static final String USER_ID = "userId";
 
@@ -50,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         userLoggedIn = bundle.getString(USER_ID);
+
+        sqlUserRepository = SqlUserRepository.getInstance(this);
+
 
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
@@ -101,7 +107,9 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
         switch(item.getItemId()){
             case R.id.team_view:
-                Intent intent = DetailViewActivity.createIntentWithTeam(this,13L);
+                User user = sqlUserRepository.getUser(userLoggedIn);
+                long teamId = user.getTeamId();
+                Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId);//TODO
                 startActivity(intent);
                 break;
         }

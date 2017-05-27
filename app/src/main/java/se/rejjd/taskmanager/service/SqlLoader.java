@@ -63,7 +63,7 @@ public final class SqlLoader {
         if (AppStatus.getInstance(context).isOnline()) {
             Log.d("johanSqlLoader", "You got Internet!!!!");
              //TODO REMOVE OLD DATA ON SQLite
-            //TODO BAAAAD PRATIC   I NEED YOR HELP JOAKIM!!
+            //TODO BAAAAD PRATIC   I NEED YOUR HELP JOAKIM!!
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.TEAM_TABLE_NAME);
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.USERS_TABLE_NAME);
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.WORK_ITEMS_TABLE_NAME);
@@ -72,7 +72,7 @@ public final class SqlLoader {
             update();
             return true;
         } else {
-            Log.d("johanSqlLoader", "You NOT on Internet!!!!");
+            Log.d("johanSqlLoader", "Your NOT on the Internet!!!!");
         }
         return false;
     }
@@ -85,8 +85,10 @@ public final class SqlLoader {
         //One Team
         Team team = httpTeamRepository.getTeam(String.valueOf(user.getTeamId()));
         Log.d("johanSqlLoader", team.toString());
-        sqlTeamRepository.addTeam(team);
-        Log.d("johanSqlLoaderSQL",sqlTeamRepository.getTeams().toString());
+        sqlTeamRepository.addTeam(team);  //TODO Team dose not load on SQLite
+        sqlTeamRepository.addTeam(new Team(1002L,"test",true));
+        Log.d("johanSqlLoaderSQLteams",sqlTeamRepository.getTeams().toString());
+        Log.d("johanSqlLoaderSQLteam",sqlTeamRepository.getTeam(String.valueOf(team.getId())).toString());
 
         //@Path("{id}/workitems")
         //TeamResource = getWorkItemsFromTeam();
@@ -95,10 +97,12 @@ public final class SqlLoader {
         Log.d("johanSqlLoader", workitemListAll.toString());
 
         List<WorkItem> workitemList = httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId());
+
         Log.d("johanSqlLoader", workitemList.toString());
         for(WorkItem w : workitemList){
             sqlWorkItemRepository.addWorkItem(w);
         }
+        Log.d("JohanLoaderWiFrSql",sqlWorkItemRepository.getWorkItems().toString());
 
         //TODO Dose not work....
         List<User> userList = httpUserRepository.getUsersFromTeam(team.getId());

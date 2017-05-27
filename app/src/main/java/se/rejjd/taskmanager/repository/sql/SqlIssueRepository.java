@@ -49,7 +49,7 @@ public class SqlIssueRepository implements IssueRepository {
 
     @Override
     public Issue getIssue(String id) {
-        IssuesCursorWrapper cursor = queryIssues(DatabaseContract.ModelEntry._ID + " = ?", new String[]{id});
+        IssuesCursorWrapper cursor = queryIssues(DatabaseContract.ModelEntry.ISSUES_COLUMN_NAME_ID + " = ?", new String[]{id});
         if(cursor.getCount() > 0){
             Issue issue = cursor.getFirstIssue();
             cursor.close();

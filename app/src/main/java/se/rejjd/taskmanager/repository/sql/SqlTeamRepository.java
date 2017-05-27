@@ -49,7 +49,7 @@ public class SqlTeamRepository implements TeamRepository {
 
     @Override
     public Team getTeam(String id) {
-        TeamCursorWrapper cursor = queryTeams(DatabaseContract.ModelEntry._ID + " = ?", new String[]{id});
+        TeamCursorWrapper cursor = queryTeams(DatabaseContract.ModelEntry.TEAM_COLUMN_NAME_ID + " = ?", new String[]{id});
         if(cursor.getCount() > 0){
             Team team = cursor.getFirstTeam();
             cursor.close();
@@ -75,7 +75,7 @@ public class SqlTeamRepository implements TeamRepository {
 
     private ContentValues getContentValues(Team team) {
         ContentValues cv = new ContentValues();
-        cv.put(DatabaseContract.ModelEntry._ID,team.getId());
+        cv.put(DatabaseContract.ModelEntry.TEAM_COLUMN_NAME_ID,team.getId());
         cv.put(DatabaseContract.ModelEntry.TEAM_COLUMN_NAME_TEAM_NAME, team.getTeamName());
         cv.put(DatabaseContract.ModelEntry.TEAM_COLUMN_NAME_ACTIVE_TEAM, team.isActiveTeam());
 

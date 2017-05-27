@@ -49,7 +49,7 @@ public class SqlUserRepository implements UserRepository {
 
     @Override
     public User getUser(String id) {
-        UserCursorWrapper cursor = queryUsers(DatabaseContract.ModelEntry._ID + " = ?", new String[]{id});
+        UserCursorWrapper cursor = queryUsers(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USER_ID + " = ?", new String[]{id});
         if(cursor.getCount() > 0){
             User user = cursor.getFirstUser();
             cursor.close();

@@ -15,7 +15,7 @@ public class IssuesCursorWrapper extends CursorWrapper {
 
     public Issue getIssue() {
 
-        long id = getLong(getColumnIndex(DatabaseContract.ModelEntry._ID));
+        long id = getLong(getColumnIndex(DatabaseContract.ModelEntry.ISSUES_COLUMN_NAME_ID));
         String description = getString(getColumnIndexOrThrow(DatabaseContract.ModelEntry.ISSUES_COLUMN_NAME_DESCRIPTION));
         boolean openIssue = getInt(getColumnIndexOrThrow(DatabaseContract.ModelEntry.ISSUES_COLUMN_NAME_OPEN_ISSUE)) > 0;
 
