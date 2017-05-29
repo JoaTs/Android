@@ -59,7 +59,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 "{"+
                 "\"id\": "+user.getId()+","+
                 "\"username\": \""+user.getUsername()+"\","+
-                "\"firstname\": \""+user.getFirstaname()+"\","+
+                "\"firstname\": \""+user.getFirstname()+"\","+
                 "\"lastname\": \""+user.getLastname()+"\","+
                 "\"userId\": \""+user.getUserId()+"\","+
                 "\"activeUser\": "+ user.isActiveUser() +
@@ -92,7 +92,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 "{"+
                         "\"id\": "+user.getId()+","+
                         "\"username\": \""+user.getUsername()+"\","+
-                        "\"firstname\": \""+user.getFirstaname()+"\","+
+                        "\"firstname\": \""+user.getFirstname()+"\","+
                         "\"lastname\": \""+user.getLastname()+"\","+
                         "\"userId\": \""+user.getUserId()+"\","+
                         "\"activeUser\": "+ user.isActiveUser() +

@@ -41,6 +41,8 @@ public final class WorkItemDetailFragment extends Fragment {
         TextView tvDescription = (TextView) view.findViewById(R.id.tv_detail_view_description);
         tvTitle.setText(workitem.getTitle());
         tvDescription.setText(workitem.getDescription());
+        getActivity().setTitle(workitem.getTitle());
+
         return view;
     }
 
