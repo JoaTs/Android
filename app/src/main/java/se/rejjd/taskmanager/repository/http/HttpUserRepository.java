@@ -27,13 +27,30 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                     return get(URL + "users");
                 }
             }).execute().get();
-            return parserWorkItems(httpResponse.getResponseAsString());
+            return parserUsers(httpResponse.getResponseAsString());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
         return null;
 
+    }
+
+    //TODO Should this method be added in interface??
+    public List<User> getUsersFromTeam(final long teamId) {
+        try {
+            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return get(URL + "teams/" + teamId + "/users");
+                }
+            }).execute().get();
+            return parserUsers(httpResponse.getResponseAsString());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
 
     }
 
@@ -46,7 +63,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                     return get(URL + "users/" + id);
                 }
             }).execute().get();
-            return parserWorkItem(httpResponse.getResponseAsString());
+            return parserUser(httpResponse.getResponseAsString());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -87,6 +104,24 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
     }
 
     @Override
+    public boolean addUserToWorkItem(final String userId,final long workItemId){
+
+        try {
+            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return put(URL + "users/"+ userId +"/workitems/" + workItemId, null);
+                }
+            }).execute().get();
+            return httpResponse.getStatusCode() == 200;
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+
+    @Override
     public User updateUser(final User user) {
         final String body =
                 "{"+
@@ -114,7 +149,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
     }
 
 
-    private User parserWorkItem(String jsonString) {
+    private User parserUser(String jsonString) {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
 
@@ -125,14 +160,24 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
             String userId = jsonObject.getString("userId");
             boolean activeUser = jsonObject.getBoolean("activeUser");
 
-            return new User(id,username,firstname,lastname,userId,activeUser);
+            long teamId = 0;
+
+            if(!jsonObject.isNull("team"));  //TODO MAKE NICER johan  (ADD TO CONSTRUCTOR)
+            {
+                JSONObject jsonTeamObject = new JSONObject(jsonObject.getString("team"));
+                teamId = jsonTeamObject.getLong("id");
+            }
+
+            User user = new User(id,username,firstname,lastname,userId,activeUser, teamId);
+
+            return user;
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private List<User> parserWorkItems(String jsonString) {
+    private List<User> parserUsers(String jsonString) {
         try {
             List<User> userItems = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(jsonString);
@@ -146,7 +191,18 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 String userId = jsonObject.getString("userId");
                 boolean activeUser = jsonObject.getBoolean("activeUser");
 
-                userItems.add(new User(id,username,firstname,lastname,userId,activeUser));
+
+                long teamId = 0;
+
+                if(!jsonObject.isNull("team"));  //TODO MAKE NICER johan  (ADD TO CONSTRUCTOR)
+                {
+                    JSONObject jsonTeamObject = new JSONObject(jsonObject.getString("team"));
+                     teamId = jsonTeamObject.getLong("id");
+                }
+
+                User user = new User(id,username,firstname,lastname,userId,activeUser, teamId);
+
+                userItems.add(user);
             }
 
             return userItems;

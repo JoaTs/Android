@@ -14,4 +14,6 @@ public interface UserRepository {
 
     User updateUser(User user);
 
+    boolean addUserToWorkItem(final String userId,final long workItemId);
+
 }

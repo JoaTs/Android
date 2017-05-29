@@ -6,10 +6,12 @@ public final class Team {
     private String teamName;
     private boolean activeTeam;
 
+
     public Team(long id, String teamName, boolean activeTeam) {
         this.id = id;
         this.teamName = teamName;
         this.activeTeam = true;
+
     }
 
     public long getId() {

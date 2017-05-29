@@ -10,7 +10,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static DatabaseHelper instance;
 
-    public DatabaseHelper(Context context) {
+    private  DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -27,7 +27,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DatabaseQueries.CREATE_TABLE_TEAMS);
         db.execSQL(DatabaseQueries.CREATE_TABLE_ISSUES);
         db.execSQL(DatabaseQueries.CREATE_TABLES_USERS);
-
     }
 
     @Override
