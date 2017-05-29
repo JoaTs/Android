@@ -3,15 +3,53 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/tv_title"
+        android:text="@string/title"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingTop="13dp"/>
+
     <EditText
         android:id="@+id/ed_update_title"
+        android:layout_width="390dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"/>
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:text="@string/description"
+        android:textSize="20sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="11dp"
+        android:paddingTop="10dp"/>
 
     <EditText
         android:id="@+id/ed_update_description"
+        android:layout_width="390dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="11dp"/>
+
+    <TextView
+        android:id="@+id/tv_workitem_status"
+        android:text="@string/workitem_status"
+        android:textSize="20dp"
+        android:paddingLeft="11dp"
+        android:paddingTop="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tv_user"
+        android:text="@string/workitem_assigned_user"
+        android:textSize="20sp"
+        android:paddingLeft="11dp"
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/update_btn"
