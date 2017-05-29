@@ -17,6 +17,8 @@ import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 
 public final class AddWorkitemActivity extends AppCompatActivity {
 
+    public static final String MESSAGE_BACK = "message back";
+    private static final String WORKITEM_ADDED = "Workitem added";
     private WorkItemRepository repository;
 
     public static Intent getIntent(Context context) {
@@ -42,6 +44,10 @@ public final class AddWorkitemActivity extends AppCompatActivity {
                 String workitemDescription = description.getText().toString();
 
                 repository.addWorkItem(new WorkItem(-1, workitemTitle, workitemDescription));
+
+                Intent intent = new Intent();
+                intent.putExtra(MESSAGE_BACK, WORKITEM_ADDED);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });

@@ -25,6 +25,7 @@ import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 public class MainActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks {
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private static final int ADD_WORKITEM = 1;
     private WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
     private RecyclerView recyclerView;
     private Team team1;
@@ -79,7 +80,18 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
     public void onFabClicked(View view) {
         Intent intent = AddWorkitemActivity.getIntent(MainActivity.this);
-        startActivity(intent);
+        startActivityForResult(intent, ADD_WORKITEM);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ADD_WORKITEM) {
+            if (resultCode == RESULT_OK) {
+                updateAdapter();
+                String message = data.getStringExtra(AddWorkitemActivity.MESSAGE_BACK);
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void updateAdapter() {
