@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
         sqlUserRepository = SqlUserRepository.getInstance(this);
 
 
+
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment == null){
@@ -80,6 +81,10 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     @Override
     protected void onResume() {
         super.onResume();
+
+        //TODO Update WorkItemAdapter
+//        WorkItemListFragment.updateAdapter();
+
         new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
