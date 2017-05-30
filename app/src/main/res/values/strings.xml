@@ -7,4 +7,5 @@
     <string name="slogan">Manage your work</string>
     <string name="add_member">+ Add user</string>
     <string name="update">Update</string>
+    <string name="search_hint">Search</string>
 </resources>

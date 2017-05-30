@@ -1,5 +1,6 @@
 package se.rejjd.taskmanager;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -100,10 +102,18 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.overflow_menu, menu);
         inflater.inflate(R.menu.search_menu, menu);
+//<<<<<<< Updated upstream
         return super.onCreateOptionsMenu(menu);
+//=======
+
+
+
+//        return true;
+//>>>>>>> Stashed changes
     }
 
     @Override
@@ -118,6 +128,11 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
                 Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId);//TODO
                 startActivity(intent);
                 break;
+            case R.id.search:
+
+                Intent intentSearch = SearchActivity.getIntent(this, userLoggedIn);
+                startActivityForResult(intentSearch, SearchActivity.SEARCH_RESULT);
+            break;
         }
         return true;
 
