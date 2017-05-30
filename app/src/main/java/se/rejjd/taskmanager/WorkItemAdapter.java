@@ -13,14 +13,31 @@ import se.rejjd.taskmanager.model.WorkItem;
 
 public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkItemViewHolder> {
 
-    private final List<WorkItem> workItems;
+    private List<WorkItem> workItems;
     private onCLickResultListener onCLickResultListener;
     private onLongClickListener onLongClickListener;
+
+    public WorkItemAdapter(List<WorkItem> workItems) {
+        this.workItems = workItems;
+    }
 
     WorkItemAdapter(List<WorkItem> workItems, onCLickResultListener onCLickResultListener, onLongClickListener onLongClickListener) {
         this.workItems = workItems;
         this.onCLickResultListener = onCLickResultListener;
         this.onLongClickListener = onLongClickListener;
+    }
+
+    public void setOnCLickResultListener(onCLickResultListener onCLickResultListener){
+        this.onCLickResultListener = onCLickResultListener;
+    }
+
+    public void setOnLongClickListener(onLongClickListener onLongClickListener){
+        this.onLongClickListener = onLongClickListener;
+    }
+
+    public void setAdapter(List<WorkItem> workItemList) {
+        this.workItems = workItemList;
+        this.notifyDataSetChanged();
     }
 
     interface onCLickResultListener {
