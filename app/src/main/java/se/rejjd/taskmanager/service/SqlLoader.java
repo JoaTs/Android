@@ -25,9 +25,7 @@ import se.rejjd.taskmanager.sql.DatabaseHelper;
 public final class SqlLoader {
 
     private final SQLiteDatabase database;
-
     private final String userLoggedIn;
-
     private final Context context;
 
     private final HttpUserRepository httpUserRepository;
@@ -79,38 +77,18 @@ public final class SqlLoader {
 
     private void update(){
         User user = httpUserRepository.getUser(String.valueOf(userLoggedIn));
-        Log.d("johanSqlLoader", user.toString());
 
-        //TODO LISTS IN USE:
-        //One Team
         Team team = httpTeamRepository.getTeam(String.valueOf(user.getTeamId()));
-        Log.d("johanSqlLoader", team.toString());
         sqlTeamRepository.addTeam(team);  //TODO Team dose not load on SQLite
-        sqlTeamRepository.addTeam(new Team(1002L,"test",true));
-        Log.d("johanSqlLoaderSQLteams",sqlTeamRepository.getTeams().toString());
-        Log.d("johanSqlLoaderSQLteam",sqlTeamRepository.getTeam(String.valueOf(team.getId())).toString());
-
-        //@Path("{id}/workitems")
-        //TeamResource = getWorkItemsFromTeam();
-        //WorkItems from Team
-        List<WorkItem> workitemListAll = httpWorkItemRepository.getWorkItems();
-        Log.d("johanSqlLoader", workitemListAll.toString());
 
         List<WorkItem> workitemList = httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId());
-
-        Log.d("johanSqlLoader", workitemList.toString());
         for(WorkItem w : workitemList){
             sqlWorkItemRepository.addWorkItem(w);
         }
-        Log.d("JohanLoaderWiFrSql",sqlWorkItemRepository.getWorkItems().toString());
 
-        //TODO Dose not work....
         List<User> userList = httpUserRepository.getUsersFromTeam(team.getId());
-        Log.d("johanSqlLoader", userList.toString());
-
         for(User u : userList){
             sqlUserRepository.addUser(u);
         }
-        Log.d("johanSqlLoeaderSQL", sqlUserRepository.getUsers().toString());
     }
 }

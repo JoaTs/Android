@@ -19,11 +19,10 @@ import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.SqlLoader;
 
-
 public class SearchActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks {
 
     public static final int SEARCH_RESULT = 15;
-    WorkItemListFragment workItemListFragment;
+    private WorkItemListFragment workItemListFragment;
      List<WorkItem> workItemList = new ArrayList<>();
     EditText etSearchValue;
     WorkItemRepository sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
@@ -43,9 +42,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        Intent intent = getIntent();
-        Bundle bundle =  intent.getExtras();
-        userLoggedIn = bundle.getString(MainActivity.USER_ID);
+        userLoggedIn = getIntent().getExtras().getString(MainActivity.USER_ID);
 
         sqlLoader = new SqlLoader(this, userLoggedIn);
 
@@ -64,7 +61,6 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
             fm.beginTransaction()
                     .add(R.id.workitem_list_search_container,fragment)
                     .commit();
-
         }
 
         Button searchButton = (Button) findViewById(R.id.search_btn_search);
@@ -81,13 +77,9 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
                         result.add(w);
                     }
                 }
-
                 workItemListFragment.updateAdapter(result);
             }
         });
-
-
-
     }
 
     @Override

@@ -59,7 +59,7 @@ public final class WorkItemListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         workItemRepository = SqlWorkItemRepository.getInstance(getActivity());
 
-        workItemAdapter = new WorkItemAdapter(workItemRepository.getWorkItems());
+//        workItemAdapter = new WorkItemAdapter(workItemRepository.getWorkItems());
     }
 
 
@@ -69,31 +69,31 @@ public final class WorkItemListFragment extends Fragment {
         View view = inflater.inflate(R.layout.work_item_list_fragment, container, false);
 
 
-        workItemAdapter.setOnCLickResultListener(new WorkItemAdapter.onCLickResultListener() {
-            @Override
-            public void onClickResult(WorkItem workitem) {
-                callBacks.onListItemClicked(workitem);
-            }
-        });
-
-        workItemAdapter.setOnLongClickListener(new WorkItemAdapter.onLongClickListener() {
-            @Override
-            public void onLongClickResult(WorkItem workItem) {
-                callBacks.onListItemLongClicked(workItem);
-            }
-        });
-
-//        workItemAdapter = new WorkItemAdapter(workItemRepository.getWorkItems(), new WorkItemAdapter.onCLickResultListener() {
+//        workItemAdapter.setOnCLickResultListener(new WorkItemAdapter.onCLickResultListener() {
 //            @Override
 //            public void onClickResult(WorkItem workitem) {
 //                callBacks.onListItemClicked(workitem);
 //            }
-//        }, new WorkItemAdapter.onLongClickListener() {
+//        });
+//
+//        workItemAdapter.setOnLongClickListener(new WorkItemAdapter.onLongClickListener() {
 //            @Override
 //            public void onLongClickResult(WorkItem workItem) {
 //                callBacks.onListItemLongClicked(workItem);
 //            }
 //        });
+
+        workItemAdapter = new WorkItemAdapter(workItemRepository.getWorkItems(), new WorkItemAdapter.onCLickResultListener() {
+            @Override
+            public void onClickResult(WorkItem workitem) {
+                callBacks.onListItemClicked(workitem);
+            }
+        }, new WorkItemAdapter.onLongClickListener() {
+            @Override
+            public void onLongClickResult(WorkItem workItem) {
+                callBacks.onListItemLongClicked(workItem);
+            }
+        });
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(workItemAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -51,14 +51,16 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         fm = getSupportFragmentManager();
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        userLoggedIn = bundle.getString(USER_ID);
+
+        userLoggedIn = getIntent().getExtras().getString(USER_ID);
+
+        sqlLoader = new SqlLoader(this, userLoggedIn);
 
         sqlUserRepository = SqlUserRepository.getInstance(this);
 
-
+        sqlLoader.updateSqlFromHttp();
 
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
@@ -68,14 +70,6 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
                     .add(R.id.workitem_list_container,fragment)
                     .commit();
         }
-        updateAdapter();
-
-        //TODO TEST TO UPDATE SQLite
-//        if(sqlLoader == null) {
-            new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
-//        }
-
-
 
     }
 
@@ -95,9 +89,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
             fm.beginTransaction()
                     .replace(R.id.workitem_list_container,fragment)
                     .commit();
-
         }
-
     }
 
     @Override
@@ -106,12 +98,9 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.overflow_menu, menu);
         inflater.inflate(R.menu.search_menu, menu);
-//<<<<<<< Updated upstream
+//<<<<<<< Updated upstream  // TODO HELP
         return super.onCreateOptionsMenu(menu);
 //=======
-
-
-
 //        return true;
 //>>>>>>> Stashed changes
     }
@@ -151,13 +140,9 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     }
 
     public void onFabClicked(View view) {
-        Intent intent = AddWorkitemActivity.getIntent(MainActivity.this);
+        Intent intent = AddWorkitemActivity.getIntent(MainActivity.this, userLoggedIn);
         startActivity(intent);
     }
 
-    public void updateAdapter() {
-//        WorkItemRepository workItemRepository = new HttpWorkItemRepository();
-//        recyclerView.setAdapter(workItemRepository.getWorkItems());
-    }
 }
 

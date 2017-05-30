@@ -61,10 +61,6 @@ public final class TeamDetailsFragment extends Fragment {
         tvTitle.setText(team.getTeamName());
         RecyclerView rvUsers = (RecyclerView) view.findViewById(R.id.rv_users);
         List<User> users = userRepository.getUsers();
-//        List<User> users = new ArrayList<>();
-//        for (int i = 0; i < 10; i++){
-//            users.add(new User(i, "@LukSky"+i, "Luke ", "Skywalker", "userId", true, 1));
-//        }
         UserAdapter userAdapter = new UserAdapter();
         userAdapter.setData(users);
         rvUsers.setAdapter(userAdapter);
