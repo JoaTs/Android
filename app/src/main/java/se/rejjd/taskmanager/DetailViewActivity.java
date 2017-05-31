@@ -3,18 +3,10 @@ package se.rejjd.taskmanager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.model.WorkItem;
 
 public class DetailViewActivity extends AppCompatActivity {
@@ -44,7 +36,7 @@ public class DetailViewActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.work_item_detail_view);
+        setContentView(R.layout.activity_details);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
