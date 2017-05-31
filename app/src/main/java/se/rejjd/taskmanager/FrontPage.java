@@ -15,6 +15,7 @@ public class FrontPage extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ActionBar bar = getSupportActionBar();
         bar.hide();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

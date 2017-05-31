@@ -17,7 +17,7 @@
             android:id="@+id/tv_beginning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Task"
+            android:text="@string/task"
             android:textColor="@color/background"
             android:textSize="60sp"/>
 
@@ -25,8 +25,8 @@
             android:id="@+id/tv_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/tv_beginning"
-            android:text="r"
+            android:layout_toEndOf="@+id/tv_beginning"
+            android:text="@string/r"
             android:textColor="@color/primary_orange"
             android:textSize="60sp"/>
     </RelativeLayout>

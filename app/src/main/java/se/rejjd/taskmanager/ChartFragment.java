@@ -1,21 +1,15 @@
 package se.rejjd.taskmanager;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RotateDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
@@ -61,13 +55,24 @@ public class ChartFragment extends Fragment {
         View view = inflater.inflate(R.layout.chart_fragment,container,false);
 
         final ProgressBar unstartedItems = (ProgressBar) view.findViewById(R.id.unstarted_items);
-        ProgressBar startedItems = (ProgressBar) view.findViewById(R.id.started_items);
-        ProgressBar doneItems = (ProgressBar) view.findViewById(R.id.done_items);
-        ProgressBar myItems = (ProgressBar) view.findViewById(R.id.my_items);
+        final ProgressBar startedItems = (ProgressBar) view.findViewById(R.id.started_items);
+        final ProgressBar doneItems = (ProgressBar) view.findViewById(R.id.done_items);
+        final ProgressBar myItems = (ProgressBar) view.findViewById(R.id.my_items);
 
         final TextView unstartedNumber = (TextView) view.findViewById(R.id.tv_unstarted_number);
+        final TextView startedNumber = (TextView) view.findViewById(R.id.tv_started_number);
+        final TextView doneNumber = (TextView) view.findViewById(R.id.tv_done_number);
+        final TextView myItemsNumber = (TextView) view.findViewById(R.id.tv_my_items_number);
+
         unstartedNumber.setText("" + workItemRepository.getWorkItems().size() + "");
+        startedNumber.setText("" + workItemRepository.getWorkItems().size() + "");
+        doneNumber.setText("" + workItemRepository.getWorkItems().size() + "");
+        myItemsNumber.setText("" + workItemRepository.getWorkItems().size() + "");
+
         final TextView unstartedTitle = (TextView) view.findViewById(R.id.tv_unstarted);
+        final TextView startedTitle = (TextView) view.findViewById(R.id.tv_started);
+        final TextView doneTitle = (TextView) view.findViewById(R.id.tv_done);
+        final TextView myItemsTitle = (TextView) view.findViewById(R.id.tv_my_items);
 
         unstartedItems.setMax(10);
         unstartedItems.setProgress(4);
@@ -77,12 +82,34 @@ public class ChartFragment extends Fragment {
                 activeChart(unstartedItems, unstartedNumber, unstartedTitle);
             }
         });
+
+        //TODO set actual progressnumbers
         startedItems.setMax(100);
         startedItems.setProgress(75);
+        startedItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activeChart(startedItems, startedNumber, startedTitle);
+            }
+        });
+
         doneItems.setMax(100);
         doneItems.setProgress(25);
+        doneItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activeChart(doneItems, doneNumber, doneTitle);
+            }
+        });
+
         myItems.setMax(100);
         myItems.setProgress(50);
+        myItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activeChart(myItems, myItemsNumber, myItemsTitle);
+            }
+        });
 
         return view;
     }

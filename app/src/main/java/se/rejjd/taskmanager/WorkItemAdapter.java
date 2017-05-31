@@ -68,6 +68,7 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
         void bindView(final WorkItem workItem, final onCLickResultListener onCLickResultListener, final WorkItemAdapter.onLongClickListener onLongClickListener) {
             tvTitle.setText(workItem.getTitle());
             tvStatus.setText(workItem.getStatus());
+            //TODO setText and background on tvStatus to actual user
             tvStatus.setBackgroundColor(Color.parseColor("#979797"));
             tvDescription.setText(workItem.getDescription());
             tvUser.setText("@Username");

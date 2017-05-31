@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chart_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +9,7 @@
     <View
         android:layout_width="wrap_content"
         android:layout_height="10sp"
-        android:background="@drawable/gradient_line" />
+        android:background="@drawable/gradient_line"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/unstarted_chart"
-                android:text="@string/unstarted" />
+                android:text="@string/unstarted"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -70,7 +71,7 @@
                     android:progressDrawable="@drawable/started"/>
 
                 <TextView
-                    android:id="@+id/started_items_number"
+                    android:id="@+id/tv_started_number"
                     style="@style/chart_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -102,13 +103,13 @@
                     android:layout_width="100sp"
                     android:layout_height="100sp"
                     android:indeterminate="false"
-                    android:progressDrawable="@drawable/done" />
+                    android:progressDrawable="@drawable/done"/>
 
                 <TextView
                     android:id="@+id/tv_done_number"
                     style="@style/chart_text"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
 
             <TextView
@@ -117,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/done_chart"
-                android:text="@string/done" />
+                android:text="@string/done"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -137,13 +138,13 @@
                     android:layout_width="100sp"
                     android:layout_height="100sp"
                     android:indeterminate="false"
-                    android:progressDrawable="@drawable/my_items" />
+                    android:progressDrawable="@drawable/my_items"/>
 
                 <TextView
-                    android:id="@+id/my_items_number"
+                    android:id="@+id/tv_my_items_number"
                     style="@style/chart_text"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
 
             <TextView
@@ -152,12 +153,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/my_items_chart"
-                android:text="@string/my_items" />
+                android:text="@string/my_items"/>
         </RelativeLayout>
     </LinearLayout>
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="10sp"
-        android:background="@drawable/gradient_line" />
+        android:background="@drawable/gradient_line"/>
 </LinearLayout>

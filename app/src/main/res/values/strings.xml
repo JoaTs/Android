@@ -13,4 +13,6 @@
     <string name="my_items">my items</string>
     <string name="teamname">Team</string>
     <string name="users">Users</string>
+    <string name="task">Task</string>
+    <string name="r">r</string>
 </resources>
