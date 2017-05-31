@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.rejjd.taskmanager.fragment.WorkItemListFragment;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
@@ -34,7 +35,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
         Intent intent = new Intent(context, SearchActivity.class);
 
-        intent.putExtra(MainActivity.USER_ID, userLoggedIn);
+        intent.putExtra(HomeScreenActivity.USER_ID, userLoggedIn);
         return intent;
     }
 
@@ -45,7 +46,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
         Intent intent = getIntent();
         Bundle bundle =  intent.getExtras();
-        userLoggedIn = bundle.getString(MainActivity.USER_ID);
+        userLoggedIn = bundle.getString(HomeScreenActivity.USER_ID);
 
         sqlLoader = new SqlLoader(this, userLoggedIn);
 

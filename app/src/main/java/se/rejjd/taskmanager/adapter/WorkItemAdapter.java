@@ -1,6 +1,7 @@
-package se.rejjd.taskmanager;
+package se.rejjd.taskmanager.adapter;
 
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import se.rejjd.taskmanager.R;
 import se.rejjd.taskmanager.model.WorkItem;
 
 public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkItemViewHolder> {
@@ -17,21 +19,9 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
     private onCLickResultListener onCLickResultListener;
     private onLongClickListener onLongClickListener;
 
-    public WorkItemAdapter(List<WorkItem> workItems) {
-        this.workItems = workItems;
-    }
-
-    WorkItemAdapter(List<WorkItem> workItems, onCLickResultListener onCLickResultListener, onLongClickListener onLongClickListener) {
+    public WorkItemAdapter(List<WorkItem> workItems, onCLickResultListener onCLickResultListener, onLongClickListener onLongClickListener) {
         this.workItems = workItems;
         this.onCLickResultListener = onCLickResultListener;
-        this.onLongClickListener = onLongClickListener;
-    }
-
-    public void setOnCLickResultListener(onCLickResultListener onCLickResultListener){
-        this.onCLickResultListener = onCLickResultListener;
-    }
-
-    public void setOnLongClickListener(onLongClickListener onLongClickListener){
         this.onLongClickListener = onLongClickListener;
     }
 
@@ -40,11 +30,11 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
         this.notifyDataSetChanged();
     }
 
-    interface onCLickResultListener {
+    public interface onCLickResultListener {
         void onClickResult(WorkItem workitem);
     }
 
-    interface onLongClickListener {
+    public interface onLongClickListener {
         void onLongClickResult(WorkItem workItem);
     }
 
@@ -68,18 +58,26 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
 
     public static class WorkItemViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvTitle;
+        private final TextView tvStatus;
         private final TextView tvDescription;
+        private final TextView tvUser;
 
         WorkItemViewHolder(View itemView) {
             super(itemView);
 
             this.tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            this.tvStatus = (TextView) itemView.findViewById(R.id.tv_status);
             this.tvDescription = (TextView) itemView.findViewById(R.id.tv_description);
+            this.tvUser = (TextView) itemView.findViewById(R.id.tv_user);
         }
 
         void bindView(final WorkItem workItem, final onCLickResultListener onCLickResultListener, final WorkItemAdapter.onLongClickListener onLongClickListener) {
             tvTitle.setText(workItem.getTitle());
+            tvStatus.setText(workItem.getStatus());
+            //TODO setText and background on tvStatus to actual user
+            tvStatus.setBackgroundColor(Color.parseColor("#979797"));
             tvDescription.setText(workItem.getDescription());
+            tvUser.setText("@Username");
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

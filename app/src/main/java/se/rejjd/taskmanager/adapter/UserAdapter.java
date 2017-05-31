@@ -1,4 +1,4 @@
-package se.rejjd.taskmanager;
+package se.rejjd.taskmanager.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,11 +8,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import se.rejjd.taskmanager.R;
 import se.rejjd.taskmanager.model.User;
-
-/**
- * Created by emeliemirhagen on 2017-05-22.
- */
 
 public final class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 

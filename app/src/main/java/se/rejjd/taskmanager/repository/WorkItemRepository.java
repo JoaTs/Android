@@ -14,5 +14,8 @@ public interface WorkItemRepository {
 
     WorkItem updateWorkItem(WorkItem workItem);
 
-}
+    List<WorkItem> getWorkItemByStatus(String status);
+
+    List<WorkItem> getWorkItemsFromTeam(final long teamId);
+    }
 

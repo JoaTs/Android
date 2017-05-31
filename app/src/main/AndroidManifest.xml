@@ -11,14 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="se.rejjd.taskmanager.FrontPage">
+        <activity android:name="se.rejjd.taskmanager.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".HomeScreenActivity"></activity>
         <activity android:name=".DetailViewActivity"></activity>
         <activity android:name=".AddWorkitemActivity"></activity>
     </application>

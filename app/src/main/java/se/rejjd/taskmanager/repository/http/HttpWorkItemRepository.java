@@ -39,7 +39,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         return null;
     }
 
-    //TODO Should this method be added to Interface????
+    @Override
     public List<WorkItem> getWorkItemsFromTeam(final long teamId) {
 
         try {
@@ -152,6 +152,12 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    @Override
+    public List<WorkItem> getWorkItemByStatus(String status) {
+        //TODO: getWorkItemsByStatus
         return null;
     }
 
