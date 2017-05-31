@@ -3,6 +3,7 @@ package se.rejjd.taskmanager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.SqlLoader;
 
-public class MainActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks {
+public class MainActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks, ChartFragment.CallBacks {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
@@ -56,14 +57,14 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
         sqlUserRepository = SqlUserRepository.getInstance(this);
 
-
-
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment == null){
             fragment = WorkItemListFragment.newInstance();
+            Fragment chartFragment = ChartFragment.newInstance();
             fm.beginTransaction()
-                    .add(R.id.workitem_list_container,fragment)
+                    .add(R.id.workitem_list_fragment,fragment)
+                    .add(R.id.chart_fragment, chartFragment)
                     .commit();
         }
         updateAdapter();
@@ -89,9 +90,11 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment != null){
-            fragment = WorkItemListFragment.newInstance();
+            Fragment listFragment = WorkItemListFragment.newInstance();
+            Fragment chartFragment = ChartFragment.newInstance();
             fm.beginTransaction()
-                    .replace(R.id.workitem_list_container,fragment)
+                    .replace(R.id.workitem_list_fragment,listFragment)
+                    .replace(R.id.chart_fragment, chartFragment)
                     .commit();
 
         }
@@ -142,6 +145,11 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     public void updateAdapter() {
 //        WorkItemRepository workItemRepository = new HttpWorkItemRepository();
 //        recyclerView.setAdapter(workItemRepository.getWorkItems());
+    }
+
+    @Override
+    public void onListItemClicked() {
+        Toast.makeText(this, "Hello world!", Toast.LENGTH_LONG).show();
     }
 }
 

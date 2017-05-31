@@ -7,4 +7,10 @@
     <string name="slogan">Manage your work</string>
     <string name="add_member">+ Add user</string>
     <string name="update">Update</string>
+    <string name="unstarted">unstarted</string>
+    <string name="started">started</string>
+    <string name="done">done</string>
+    <string name="my_items">my items</string>
+    <string name="teamname">Team</string>
+    <string name="users">Users</string>
 </resources>

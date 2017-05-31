@@ -1,6 +1,7 @@
 package se.rejjd.taskmanager;
 
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,18 +52,25 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
 
     public static class WorkItemViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvTitle;
+        private final TextView tvStatus;
         private final TextView tvDescription;
+        private final TextView tvUser;
 
         WorkItemViewHolder(View itemView) {
             super(itemView);
 
             this.tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            this.tvStatus = (TextView) itemView.findViewById(R.id.tv_status);
             this.tvDescription = (TextView) itemView.findViewById(R.id.tv_description);
+            this.tvUser = (TextView) itemView.findViewById(R.id.tv_user);
         }
 
         void bindView(final WorkItem workItem, final onCLickResultListener onCLickResultListener, final WorkItemAdapter.onLongClickListener onLongClickListener) {
             tvTitle.setText(workItem.getTitle());
+            tvStatus.setText(workItem.getStatus());
+            tvStatus.setBackgroundColor(Color.parseColor("#979797"));
             tvDescription.setText(workItem.getDescription());
+            tvUser.setText("@Username");
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

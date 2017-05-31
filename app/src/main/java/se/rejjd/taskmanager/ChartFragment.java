@@ -2,6 +2,7 @@ package se.rejjd.taskmanager;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RotateDrawable;
 import android.os.Bundle;
@@ -65,14 +66,15 @@ public class ChartFragment extends Fragment {
         ProgressBar myItems = (ProgressBar) view.findViewById(R.id.my_items);
 
         final TextView unstartedNumber = (TextView) view.findViewById(R.id.tv_unstarted_number);
-        unstartedNumber.setText("42");
+        unstartedNumber.setText("" + workItemRepository.getWorkItems().size() + "");
+        final TextView unstartedTitle = (TextView) view.findViewById(R.id.tv_unstarted);
 
-        unstartedItems.setMax(100);
-        unstartedItems.setProgress(50);
+        unstartedItems.setMax(10);
+        unstartedItems.setProgress(4);
         unstartedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeChart(unstartedItems, unstartedNumber);
+                activeChart(unstartedItems, unstartedNumber, unstartedTitle);
             }
         });
         startedItems.setMax(100);
@@ -82,15 +84,16 @@ public class ChartFragment extends Fragment {
         myItems.setMax(100);
         myItems.setProgress(50);
 
-
         return view;
     }
 
-    private void activeChart(ProgressBar bar, TextView textView){
-        bar.setScaleX(1.5F);
-        bar.setScaleY(1.5F);
-        textView.setScaleX(1.5F);
-        textView.setScaleY(1.5F);
+    private void activeChart(ProgressBar bar, TextView number, TextView title){
+        bar.setScaleX(1.1F);
+        bar.setScaleY(1.1F);
+        number.setScaleX(1.1F);
+        number.setScaleY(1.1F);
+        title.setTextSize(14);
+        title.setTextColor(Color.parseColor("#FFA000"));
     }
 }
 
