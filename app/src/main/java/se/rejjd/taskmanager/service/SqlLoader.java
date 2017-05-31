@@ -28,13 +28,13 @@ public final class SqlLoader {
     private final String userLoggedIn;
     private final Context context;
 
-    private final HttpUserRepository httpUserRepository;
+    private final UserRepository httpUserRepository;
     private final UserRepository sqlUserRepository;
 
-    private final HttpTeamRepository httpTeamRepository;
+    private final TeamRepository httpTeamRepository;
     private final TeamRepository sqlTeamRepository;
 
-    private final HttpWorkItemRepository httpWorkItemRepository;
+    private final WorkItemRepository httpWorkItemRepository;
     private final WorkItemRepository sqlWorkItemRepository;
 
     //TODO. ONLY ONE INSTANCE OF THIS SHOULD BE ALLOWED
@@ -61,7 +61,6 @@ public final class SqlLoader {
         if (AppStatus.getInstance(context).isOnline()) {
             Log.d("johanSqlLoader", "You got Internet!!!!");
              //TODO REMOVE OLD DATA ON SQLite
-            //TODO BAAAAD PRATIC   I NEED YOUR HELP JOAKIM!!
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.TEAM_TABLE_NAME);
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.USERS_TABLE_NAME);
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.WORK_ITEMS_TABLE_NAME);

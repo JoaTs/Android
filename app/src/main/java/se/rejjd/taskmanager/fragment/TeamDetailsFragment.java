@@ -1,28 +1,23 @@
-package se.rejjd.taskmanager;
+package se.rejjd.taskmanager.fragment;
 
-import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.ActivityChooserView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import se.rejjd.taskmanager.R;
+import se.rejjd.taskmanager.adapter.UserAdapter;
 import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.TeamRepository;
 import se.rejjd.taskmanager.repository.UserRepository;
-import se.rejjd.taskmanager.repository.http.HttpUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 

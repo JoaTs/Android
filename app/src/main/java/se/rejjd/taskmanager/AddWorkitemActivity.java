@@ -23,16 +23,16 @@ public final class AddWorkitemActivity extends AppCompatActivity {
 
     public static Intent getIntent(Context context, String userId) {
         Intent intent = new Intent(context, AddWorkitemActivity.class);
-        intent.putExtra(MainActivity.USER_ID, userId);
+        intent.putExtra(HomeScreenActivity.USER_ID, userId);
         return intent;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.work_item_add_view);
+        setContentView(R.layout.activity_add_work_item);
 
-        userLoggedIn = getIntent().getExtras().getString(MainActivity.USER_ID);
+        userLoggedIn = getIntent().getExtras().getString(HomeScreenActivity.USER_ID);
 
         workItemRepository = new HttpWorkItemRepository();
         userRepository = new HttpUserRepository();
@@ -46,6 +46,7 @@ public final class AddWorkitemActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String workitemTitle = title.getText().toString();
                 String workitemDescription = description.getText().toString();
+
                 WorkItem workItem = new WorkItem(-1L,workitemTitle,workitemDescription,Long.valueOf(userLoggedIn));
                 long newId =  workItemRepository.addWorkItem(workItem);
                 userRepository.addUserToWorkItem(userLoggedIn, newId);

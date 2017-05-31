@@ -36,7 +36,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
 
     }
 
-    //TODO Should this method be added in interface??
+    @Override
     public List<User> getUsersFromTeam(final long teamId) {
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {

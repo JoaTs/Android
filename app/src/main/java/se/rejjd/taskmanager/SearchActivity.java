@@ -13,6 +13,7 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.rejjd.taskmanager.fragment.WorkItemListFragment;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
@@ -30,7 +31,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
     public static Intent getIntent(Context context, String userLoggedIn) {
         Intent intent = new Intent(context, SearchActivity.class);
-        intent.putExtra(MainActivity.USER_ID, userLoggedIn);
+        intent.putExtra(HomeScreenActivity.USER_ID, userLoggedIn);
         return intent;
     }
 
@@ -39,7 +40,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        String userLoggedIn = getIntent().getExtras().getString(MainActivity.USER_ID);
+        String userLoggedIn = getIntent().getExtras().getString(HomeScreenActivity.USER_ID);
 
         sqlLoader = new SqlLoader(this, userLoggedIn);
 
