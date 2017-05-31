@@ -21,11 +21,14 @@ import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
+import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.SqlLoader;
 
 public class HomeScreenActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks, ChartFragment.CallBacks {
     private static final String TAG = HomeScreenActivity.class.getSimpleName();
 
+    private SqlWorkItemRepository sqlWorkItemRepository;
+    private WorkItemListFragment workItemListFragment;
     private WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
     private SqlUserRepository sqlUserRepository;
     private RecyclerView recyclerView;
@@ -47,25 +50,26 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         fm = getSupportFragmentManager();
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        userLoggedIn = bundle.getString(USER_ID);
+        sqlUserRepository = SqlUserRepository.getInstance(this);
+        sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
+        userLoggedIn = getIntent().getExtras().getString(USER_ID);
+        sqlLoader = new SqlLoader(this, userLoggedIn);
+        sqlLoader.updateSqlFromHttp();
 
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this);
+                Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this, userLoggedIn);
                 startActivity(intent);
             }
         });
 
-        sqlUserRepository = SqlUserRepository.getInstance(this);
-
+        workItemListFragment = (WorkItemListFragment) WorkItemListFragment.newInstance();
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment == null){
-            fragment = WorkItemListFragment.newInstance();
+            fragment = workItemListFragment;
             Fragment chartFragment = ChartFragment.newInstance();
             fm.beginTransaction()
                     .add(R.id.workitem_list_fragment,fragment)
@@ -73,48 +77,26 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
                     .commit();
         }
 
-        //TODO TEST TO UPDATE SQLite
-//        if(sqlLoader == null) {
-            new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
-//        }
-
-
-
     }
 
     //temp Solution
     @Override
     protected void onResume() {
         super.onResume();
-
-        //TODO Update WorkItemAdapter
-//        WorkItemListFragment.updateAdapter();
-
-        new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
-        Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
-
-        if(fragment != null){
-            Fragment listFragment = WorkItemListFragment.newInstance();
-            Fragment chartFragment = ChartFragment.newInstance();
-            fm.beginTransaction()
-                    .replace(R.id.workitem_list_fragment,listFragment)
-                    .replace(R.id.chart_fragment, chartFragment)
-                    .commit();
-
-        }
-
+        sqlLoader.updateSqlFromHttp();
+        workItemListFragment.updateAdapter(sqlWorkItemRepository.getWorkItems());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.overflow_menu, menu);
+        inflater.inflate(R.menu.search_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         super.onOptionsItemSelected(item);
 
         switch(item.getItemId()){
@@ -124,9 +106,12 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
                 Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId);//TODO
                 startActivity(intent);
                 break;
+            case R.id.search:
+                Intent intentSearch = SearchActivity.getIntent(this, userLoggedIn);
+                startActivityForResult(intentSearch, SearchActivity.SEARCH_RESULT);
+            break;
         }
         return true;
-
     }
 
     @Override
@@ -140,7 +125,6 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         Intent intent = DetailViewActivity.createIntentForUpdate(HomeScreenActivity.this, workItem);
         startActivity(intent);
     }
-
 
     @Override
     public void onListItemClicked() {

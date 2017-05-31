@@ -1,6 +1,5 @@
 package se.rejjd.taskmanager.adapter;
 
-
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

@@ -1,6 +1,5 @@
 package se.rejjd.taskmanager;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,9 +19,11 @@ public final class AddWorkitemActivity extends AppCompatActivity {
 
     private UserRepository userRepository;
     private WorkItemRepository workItemRepository;
+    private String userLoggedIn;
 
-    public static Intent getIntent(Context context) {
+    public static Intent getIntent(Context context, String userId) {
         Intent intent = new Intent(context, AddWorkitemActivity.class);
+        intent.putExtra(HomeScreenActivity.USER_ID, userId);
         return intent;
     }
 
@@ -30,6 +31,8 @@ public final class AddWorkitemActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_work_item);
+
+        userLoggedIn = getIntent().getExtras().getString(HomeScreenActivity.USER_ID);
 
         workItemRepository = new HttpWorkItemRepository();
         userRepository = new HttpUserRepository();
@@ -43,16 +46,10 @@ public final class AddWorkitemActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String workitemTitle = title.getText().toString();
                 String workitemDescription = description.getText().toString();
-                Intent intent = getIntent();
-                Bundle bundle = intent.getExtras();
-//                String userId = bundle.getString(HomeScreenActivity.USER_ID);
-                String userId = "2002";
-                        WorkItem workItem = new WorkItem(-1L,workitemTitle,workitemDescription,Long.valueOf(userId));
 
+                WorkItem workItem = new WorkItem(-1L,workitemTitle,workitemDescription,Long.valueOf(userLoggedIn));
                 long newId =  workItemRepository.addWorkItem(workItem);
-//                WorkItem workItemDb  = workItemRepository.getWorkItem(String.valueOf(workItem.getId()));
-                userRepository.addUserToWorkItem(userId, newId);
-
+                userRepository.addUserToWorkItem(userLoggedIn, newId);
                 finish();
             }
         });

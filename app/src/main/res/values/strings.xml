@@ -15,4 +15,5 @@
     <string name="users">Users</string>
     <string name="task">Task</string>
     <string name="r">r</string>
+    <string name="search_hint">Search</string>
 </resources>

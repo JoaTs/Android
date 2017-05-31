@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,21 +19,18 @@ import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.SqlLoader;
 
-
 public class SearchActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks {
 
     public static final int SEARCH_RESULT = 15;
-    WorkItemListFragment workItemListFragment;
-     List<WorkItem> workItemList = new ArrayList<>();
-    EditText etSearchValue;
-    WorkItemRepository sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
-    private String userLoggedIn;
-    SqlLoader sqlLoader = new SqlLoader(this, userLoggedIn);
+    private WorkItemListFragment workItemListFragment;
+    private List<WorkItem> workItemList = new ArrayList<>();
+    private List<WorkItem> resultList = new ArrayList<>();
+    private EditText etSearchValue;
+    private SqlLoader sqlLoader;
+    private final WorkItemRepository sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
 
     public static Intent getIntent(Context context, String userLoggedIn) {
-
         Intent intent = new Intent(context, SearchActivity.class);
-
         intent.putExtra(HomeScreenActivity.USER_ID, userLoggedIn);
         return intent;
     }
@@ -44,19 +40,15 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        Intent intent = getIntent();
-        Bundle bundle =  intent.getExtras();
-        userLoggedIn = bundle.getString(HomeScreenActivity.USER_ID);
+        String userLoggedIn = getIntent().getExtras().getString(HomeScreenActivity.USER_ID);
 
         sqlLoader = new SqlLoader(this, userLoggedIn);
-
-        workItemList = sqlWorkItemRepository.getWorkItems();
 
         etSearchValue = (EditText) findViewById(R.id.et_search_value);
 
         FragmentManager fm = getSupportFragmentManager();
 
-        workItemListFragment= (WorkItemListFragment) WorkItemListFragment.newInstance();
+        workItemListFragment = (WorkItemListFragment) WorkItemListFragment.newInstance();
 
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_search_container);
 
@@ -65,7 +57,6 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
             fm.beginTransaction()
                     .add(R.id.workitem_list_search_container,fragment)
                     .commit();
-
         }
 
         Button searchButton = (Button) findViewById(R.id.search_btn_search);
@@ -73,29 +64,35 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String value = etSearchValue.getText().toString();
-                Toast.makeText(SearchActivity.this, "Searching" + value, Toast.LENGTH_SHORT).show();
-                List<WorkItem> result = new ArrayList<>();
-                for(WorkItem w:  workItemList){
-                    if(w.getTitle().toLowerCase().contains(value.toLowerCase()) ||
-                            w.getDescription().toLowerCase().contains(value.toLowerCase())){
-                        result.add(w);
-                    }
-                }
-
-                workItemListFragment.updateAdapter(result);
+                String searchValue = etSearchValue.getText().toString();
+                resultList.clear();
+                resultList = getFilteredList(workItemList, searchValue);
+                workItemListFragment.updateAdapter(resultList);
             }
         });
+    }
 
-
-
+    private List<WorkItem> getFilteredList(List<WorkItem> list, String searchValue){
+        List<WorkItem> result = new ArrayList<>();
+        for(WorkItem w:  list){
+            if(w.getTitle().toLowerCase().contains(searchValue.toLowerCase()) ||
+                    w.getDescription().toLowerCase().contains(searchValue.toLowerCase())){
+                result.add(w);
+            }
+        }
+        return result;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         sqlLoader.updateSqlFromHttp();
-        workItemListFragment.updateAdapter(sqlWorkItemRepository.getWorkItems());
+        workItemList = sqlWorkItemRepository.getWorkItems();
+        List<WorkItem> updatedResultList = new ArrayList<>();
+        for(WorkItem w: resultList){
+            updatedResultList.add(sqlWorkItemRepository.getWorkItem(String.valueOf(w.getId())));
+        }
+        workItemListFragment.updateAdapter(updatedResultList);
     }
 
     @Override
