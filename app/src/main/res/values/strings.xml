@@ -9,4 +9,12 @@
     <string name="update">Update</string>
     <string name="workitem_assigned_user">Assigned user</string>
     <string name="workitem_status">Status</string>
+    <string name="unstarted">unstarted</string>
+    <string name="started">started</string>
+    <string name="done">done</string>
+    <string name="my_items">my items</string>
+    <string name="teamname">Team</string>
+    <string name="users">Users</string>
+    <string name="task">Task</string>
+    <string name="r">r</string>
 </resources>
