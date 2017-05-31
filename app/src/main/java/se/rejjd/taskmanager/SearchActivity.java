@@ -24,6 +24,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
     public static final int SEARCH_RESULT = 15;
     private WorkItemListFragment workItemListFragment;
      List<WorkItem> workItemList = new ArrayList<>();
+    List<WorkItem> resultList = new ArrayList<>();
     EditText etSearchValue;
     WorkItemRepository sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
     private String userLoggedIn;
@@ -46,7 +47,9 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
         sqlLoader = new SqlLoader(this, userLoggedIn);
 
-        workItemList = sqlWorkItemRepository.getWorkItems();
+
+
+        resultList = sqlWorkItemRepository.getWorkItems();
 
         etSearchValue = (EditText) findViewById(R.id.et_search_value);
 
@@ -68,25 +71,41 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String value = etSearchValue.getText().toString();
-                Toast.makeText(SearchActivity.this, "Searching" + value, Toast.LENGTH_SHORT).show();
-                List<WorkItem> result = new ArrayList<>();
-                for(WorkItem w:  workItemList){
-                    if(w.getTitle().toLowerCase().contains(value.toLowerCase()) ||
-                            w.getDescription().toLowerCase().contains(value.toLowerCase())){
-                        result.add(w);
-                    }
-                }
-                workItemListFragment.updateAdapter(result);
+                String searchValue = etSearchValue.getText().toString();
+                Toast.makeText(SearchActivity.this, "Searching" + searchValue, Toast.LENGTH_SHORT).show();
+
+                resultList.clear();
+                resultList = getFilteredList(workItemList, searchValue);
+
+                workItemListFragment.updateAdapter(resultList);
             }
         });
+    }
+
+    private List<WorkItem> getFilteredList(List<WorkItem> list, String searchValue){
+        List<WorkItem> result = new ArrayList<>();
+        for(WorkItem w:  list){
+            if(w.getTitle().toLowerCase().contains(searchValue.toLowerCase()) ||
+                    w.getDescription().toLowerCase().contains(searchValue.toLowerCase())){
+                result.add(w);
+            }
+        }
+        return result;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         sqlLoader.updateSqlFromHttp();
-        workItemListFragment.updateAdapter(sqlWorkItemRepository.getWorkItems());
+
+        workItemList = sqlWorkItemRepository.getWorkItems();
+
+        List<WorkItem> updatedResultList = new ArrayList<>();
+        for(WorkItem w: resultList){
+            updatedResultList.add(sqlWorkItemRepository.getWorkItem(String.valueOf(w.getId())));
+        }
+
+        workItemListFragment.updateAdapter(updatedResultList);
     }
 
     @Override

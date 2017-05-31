@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
+//        menu.clear();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.overflow_menu, menu);
         inflater.inflate(R.menu.search_menu, menu);
