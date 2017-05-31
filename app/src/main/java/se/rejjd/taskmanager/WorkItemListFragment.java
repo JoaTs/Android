@@ -28,6 +28,7 @@ public final class WorkItemListFragment extends Fragment {
 
     interface CallBacks{
         void onListItemClicked(WorkItem workItem);
+        void onListItemLongClicked(WorkItem workItem);
     }
 
     @Override
@@ -44,11 +45,7 @@ public final class WorkItemListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        workItemRepository = new HttpWorkItemRepository();
-//        for (int i = 0; i <= 10; i++) {
-//            workItemRepository.addWorkItem(new WorkItem(i, "test" + i,"test" + i));
-//        }
-        Log.d("hej", "onCreate: " + workItemRepository.getWorkItems().toString());
+        workItemRepository = SqlWorkItemRepository.getInstance(getActivity());
     }
 
 
@@ -60,6 +57,11 @@ public final class WorkItemListFragment extends Fragment {
             @Override
             public void onClickResult(WorkItem workitem) {
                 callBacks.onListItemClicked(workitem);
+            }
+        }, new WorkItemAdapter.onLongClickListener() {
+            @Override
+            public void onLongClickResult(WorkItem workItem) {
+                callBacks.onListItemLongClicked(workItem);
             }
         });
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);

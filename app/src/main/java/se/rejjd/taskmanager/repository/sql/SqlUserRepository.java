@@ -49,7 +49,7 @@ public class SqlUserRepository implements UserRepository {
 
     @Override
     public User getUser(String id) {
-        UserCursorWrapper cursor = queryUsers(DatabaseContract.ModelEntry._ID + " = ?", new String[]{id});
+        UserCursorWrapper cursor = queryUsers(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USER_ID + " = ?", new String[]{id});
         if(cursor.getCount() > 0){
             User user = cursor.getFirstUser();
             cursor.close();
@@ -72,13 +72,21 @@ public class SqlUserRepository implements UserRepository {
         return null;
     }
 
+    @Override
+    public boolean addUserToWorkItem(String userId, long workItemId) {
+
+        return false;
+    }
+
     private ContentValues getContentValues(User user) {
         ContentValues cv = new ContentValues();
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ID, user.getId());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USERNAME, user.getUsername());
-        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_FIRSTNAME, user.getFirstaname());
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_FIRSTNAME, user.getFirstname());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_LASTNAME, user.getLastname());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USER_ID, user.getUserId());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ACTIVE_USER, user.isActiveUser());
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_TEAM_ID,user.getTeamId());
 
         return cv;
     }

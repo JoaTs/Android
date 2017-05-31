@@ -5,4 +5,8 @@
     <string name="description">Description</string>
     <string name="add_workitem_button">Add</string>
     <string name="slogan">Manage your work</string>
+    <string name="add_member">+ Add user</string>
+    <string name="update">Update</string>
+    <string name="workitem_assigned_user">Assigned user</string>
+    <string name="workitem_status">Status</string>
 </resources>

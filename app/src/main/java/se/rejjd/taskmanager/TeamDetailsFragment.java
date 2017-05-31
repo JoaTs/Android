@@ -1,22 +1,29 @@
 package se.rejjd.taskmanager;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.ActivityChooserView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 import se.rejjd.taskmanager.model.Team;
+import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.TeamRepository;
+import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
+import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 
 public final class TeamDetailsFragment extends Fragment {
     private static final String BUNDLE_TEAM_ID = "team_id";
-    private TeamRepository teamRepository = SqlTeamRepository.getInstance(getContext());
+
+    private UserRepository userRepository;
+    private TeamRepository teamRepository;
     private Team team;
 
     public static Fragment newInstance(long id) {
@@ -30,10 +37,14 @@ public final class TeamDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Team team1 = new Team(10L, "hello", true);
-        teamRepository.addTeam(team1);
-        Log.d("test", "onCreate: " + teamRepository.getTeams());
-        team = teamRepository.getTeam(String.valueOf(getArguments().getLong(BUNDLE_TEAM_ID)));
+
+        Log.d("johan", "" + getContext());
+        //TODO TEST
+        userRepository = SqlUserRepository.getInstance(getContext());
+        teamRepository = SqlTeamRepository.getInstance(getContext());
+        Log.d("johanTeamDetails row47", "" +  teamRepository.getTeams());
+        String teamId = String.valueOf(getArguments().getLong(BUNDLE_TEAM_ID));
+        team = teamRepository.getTeam(teamId);
     }
 
     @Override
@@ -41,6 +52,17 @@ public final class TeamDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.team_details_fragment, container, false);
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_team_detail_title);
         tvTitle.setText(team.getTeamName());
+        RecyclerView rvUsers = (RecyclerView) view.findViewById(R.id.rv_users);
+        List<User> users = userRepository.getUsers();
+//        List<User> users = new ArrayList<>();
+//        for (int i = 0; i < 10; i++){
+//            users.add(new User(i, "@LukSky"+i, "Luke ", "Skywalker", "userId", true, 1));
+//        }
+        UserAdapter userAdapter = new UserAdapter();
+        userAdapter.setData(users);
+        rvUsers.setAdapter(userAdapter);
+        rvUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
+        getActivity().setTitle(team.getTeamName());
         return view;
     }
 }

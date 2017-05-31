@@ -1,5 +1,7 @@
 package se.rejjd.taskmanager.repository.http;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +29,24 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                 @Override
                 public HttpResponse execute() {
                     return get(URL + "workitems");
+                }
+            }).execute().get();
+            return parserWorkItems(httpResponse.getResponseAsString());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    //TODO Should this method be added to Interface????
+    public List<WorkItem> getWorkItemsFromTeam(final long teamId) {
+
+        try {
+            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return get(URL + "teams/" + teamId + "/workitems");
                 }
             }).execute().get();
             return parserWorkItems(httpResponse.getResponseAsString());
@@ -90,14 +110,30 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
     @Override
     public WorkItem updateWorkItem(final WorkItem workItem) {
 
+//        final String body =
+//                "{" +
+//                "\"id\": \"" + ": \"82\","+
+//                "\"createdDate\": \"2017-05-17\","+
+//                "\"createdBy\": \"DreamierTeam\","+
+//                "\"lastModifiedDate\": \"2017-05-17\","+
+//                "\"lastModifiedBy\": \"DreamierTeam\","+
+//                "\"title\": \"en title\","+
+//                "\"description\": \"Uppdate?\","+
+//                "\"status\": \""+ workItem.getStatus() +"\","+
+//                "\"user\": null,"+
+//                "\"dateOfCompletion\": \"\""+
+//                "}";
+
         final String body =
-                "{" +
-                "\"id\": \"" + workItem.getId() + "\","+
-                "\"title\": \"en title\","+
-                "\"description\": \"Uppdate?\","+
-                "\"status\": \""+ workItem.getStatus() +"\","+
+                "{"+
+                "\"id\": "+workItem.getId()+","+
+                "\"title\": \""+workItem.getTitle()+"\","+
+                "\"description\": \""+workItem.getDescription()+"\","+
+                "\"status\": \""+workItem.getStatus()+"\","+
                 "\"user\": null,"+
                 "}";
+
+        Log.d("johanHttpWorkRepRow127",body);
 
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
@@ -106,7 +142,7 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                     return put(URL + "workitems/" + workItem.getId() , body);
                 }
             }).execute().get();
-
+            Log.d("johan", "updateWorkItem: " + httpResponse.getStatusCode());
             return (httpResponse.getStatusCode() == 200)? workItem : null;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -121,7 +157,17 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
             long id = jsonObject.getLong("id");
             String title = jsonObject.getString("title");
             String description = jsonObject.getString("description");
-            return new WorkItem(id, title, description);
+            String status = jsonObject.getString("status");
+            long userLongId = 0;
+
+            if(!jsonObject.isNull("user")) {
+                JSONObject jsonUserObject = new JSONObject(jsonObject.getString("user"));
+                userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
+            }
+            WorkItem workItem = new WorkItem(id, title, description, userLongId);
+            workItem.setStatus(status);
+
+            return workItem;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -137,8 +183,18 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                 long id = jsonObject.getLong("id");
                 String title = jsonObject.getString("title");
                 String description = jsonObject.getString("description");
-                WorkItem workitem = new WorkItem(id, title, description);
-                workItems.add(workitem);
+                String status = jsonObject.getString("status");
+
+                long userLongId = 0;
+
+                if(!jsonObject.isNull("user")) {
+                    JSONObject jsonUserObject = new JSONObject(jsonObject.getString("user"));
+                    userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
+                }
+                WorkItem workItem = new WorkItem(id, title, description, userLongId);
+                workItem.setStatus(status);
+
+                workItems.add(workItem);
             }
 
             return workItems;

@@ -18,8 +18,9 @@ import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.model.WorkItem;
 
 public class DetailViewActivity extends AppCompatActivity {
-    private final static String EXTRA_WORKITEM_ID = "userid";
+    private final static String EXTRA_WORKITEM_ID = "detailWorkItem";
     private static final String TEAM_ID = "teamid";
+    private static final String EXTRA_UPDATE_WORKITEM = "updateworkitem";
 
     public static Intent createIntentWithWorkItem(Context context, WorkItem workItem) {
         Intent intent = new Intent(context, DetailViewActivity.class);
@@ -31,6 +32,13 @@ public class DetailViewActivity extends AppCompatActivity {
         Intent intent = new Intent(context, DetailViewActivity.class);
         intent.putExtra(TEAM_ID, id);
         return intent;
+    }
+
+    public static Intent createIntentForUpdate(Context context , WorkItem workItem){
+        Intent intent = new Intent(context, DetailViewActivity.class);
+        intent.putExtra(EXTRA_UPDATE_WORKITEM,workItem);
+        return intent;
+
     }
 
     @Override
@@ -50,11 +58,25 @@ public class DetailViewActivity extends AppCompatActivity {
                         .add(R.id.details_container, fragment)
                         .commit();
             }
-        } else {
+
+        }
+        WorkItem updateWorkitem = bundle.getParcelable(EXTRA_UPDATE_WORKITEM);
+        if(updateWorkitem != null){
+            FragmentManager fm = getSupportFragmentManager();
+            Fragment fragment = fm.findFragmentById(R.id.details_container);
+            if(fragment == null){
+                fragment = WorkItemUpdateFragment.getInstance(updateWorkitem.getId());
+                fm.beginTransaction()
+                        .add(R.id.details_container,fragment)
+                        .commit();
+            }
+        }
+        Long id = bundle.getLong(TEAM_ID);
+        if(id != 0) {
             FragmentManager fm = getSupportFragmentManager();
             Fragment fragment = fm.findFragmentById(R.id.details_container);
             if (fragment == null) {
-                fragment = TeamDetailsFragment.newInstance(bundle.getLong(TEAM_ID));
+                fragment = TeamDetailsFragment.newInstance(id);
                 fm.beginTransaction()
                         .add(R.id.details_container, fragment)
                         .commit();

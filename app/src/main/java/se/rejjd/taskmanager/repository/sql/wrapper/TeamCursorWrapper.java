@@ -14,7 +14,7 @@ public class TeamCursorWrapper extends CursorWrapper {
 
     public Team getTeam() {
 
-        long id = getLong(getColumnIndex(DatabaseContract.ModelEntry._ID));
+        long id = getLong(getColumnIndex(DatabaseContract.ModelEntry.TEAM_COLUMN_NAME_ID));
         String teamName = getString(getColumnIndexOrThrow(DatabaseContract.ModelEntry.TEAM_COLUMN_NAME_TEAM_NAME));
         boolean activeTeam = getInt(getColumnIndexOrThrow(DatabaseContract.ModelEntry.TEAM_COLUMN_NAME_ACTIVE_TEAM)) > 0;
 

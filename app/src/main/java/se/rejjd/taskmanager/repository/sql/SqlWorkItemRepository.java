@@ -49,7 +49,7 @@ public class SqlWorkItemRepository implements WorkItemRepository{
 
     @Override
     public WorkItem getWorkItem(String id) {
-        WorkItemCursorWrapper cursor = queryWorkItems(ModelEntry._ID + " = ?", new String[]{id});
+        WorkItemCursorWrapper cursor = queryWorkItems(ModelEntry.WORK_ITEMS_COLUMN_NAME_ID + " = ?", new String[]{id});
         if(cursor.getCount() > 0){
             WorkItem workItem = cursor.getFirstWorkItem();
             cursor.close();
@@ -75,8 +75,10 @@ public class SqlWorkItemRepository implements WorkItemRepository{
 
     private ContentValues getContentValues(WorkItem workItem) {
         ContentValues cv = new ContentValues();
+        cv.put(ModelEntry.WORK_ITEMS_COLUMN_NAME_ID, workItem.getId());
         cv.put(ModelEntry.WORK_ITEMS_COLUMN_NAME_TITLE, workItem.getTitle());
         cv.put(ModelEntry.WORK_ITEMS_COLUMN_NAME_DESCRIPTION, workItem.getDescription());
+        cv.put(ModelEntry.WORK_ITEMS_COLUMN_NAME_STATUS, workItem.getStatus());
 
         return cv;
     }
