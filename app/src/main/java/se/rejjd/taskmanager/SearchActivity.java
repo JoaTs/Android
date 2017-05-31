@@ -23,17 +23,14 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
     public static final int SEARCH_RESULT = 15;
     private WorkItemListFragment workItemListFragment;
-     List<WorkItem> workItemList = new ArrayList<>();
-    List<WorkItem> resultList = new ArrayList<>();
-    EditText etSearchValue;
-    WorkItemRepository sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
-    private String userLoggedIn;
-    SqlLoader sqlLoader = new SqlLoader(this, userLoggedIn);
+    private List<WorkItem> workItemList = new ArrayList<>();
+    private List<WorkItem> resultList = new ArrayList<>();
+    private EditText etSearchValue;
+    private SqlLoader sqlLoader;
+    private final WorkItemRepository sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
 
     public static Intent getIntent(Context context, String userLoggedIn) {
-
         Intent intent = new Intent(context, SearchActivity.class);
-
         intent.putExtra(MainActivity.USER_ID, userLoggedIn);
         return intent;
     }
@@ -43,11 +40,9 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        userLoggedIn = getIntent().getExtras().getString(MainActivity.USER_ID);
+        String userLoggedIn = getIntent().getExtras().getString(MainActivity.USER_ID);
 
         sqlLoader = new SqlLoader(this, userLoggedIn);
-
-
 
         resultList = sqlWorkItemRepository.getWorkItems();
 
@@ -55,7 +50,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
         FragmentManager fm = getSupportFragmentManager();
 
-        workItemListFragment= (WorkItemListFragment) WorkItemListFragment.newInstance();
+        workItemListFragment = (WorkItemListFragment) WorkItemListFragment.newInstance();
 
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_search_container);
 
@@ -72,11 +67,8 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
             @Override
             public void onClick(View v) {
                 String searchValue = etSearchValue.getText().toString();
-                Toast.makeText(SearchActivity.this, "Searching" + searchValue, Toast.LENGTH_SHORT).show();
-
                 resultList.clear();
                 resultList = getFilteredList(workItemList, searchValue);
-
                 workItemListFragment.updateAdapter(resultList);
             }
         });
@@ -97,14 +89,11 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
     protected void onResume() {
         super.onResume();
         sqlLoader.updateSqlFromHttp();
-
         workItemList = sqlWorkItemRepository.getWorkItems();
-
         List<WorkItem> updatedResultList = new ArrayList<>();
         for(WorkItem w: resultList){
             updatedResultList.add(sqlWorkItemRepository.getWorkItem(String.valueOf(w.getId())));
         }
-
         workItemListFragment.updateAdapter(updatedResultList);
     }
 
