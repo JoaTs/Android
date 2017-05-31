@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import se.rejjd.taskmanager.fragment.TeamDetailsFragment;
+import se.rejjd.taskmanager.fragment.WorkItemDetailFragment;
+import se.rejjd.taskmanager.fragment.WorkItemUpdateFragment;
 import se.rejjd.taskmanager.model.WorkItem;
 
 public class DetailViewActivity extends AppCompatActivity {

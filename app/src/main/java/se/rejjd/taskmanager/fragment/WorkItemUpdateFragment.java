@@ -1,4 +1,4 @@
-package se.rejjd.taskmanager;
+package se.rejjd.taskmanager.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import se.rejjd.taskmanager.R;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;

@@ -1,4 +1,4 @@
-package se.rejjd.taskmanager;
+package se.rejjd.taskmanager.adapter;
 
 
 import android.graphics.Color;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import se.rejjd.taskmanager.R;
 import se.rejjd.taskmanager.model.WorkItem;
 
 public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkItemViewHolder> {
@@ -18,17 +19,17 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
     private onCLickResultListener onCLickResultListener;
     private onLongClickListener onLongClickListener;
 
-    WorkItemAdapter(List<WorkItem> workItems, onCLickResultListener onCLickResultListener, onLongClickListener onLongClickListener) {
+    public WorkItemAdapter(List<WorkItem> workItems, onCLickResultListener onCLickResultListener, onLongClickListener onLongClickListener) {
         this.workItems = workItems;
         this.onCLickResultListener = onCLickResultListener;
         this.onLongClickListener = onLongClickListener;
     }
 
-    interface onCLickResultListener {
+    public interface onCLickResultListener {
         void onClickResult(WorkItem workitem);
     }
 
-    interface onLongClickListener {
+    public interface onLongClickListener {
         void onLongClickResult(WorkItem workItem);
     }
 

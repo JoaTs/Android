@@ -2,7 +2,6 @@ package se.rejjd.taskmanager;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,7 +29,7 @@ public final class AddWorkitemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.work_item_add_view);
+        setContentView(R.layout.activity_add_work_item);
 
         workItemRepository = new HttpWorkItemRepository();
         userRepository = new HttpUserRepository();
@@ -46,7 +45,7 @@ public final class AddWorkitemActivity extends AppCompatActivity {
                 String workitemDescription = description.getText().toString();
                 Intent intent = getIntent();
                 Bundle bundle = intent.getExtras();
-//                String userId = bundle.getString(MainActivity.USER_ID);
+//                String userId = bundle.getString(HomeScreenActivity.USER_ID);
                 String userId = "2002";
                         WorkItem workItem = new WorkItem(-1L,workitemTitle,workitemDescription,Long.valueOf(userId));
 

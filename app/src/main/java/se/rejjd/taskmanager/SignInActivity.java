@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-public class FrontPage extends AppCompatActivity{
+public class SignInActivity extends AppCompatActivity{
 
     private final String userId = "2002";
 
@@ -20,14 +20,14 @@ public class FrontPage extends AppCompatActivity{
         bar.hide();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        setContentView(R.layout.front_page);
+        setContentView(R.layout.activity_sign_in);
 
         Button button = (Button) findViewById(R.id.sign_in_button);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = MainActivity.createIntentMainActivity(FrontPage.this, userId);
+                Intent intent = HomeScreenActivity.createIntentMainActivity(SignInActivity.this, userId);
                 startActivity(intent);
                 finish();
             }

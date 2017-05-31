@@ -1,4 +1,4 @@
-package se.rejjd.taskmanager;
+package se.rejjd.taskmanager.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,12 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import se.rejjd.taskmanager.R;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
-
-/**
- * Created by emeliemirhagen on 2017-05-24.
- */
 
 public class ChartFragment extends Fragment {
 
@@ -28,7 +25,7 @@ public class ChartFragment extends Fragment {
         return new ChartFragment();
     }
 
-    interface CallBacks{
+    public interface CallBacks{
         void onListItemClicked();
     }
 

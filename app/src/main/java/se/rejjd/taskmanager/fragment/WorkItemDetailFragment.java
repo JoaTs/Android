@@ -1,6 +1,5 @@
-package se.rejjd.taskmanager;
+package se.rejjd.taskmanager.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,11 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import se.rejjd.taskmanager.R;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
-import se.rejjd.taskmanager.repository.http.HttpUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 

@@ -2,33 +2,29 @@ package se.rejjd.taskmanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import se.rejjd.taskmanager.model.Team;
+import se.rejjd.taskmanager.fragment.ChartFragment;
+import se.rejjd.taskmanager.fragment.WorkItemListFragment;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
-import se.rejjd.taskmanager.repository.TeamRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
-import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
-import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.SqlLoader;
 
-public class MainActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks, ChartFragment.CallBacks {
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class HomeScreenActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks, ChartFragment.CallBacks {
+    private static final String TAG = HomeScreenActivity.class.getSimpleName();
 
     private WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
     private SqlUserRepository sqlUserRepository;
@@ -41,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     public static final String USER_ID = "userId";
 
     public static Intent createIntentMainActivity(Context context, String userId) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, HomeScreenActivity.class);
         intent.putExtra(USER_ID, userId);
         return intent;
     }
@@ -49,11 +45,20 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home_screen);
         fm = getSupportFragmentManager();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         userLoggedIn = bundle.getString(USER_ID);
+
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this);
+                startActivity(intent);
+            }
+        });
 
         sqlUserRepository = SqlUserRepository.getInstance(this);
 
@@ -67,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
                     .add(R.id.chart_fragment, chartFragment)
                     .commit();
         }
-        updateAdapter();
 
         //TODO TEST TO UPDATE SQLite
 //        if(sqlLoader == null) {
@@ -127,25 +131,16 @@ public class MainActivity extends AppCompatActivity implements WorkItemListFragm
 
     @Override
     public void onListItemClicked(WorkItem workItem) {
-        Intent intent =  DetailViewActivity.createIntentWithWorkItem(MainActivity.this,workItem);
+        Intent intent =  DetailViewActivity.createIntentWithWorkItem(HomeScreenActivity.this,workItem);
         startActivity(intent);
     }
 
     @Override
     public void onListItemLongClicked(WorkItem workItem) {
-        Intent intent = DetailViewActivity.createIntentForUpdate(MainActivity.this, workItem);
+        Intent intent = DetailViewActivity.createIntentForUpdate(HomeScreenActivity.this, workItem);
         startActivity(intent);
     }
 
-    public void onFabClicked(View view) {
-        Intent intent = AddWorkitemActivity.getIntent(MainActivity.this);
-        startActivity(intent);
-    }
-
-    public void updateAdapter() {
-//        WorkItemRepository workItemRepository = new HttpWorkItemRepository();
-//        recyclerView.setAdapter(workItemRepository.getWorkItems());
-    }
 
     @Override
     public void onListItemClicked() {

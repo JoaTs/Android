@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:layout_centerHorizontal="true"
     android:background="@drawable/new_bg"
-    tools:context="se.rejjd.taskmanager.FrontPage">
+    tools:context="se.rejjd.taskmanager.SignInActivity">
 
     <RelativeLayout
         android:layout_width="wrap_content"
