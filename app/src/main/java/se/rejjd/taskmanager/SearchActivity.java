@@ -48,7 +48,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
         FragmentManager fm = getSupportFragmentManager();
 
-        workItemListFragment = (WorkItemListFragment) WorkItemListFragment.newInstance("STARTED");
+        workItemListFragment = (WorkItemListFragment) WorkItemListFragment.newInstance();
 
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_search_container);
 
