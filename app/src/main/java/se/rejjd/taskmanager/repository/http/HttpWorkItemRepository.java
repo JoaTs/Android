@@ -133,10 +133,6 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         final String body =
                 "{"+
                 "\"id\": "+workItem.getId()+","+
-                "\"createdDate\": null,"+
-                "\"createdBy\": null,"+
-                "\"lastModifiedDate\": null,"+
-                "\"lastModifiedBy\": null,"+
                 "\"title\": \""+workItem.getTitle()+"\","+
                 "\"description\": \""+workItem.getDescription()+"\","+
                 "\"status\": \""+workItem.getStatus()+"\","+

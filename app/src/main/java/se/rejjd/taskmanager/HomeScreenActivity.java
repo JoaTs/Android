@@ -63,20 +63,19 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         userLoggedIn = bundle.getString(USER_ID);
-List<Fragment> fragments = new ArrayList<>();
-        fragments.add(WorkItemListFragment.newInstance("UNSTARTED"));
-        fragments.add(WorkItemListFragment.newInstance("STARTED"));
-        fragments.add(WorkItemListFragment.newInstance("DONE"));
-        viewPager = (ViewPager) findViewById(R.id.vp_workitem_list);
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),fragments);
-        viewPager.setAdapter(pagerAdapter);
-
         sqlUserRepository = SqlUserRepository.getInstance(this);
         sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
         userLoggedIn = getIntent().getExtras().getString(USER_ID);
         sqlLoader = new SqlLoader(this, userLoggedIn);
         sqlLoader.updateSqlFromHttp();
 
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(WorkItemListFragment.newInstance("UNSTARTED"));
+        fragments.add(WorkItemListFragment.newInstance("STARTED"));
+        fragments.add(WorkItemListFragment.newInstance("DONE"));
+        viewPager = (ViewPager) findViewById(R.id.vp_workitem_list);
+        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),fragments);
+        viewPager.setAdapter(pagerAdapter);
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,10 +89,10 @@ List<Fragment> fragments = new ArrayList<>();
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment == null){
-            fragment = workItemListFragment;
+//            fragment = workItemListFragment;
             Fragment chartFragment = ChartFragment.newInstance();
             fm.beginTransaction()
-                    .add(R.id.workitem_list_fragment,fragment)
+//                    .add(R.id.workitem_list_fragment,fragment)
                     .add(R.id.chart_fragment, chartFragment)
                     .commit();
         }
@@ -120,16 +119,16 @@ List<Fragment> fragments = new ArrayList<>();
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment != null){
-            Fragment listFragment = WorkItemListFragment.newInstance("STARTED");
+//            Fragment listFragment = WorkItemListFragment.newInstance("STARTED");
             Fragment chartFragment = ChartFragment.newInstance();
             fm.beginTransaction()
-                    .replace(R.id.workitem_list_fragment,listFragment)
+//                    .replace(R.id.workitem_list_fragment,listFragment)
                     .replace(R.id.chart_fragment, chartFragment)
                     .commit();
 
         }
         sqlLoader.updateSqlFromHttp();
-        workItemListFragment.updateAdapter(sqlWorkItemRepository.getWorkItems());
+//        workItemListFragment.updateAdapter(sqlWorkItemRepository.getWorkItems());
     }
 
     @Override
