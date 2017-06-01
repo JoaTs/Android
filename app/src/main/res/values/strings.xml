@@ -16,4 +16,6 @@
     <string name="task">Task</string>
     <string name="r">r</string>
     <string name="search_hint">Search</string>
+    <string name="log_out">Log Out</string>
+    <string name="sig_out">Sig out!</string>
 </resources>

@@ -2,6 +2,7 @@ package se.rejjd.taskmanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import se.rejjd.taskmanager.fragment.ChartFragment;
 import se.rejjd.taskmanager.fragment.WorkItemListFragment;
@@ -29,13 +36,12 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
 
     private SqlWorkItemRepository sqlWorkItemRepository;
     private WorkItemListFragment workItemListFragment;
-    private WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
     private SqlUserRepository sqlUserRepository;
-    private RecyclerView recyclerView;
     private SqlLoader sqlLoader;
     private String userLoggedIn;
     private FragmentManager fm;
 
+    private GoogleApiClient googleApiClient;
 
     public static final String USER_ID = "userId";
 
@@ -43,6 +49,18 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         Intent intent = new Intent(context, HomeScreenActivity.class);
         intent.putExtra(USER_ID, userId);
         return intent;
+    }
+
+    @Override
+    protected void onStart() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        googleApiClient.connect();
+        super.onStart();
     }
 
     @Override
@@ -76,7 +94,6 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
                     .add(R.id.chart_fragment, chartFragment)
                     .commit();
         }
-
     }
 
     //temp Solution
@@ -105,6 +122,16 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
                 long teamId = user.getTeamId();
                 Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId);//TODO
                 startActivity(intent);
+                break;
+            case R.id.log_out:
+                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        Intent intentSignIn = SignInActivity.getIntent(HomeScreenActivity.this);//TODO
+                        startActivity(intentSignIn);
+                        finish();
+                    }
+                });
                 break;
             case R.id.search:
                 Intent intentSearch = SearchActivity.getIntent(this, userLoggedIn);

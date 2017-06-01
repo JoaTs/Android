@@ -8,9 +8,8 @@ import android.util.Log;
 public final class AppStatus {
     private static AppStatus instance = new AppStatus();
     private static Context context;
-    ConnectivityManager connectivityManager;
-    NetworkInfo wifiInfo, mobileInfo;
-    boolean connected = false;
+    private ConnectivityManager connectivityManager;
+    private boolean connected = false;
 
     public static AppStatus getInstance(Context ctx) {
         context = ctx.getApplicationContext();

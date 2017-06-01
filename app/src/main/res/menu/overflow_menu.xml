@@ -6,4 +6,8 @@
         app:showAsAction="never"
         android:id="@+id/team_view"/>
 
+    <item
+        android:title="@string/log_out"
+        app:showAsAction="never"
+        android:id="@+id/log_out"/>
 </menu>
