@@ -37,7 +37,11 @@ public final class WorkItemListFragment extends Fragment {
 
 
     public static Fragment newInstance() {
-        return new WorkItemListFragment();
+        Fragment fragment = new WorkItemListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(WORKITEM_STATUS,null);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
 
