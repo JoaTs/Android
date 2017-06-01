@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +17,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import se.rejjd.taskmanager.fragment.ChartFragment;
 import se.rejjd.taskmanager.fragment.WorkItemListFragment;
@@ -38,6 +45,9 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
 
 
     public static final String USER_ID = "userId";
+    private static final int NUM_PAGES = 4;
+    private ViewPager viewPager;
+    private PagerAdapter pagerAdapter;
 
     public static Intent createIntentMainActivity(Context context, String userId) {
         Intent intent = new Intent(context, HomeScreenActivity.class);
@@ -50,6 +60,17 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         fm = getSupportFragmentManager();
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        userLoggedIn = bundle.getString(USER_ID);
+List<Fragment> fragments = new ArrayList<>();
+        fragments.add(WorkItemListFragment.newInstance("UNSTARTED"));
+        fragments.add(WorkItemListFragment.newInstance("STARTED"));
+        fragments.add(WorkItemListFragment.newInstance("DONE"));
+        viewPager = (ViewPager) findViewById(R.id.vp_workitem_list);
+        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),fragments);
+        viewPager.setAdapter(pagerAdapter);
+
         sqlUserRepository = SqlUserRepository.getInstance(this);
         sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
         userLoggedIn = getIntent().getExtras().getString(USER_ID);
@@ -65,7 +86,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
             }
         });
 
-        workItemListFragment = (WorkItemListFragment) WorkItemListFragment.newInstance();
+        workItemListFragment = (WorkItemListFragment) WorkItemListFragment.newInstance("UNSTARTED");
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment == null){
@@ -79,10 +100,34 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (viewPager.getCurrentItem() == 0) {
+        super.onBackPressed();
+    } else {
+        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+    }
+    }
+
     //temp Solution
     @Override
     protected void onResume() {
         super.onResume();
+        //TODO Update WorkItemAdapter
+//        WorkItemListFragment.updateAdapter();
+
+        new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
+        Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
+
+        if(fragment != null){
+            Fragment listFragment = WorkItemListFragment.newInstance("STARTED");
+            Fragment chartFragment = ChartFragment.newInstance();
+            fm.beginTransaction()
+                    .replace(R.id.workitem_list_fragment,listFragment)
+                    .replace(R.id.chart_fragment, chartFragment)
+                    .commit();
+
+        }
         sqlLoader.updateSqlFromHttp();
         workItemListFragment.updateAdapter(sqlWorkItemRepository.getWorkItems());
     }
@@ -129,6 +174,25 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     @Override
     public void onListItemClicked() {
         Toast.makeText(this, "Hello world!", Toast.LENGTH_LONG).show();
+    }
+
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        private final List<Fragment> fragments;
+
+        public ScreenSlidePagerAdapter(FragmentManager fm , List<Fragment> fragments) {
+            super(fm);
+            this.fragments = fragments;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
     }
 }
 

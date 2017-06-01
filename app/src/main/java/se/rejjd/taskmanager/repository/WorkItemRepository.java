@@ -17,5 +17,7 @@ public interface WorkItemRepository {
     List<WorkItem> getWorkItemByStatus(String status);
 
     List<WorkItem> getWorkItemsFromTeam(final long teamId);
-    }
+
+    List<WorkItem> getWorkItemsByUser(String userId);
+}
 

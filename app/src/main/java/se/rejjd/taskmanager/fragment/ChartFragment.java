@@ -11,13 +11,27 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import se.rejjd.taskmanager.HomeScreenActivity;
 import se.rejjd.taskmanager.R;
+import se.rejjd.taskmanager.model.User;
+import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
+import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
+import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
 public class ChartFragment extends Fragment {
 
     private WorkItemRepository workItemRepository;
+    private UserRepository userRepository;
+    private final String unstarted = "UNSTARTED";
+    private final String started = "STARTED";
+    private final String done = "DONE";
+    private User user;
+    private ProgressBar unstartedItems;
+    private ProgressBar startedItems;
+    private ProgressBar doneItems;
+    private ProgressBar myItems;
 
     private ChartFragment.CallBacks callBacks;
 
@@ -43,7 +57,10 @@ public class ChartFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        workItemRepository = new HttpWorkItemRepository();
+        workItemRepository = SqlWorkItemRepository.getInstance(getContext());
+        userRepository = SqlUserRepository.getInstance(getContext());
+        //TODO hårdkodning
+        user = userRepository.getUser("2002");
     }
 
     @Nullable
@@ -51,28 +68,30 @@ public class ChartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.chart_fragment,container,false);
 
-        final ProgressBar unstartedItems = (ProgressBar) view.findViewById(R.id.unstarted_items);
-        final ProgressBar startedItems = (ProgressBar) view.findViewById(R.id.started_items);
-        final ProgressBar doneItems = (ProgressBar) view.findViewById(R.id.done_items);
-        final ProgressBar myItems = (ProgressBar) view.findViewById(R.id.my_items);
+        unstartedItems = (ProgressBar) view.findViewById(R.id.unstarted_items);
+        startedItems = (ProgressBar) view.findViewById(R.id.started_items);
+        doneItems = (ProgressBar) view.findViewById(R.id.done_items);
+        myItems = (ProgressBar) view.findViewById(R.id.my_items);
 
         final TextView unstartedNumber = (TextView) view.findViewById(R.id.tv_unstarted_number);
         final TextView startedNumber = (TextView) view.findViewById(R.id.tv_started_number);
         final TextView doneNumber = (TextView) view.findViewById(R.id.tv_done_number);
         final TextView myItemsNumber = (TextView) view.findViewById(R.id.tv_my_items_number);
 
-        unstartedNumber.setText("" + workItemRepository.getWorkItems().size() + "");
-        startedNumber.setText("" + workItemRepository.getWorkItems().size() + "");
-        doneNumber.setText("" + workItemRepository.getWorkItems().size() + "");
-        myItemsNumber.setText("" + workItemRepository.getWorkItems().size() + "");
-
         final TextView unstartedTitle = (TextView) view.findViewById(R.id.tv_unstarted);
         final TextView startedTitle = (TextView) view.findViewById(R.id.tv_started);
         final TextView doneTitle = (TextView) view.findViewById(R.id.tv_done);
         final TextView myItemsTitle = (TextView) view.findViewById(R.id.tv_my_items);
 
-        unstartedItems.setMax(10);
-        unstartedItems.setProgress(4);
+        unstartedNumber.setText(String.valueOf(workItemRepository.getWorkItemByStatus(unstarted).size()));
+        startedNumber.setText(String.valueOf(workItemRepository.getWorkItemByStatus(started).size()));
+        doneNumber.setText(String.valueOf(workItemRepository.getWorkItemByStatus(done).size()));
+        myItemsNumber.setText(String.valueOf(workItemRepository.getWorkItemsByUser(String.valueOf(user.getId())).size()));
+
+        setMaxProgress();
+
+        setProgress();
+
         unstartedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,8 +100,6 @@ public class ChartFragment extends Fragment {
         });
 
         //TODO set actual progressnumbers
-        startedItems.setMax(100);
-        startedItems.setProgress(75);
         startedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,8 +107,6 @@ public class ChartFragment extends Fragment {
             }
         });
 
-        doneItems.setMax(100);
-        doneItems.setProgress(25);
         doneItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,8 +114,6 @@ public class ChartFragment extends Fragment {
             }
         });
 
-        myItems.setMax(100);
-        myItems.setProgress(50);
         myItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +122,20 @@ public class ChartFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setMaxProgress() {
+        unstartedItems.setMax(workItemRepository.getWorkItems().size());
+        startedItems.setMax(workItemRepository.getWorkItems().size());
+        doneItems.setMax(workItemRepository.getWorkItems().size());
+        myItems.setMax(5);
+    }
+
+    private void setProgress() {
+        unstartedItems.setProgress(workItemRepository.getWorkItemByStatus(unstarted).size());
+        startedItems.setProgress(workItemRepository.getWorkItemByStatus(started).size());
+        doneItems.setProgress(workItemRepository.getWorkItemByStatus(done).size());
+        myItems.setProgress(workItemRepository.getWorkItemsByUser(String.valueOf(user.getId())).size());
     }
 
     private void activeChart(ProgressBar bar, TextView number, TextView title){

@@ -5,12 +5,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import se.rejjd.taskmanager.model.WorkItem;
+import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
+import se.rejjd.taskmanager.repository.sql.wrapper.UserCursorWrapper;
 import se.rejjd.taskmanager.repository.sql.wrapper.WorkItemCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseHelper;
 import se.rejjd.taskmanager.sql.DatabaseContract.ModelEntry;
@@ -75,13 +78,35 @@ public class SqlWorkItemRepository implements WorkItemRepository{
 
     @Override
     public List<WorkItem> getWorkItemByStatus(String status) {
-        //TODO: getWorkItemByStatus
-        return null;
+        WorkItemCursorWrapper cursor = queryWorkItems(ModelEntry.WORK_ITEMS_COLUMN_NAME_STATUS + " = ?", new String []{status});
+
+        List<WorkItem> workItems = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                workItems.add(cursor.getWorkItem());
+            }
+        }
+        cursor.close();
+        return workItems;
     }
 
+
     @Override
-    public List<WorkItem> getWorkItemsFromTeam(long teamId) {
-        return null;
+    public List<WorkItem> getWorkItemsFromTeam(long teamId) {return null;}
+
+    @Override
+    public List<WorkItem> getWorkItemsByUser(String userId) {
+        WorkItemCursorWrapper cursor = queryWorkItems(ModelEntry.WORK_ITEMS_COLUMN_NAME_USER_ID + " = ?", new String []{userId});
+        Log.d("TEST", "getWorkItemsByUser: " + cursor);
+        List<WorkItem> workItems = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                workItems.add(cursor.getWorkItem());
+            }
+            Log.d("TEST", "getWorkItemsByUser: " + workItems);
+        }
+        cursor.close();
+        return workItems;
     }
 
     private ContentValues getContentValues(WorkItem workItem) {
@@ -90,6 +115,7 @@ public class SqlWorkItemRepository implements WorkItemRepository{
         cv.put(ModelEntry.WORK_ITEMS_COLUMN_NAME_TITLE, workItem.getTitle());
         cv.put(ModelEntry.WORK_ITEMS_COLUMN_NAME_DESCRIPTION, workItem.getDescription());
         cv.put(ModelEntry.WORK_ITEMS_COLUMN_NAME_STATUS, workItem.getStatus());
+        cv.put(ModelEntry.WORK_ITEMS_COLUMN_NAME_USER_ID, workItem.getUserId());
 
         return cv;
     }
