@@ -141,7 +141,6 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         startActivity(intent);
     }
 
-
     @Override
     public void onListItemClicked() {
         Toast.makeText(this, "Hello world!", Toast.LENGTH_LONG).show();

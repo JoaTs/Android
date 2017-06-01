@@ -9,10 +9,8 @@
     tools:context="se.rejjd.taskmanager.HomeScreenActivity">
 
     <RelativeLayout
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="8dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <FrameLayout
             android:id="@+id/chart_fragment"

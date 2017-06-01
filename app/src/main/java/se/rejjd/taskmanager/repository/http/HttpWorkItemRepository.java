@@ -57,6 +57,12 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         return null;
     }
 
+    @Override
+    public List<WorkItem> getWorkItemsByUser(String userId) {
+        //TODO getWorkItemByUser
+        return null;
+    }
+
 
     @Override
     public WorkItem getWorkItem(final String id) {
