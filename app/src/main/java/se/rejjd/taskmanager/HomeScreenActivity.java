@@ -28,11 +28,14 @@ import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
+import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.SqlLoader;
 
 public class HomeScreenActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks, ChartFragment.CallBacks {
     private static final String TAG = HomeScreenActivity.class.getSimpleName();
 
+    private SqlWorkItemRepository sqlWorkItemRepository;
+    private WorkItemListFragment workItemListFragment;
     private WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
     private SqlUserRepository sqlUserRepository;
     private RecyclerView recyclerView;
@@ -68,34 +71,32 @@ List<Fragment> fragments = new ArrayList<>();
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),fragments);
         viewPager.setAdapter(pagerAdapter);
 
+        sqlUserRepository = SqlUserRepository.getInstance(this);
+        sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
+        userLoggedIn = getIntent().getExtras().getString(USER_ID);
+        sqlLoader = new SqlLoader(this, userLoggedIn);
+        sqlLoader.updateSqlFromHttp();
+
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this);
+                Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this, userLoggedIn);
                 startActivity(intent);
             }
         });
 
-        sqlUserRepository = SqlUserRepository.getInstance(this);
-
+        workItemListFragment = (WorkItemListFragment) WorkItemListFragment.newInstance("UNSTARTED");
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment == null){
-            fragment = WorkItemListFragment.newInstance("STARTED");
+            fragment = workItemListFragment;
             Fragment chartFragment = ChartFragment.newInstance();
             fm.beginTransaction()
                     .add(R.id.workitem_list_fragment,fragment)
                     .add(R.id.chart_fragment, chartFragment)
                     .commit();
         }
-
-        //TODO TEST TO UPDATE SQLite
-//        if(sqlLoader == null) {
-            new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
-//        }
-
-
 
     }
 
@@ -112,7 +113,6 @@ List<Fragment> fragments = new ArrayList<>();
     @Override
     protected void onResume() {
         super.onResume();
-
         //TODO Update WorkItemAdapter
 //        WorkItemListFragment.updateAdapter();
 
@@ -128,19 +128,20 @@ List<Fragment> fragments = new ArrayList<>();
                     .commit();
 
         }
-
+        sqlLoader.updateSqlFromHttp();
+        workItemListFragment.updateAdapter(sqlWorkItemRepository.getWorkItems());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.overflow_menu, menu);
+        inflater.inflate(R.menu.search_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         super.onOptionsItemSelected(item);
 
         switch(item.getItemId()){
@@ -150,9 +151,12 @@ List<Fragment> fragments = new ArrayList<>();
                 Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId);//TODO
                 startActivity(intent);
                 break;
+            case R.id.search:
+                Intent intentSearch = SearchActivity.getIntent(this, userLoggedIn);
+                startActivityForResult(intentSearch, SearchActivity.SEARCH_RESULT);
+            break;
         }
         return true;
-
     }
 
     @Override

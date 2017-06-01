@@ -1,6 +1,5 @@
 package se.rejjd.taskmanager.adapter;
 
-
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +14,7 @@ import se.rejjd.taskmanager.model.WorkItem;
 
 public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkItemViewHolder> {
 
-    private final List<WorkItem> workItems;
+    private List<WorkItem> workItems;
     private onCLickResultListener onCLickResultListener;
     private onLongClickListener onLongClickListener;
 
@@ -23,6 +22,11 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
         this.workItems = workItems;
         this.onCLickResultListener = onCLickResultListener;
         this.onLongClickListener = onLongClickListener;
+    }
+
+    public void setAdapter(List<WorkItem> workItemList) {
+        this.workItems = workItemList;
+        this.notifyDataSetChanged();
     }
 
     public interface onCLickResultListener {

@@ -60,7 +60,7 @@ public final class WorkItemUpdateFragment extends Fragment {
 
                 WorkItemRepository workItemRepository = new HttpWorkItemRepository();
                 workItemRepository.updateWorkItem(workItemToUpdate);
-                Toast.makeText(getContext(), workItemToUpdate.toString(), Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
             }
         });
         return view;

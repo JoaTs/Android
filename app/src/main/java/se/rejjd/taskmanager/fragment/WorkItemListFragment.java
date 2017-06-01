@@ -24,28 +24,40 @@ public final class WorkItemListFragment extends Fragment {
     private WorkItemRepository workItemRepository;
     private WorkItemAdapter workItemAdapter;
     private CallBacks callBacks;
+    private List<WorkItem> workItemList;
     private List<WorkItem> workitems;
 
-    public static Fragment newInstance(String status){
+    public static Fragment newInstance(String status) {
         Fragment fragment = new WorkItemListFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(WORKITEM_STATUS,status);
+        bundle.putString(WORKITEM_STATUS, status);
         fragment.setArguments(bundle);
         return fragment;
     }
+
+
+    public static Fragment newInstance() {
+        return new WorkItemListFragment();
+    }
+
 
     public interface CallBacks{
         void onListItemClicked(WorkItem workItem);
         void onListItemLongClicked(WorkItem workItem);
     }
 
+    public void updateAdapter(List<WorkItem> workItemList) {
+        this.workItemList = workItemList;
+        workItemAdapter.setAdapter(workItemList);
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try{
+        try {
             callBacks = (CallBacks) context;
 
-        }catch(ClassCastException e){
+        } catch (ClassCastException e) {
             throw new IllegalArgumentException("Hosting activity needs callBacks impl");
         }
     }
@@ -72,7 +84,9 @@ public final class WorkItemListFragment extends Fragment {
         workItemRepository = SqlWorkItemRepository.getInstance(getActivity());
         Bundle bundle = getArguments();
         String status = bundle.getString(WORKITEM_STATUS);
-        workitems = workItemRepository.getWorkItemByStatus(status);
+        if(status != null){
+            workitems = workItemRepository.getWorkItemByStatus(status);
+        }
     }
 
 
@@ -80,7 +94,7 @@ public final class WorkItemListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.work_item_list_fragment,container,false);
-        WorkItemAdapter workItemAdapter = new WorkItemAdapter(workitems, new WorkItemAdapter.onCLickResultListener() {
+        workItemAdapter = new WorkItemAdapter(workitems, new WorkItemAdapter.onCLickResultListener() {
             @Override
             public void onClickResult(WorkItem workitem) {
                 callBacks.onListItemClicked(workitem);
