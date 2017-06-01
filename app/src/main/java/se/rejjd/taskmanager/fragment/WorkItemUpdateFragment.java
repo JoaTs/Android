@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -20,6 +19,7 @@ import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
+import se.rejjd.taskmanager.repository.http.HttpUserRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
@@ -115,11 +115,15 @@ public final class WorkItemUpdateFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                final WorkItem workItemToUpdate = new WorkItem(workItemSql.getId(),editTextTitle.getText().toString(),editTextDescription.getText().toString(), getUserIdFromSpinnerSelectedItem());
+                User userSelected = getUserFromSpinnerSelectedItem();
+
+                final WorkItem workItemToUpdate = new WorkItem(workItemSql.getId(),editTextTitle.getText().toString(),editTextDescription.getText().toString(), getUserFromSpinnerSelectedItem().getId());
                 workItemToUpdate.setStatus(statusSpinner.getSelectedItem().toString().toUpperCase());
 
-                WorkItemRepository workItemRepository = new HttpWorkItemRepository();
-                workItemRepository.updateWorkItem(workItemToUpdate);
+                WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
+                httpWorkItemRepository.updateWorkItem(workItemToUpdate);
+                UserRepository httpUserRepository = new HttpUserRepository();
+                httpUserRepository.addUserToWorkItem(getUserFromSpinnerSelectedItem().getUserId(),workItemToUpdate.getId());
                 getActivity().onBackPressed();
 
             }
@@ -127,7 +131,7 @@ public final class WorkItemUpdateFragment extends Fragment {
         return view;
     }
 
-    public long getUserIdFromSpinnerSelectedItem(){
-     return   users.get(userSpinner.getSelectedItemPosition()).getId();
+    public User getUserFromSpinnerSelectedItem(){
+     return   users.get(userSpinner.getSelectedItemPosition());
     }
 }
