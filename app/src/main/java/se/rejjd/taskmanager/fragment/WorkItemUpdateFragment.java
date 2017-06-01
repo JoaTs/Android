@@ -116,12 +116,12 @@ public final class WorkItemUpdateFragment extends Fragment {
             public void onClick(View v) {
 
                 final WorkItem workItemToUpdate = new WorkItem(workItemSql.getId(),editTextTitle.getText().toString(),editTextDescription.getText().toString(), getUserIdFromSpinnerSelectedItem());
-                workItemToUpdate.setStatus(statusSpinner.getSelectedItem().toString());
-
+                workItemToUpdate.setStatus(statusSpinner.getSelectedItem().toString().toUpperCase());
 
                 WorkItemRepository workItemRepository = new HttpWorkItemRepository();
                 workItemRepository.updateWorkItem(workItemToUpdate);
                 getActivity().onBackPressed();
+
             }
         });
         return view;
