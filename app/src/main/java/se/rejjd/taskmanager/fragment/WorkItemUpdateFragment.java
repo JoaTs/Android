@@ -107,7 +107,7 @@ public final class WorkItemUpdateFragment extends Fragment {
         userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userSpinner.setAdapter(userAdapter);
 
-        userSpinner.setSelection(1);
+        userSpinner.setSelection(userSpinnerIndexOfOwner);
 
         Button updateButton = (Button) view.findViewById(R.id.update_btn);
         updateButton.setOnClickListener(new View.OnClickListener() {
