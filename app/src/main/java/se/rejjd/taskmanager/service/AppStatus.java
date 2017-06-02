@@ -7,9 +7,7 @@ import android.util.Log;
 
 public final class AppStatus {
 
-    private static Context context;
-
-    public static boolean isOnline() {
+    public static boolean isOnline(Context context) {
         try {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -18,14 +16,10 @@ public final class AppStatus {
             return networkInfo != null && networkInfo.isAvailable() &&
                     networkInfo.isConnected();
 
-
-
         } catch (Exception e) {
             System.out.println("CheckConnectivity Exception: " + e.getMessage());
             Log.v("connectivity", e.toString());
         }
-
-
         return false;
     }
 

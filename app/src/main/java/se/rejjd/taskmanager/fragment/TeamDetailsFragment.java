@@ -77,7 +77,7 @@ public final class TeamDetailsFragment extends Fragment {
         textView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if(AppStatus.isOnline()) {
+                if(AppStatus.isOnline(getContext())) {
                     Intent intent = TeamUpdateActivity.createUpdateTeamIntent(getContext(), team.getId());
                     startActivity(intent);
                 }else{

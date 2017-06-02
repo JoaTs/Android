@@ -58,7 +58,7 @@ public final class SqlLoader {
     }
 
     public boolean updateSqlFromHttp() {
-        if (AppStatus.isOnline()) {
+        if (AppStatus.isOnline(context)) {
             Log.d("johanSqlLoader", "You got Internet!!!!");
              //TODO REMOVE OLD DATA ON SQLite
             database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.TEAM_TABLE_NAME);

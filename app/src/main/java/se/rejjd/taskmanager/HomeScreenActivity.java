@@ -79,11 +79,12 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         viewPager = (ViewPager) findViewById(R.id.vp_workitem_list);
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),fragments);
         viewPager.setAdapter(pagerAdapter);
+
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(AppStatus.isOnline()) {
+                if(AppStatus.isOnline(HomeScreenActivity.this)) {
                     Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this, userLoggedIn);
                     startActivity(intent);
                 }else{
@@ -173,7 +174,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
 
     @Override
     public void onListItemLongClicked(WorkItem workItem) {
-        if(AppStatus.isOnline()) {
+        if(AppStatus.isOnline(HomeScreenActivity.this)) {
             Intent intent = DetailViewActivity.createIntentForUpdate(HomeScreenActivity.this, workItem);
             startActivity(intent);
         }else{
