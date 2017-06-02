@@ -31,7 +31,6 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
     private EditText etSearchValue;
     private SqlLoader sqlLoader;
     private final WorkItemRepository sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
-    private  AppStatus appStatus;
 
     public static Intent getIntent(Context context, String userLoggedIn) {
         Intent intent = new Intent(context, SearchActivity.class);
@@ -51,8 +50,6 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
         etSearchValue = (EditText) findViewById(R.id.et_search_value);
 
         FragmentManager fm = getSupportFragmentManager();
-
-        appStatus = AppStatus.getInstance(this);
 
         workItemListFragment = (WorkItemListFragment) WorkItemListFragment.newInstance();
 
@@ -109,7 +106,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
     @Override
     public void onListItemLongClicked(WorkItem workItem) {
-        if(appStatus.isOnline()) {
+        if(AppStatus.isOnline()) {
             Intent intent = DetailViewActivity.createIntentForUpdate(SearchActivity.this, workItem);
             startActivity(intent);
         }else{

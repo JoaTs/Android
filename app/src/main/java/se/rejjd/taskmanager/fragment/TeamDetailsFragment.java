@@ -1,8 +1,10 @@
 package se.rejjd.taskmanager.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,6 +25,7 @@ import se.rejjd.taskmanager.repository.TeamRepository;
 import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
+import se.rejjd.taskmanager.service.AppStatus;
 import se.rejjd.taskmanager.service.SqlLoader;
 
 public final class TeamDetailsFragment extends Fragment {
@@ -34,6 +37,7 @@ public final class TeamDetailsFragment extends Fragment {
     private TextView tvTitle;
     private SqlLoader sqlLoader;
     private String userLoggedIn;
+    private AppStatus appStatus;
 
     public static Fragment newInstance(long id, String userLoggedIn) {
         Fragment fragment = new TeamDetailsFragment();
@@ -73,13 +77,12 @@ public final class TeamDetailsFragment extends Fragment {
         textView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
-                Intent intent = TeamUpdateActivity.createUpdateTeamIntent(getContext(), team.getId());
-                startActivity(intent);
-
-//                Toast.makeText(getContext(), "Update", Toast.LENGTH_LONG).show();
-
-                //TODO: TEAM UPDATE
+                if(AppStatus.isOnline()) {
+                    Intent intent = TeamUpdateActivity.createUpdateTeamIntent(getContext(), team.getId());
+                    startActivity(intent);
+                }else{
+                    runAlert();
+                }
                 return false;
             }
         });
@@ -98,5 +101,16 @@ public final class TeamDetailsFragment extends Fragment {
         sqlLoader.updateSqlFromHttp();
         team = teamRepository.getTeam(String.valueOf(team.getId()));
         tvTitle.setText(team.getTeamName());
+    }
+
+    private void runAlert() {
+        AlertDialog.Builder alertWindow = new AlertDialog.Builder(getContext());
+        alertWindow.setMessage("Please connect to the internet");
+        alertWindow.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertWindow.show();
     }
 }

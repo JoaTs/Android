@@ -46,7 +46,6 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     private SqlLoader sqlLoader;
     private String userLoggedIn;
     private FragmentManager fm;
-    private AppStatus appStatus;
 
 
     public static final String USER_ID = "userId";
@@ -73,8 +72,6 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         userLoggedIn = getIntent().getExtras().getString(USER_ID);
         sqlLoader = new SqlLoader(this, userLoggedIn);
         sqlLoader.updateSqlFromHttp();
-        appStatus = AppStatus.getInstance(this);
-
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(WorkItemListFragment.newInstance("UNSTARTED"));
         fragments.add(WorkItemListFragment.newInstance("STARTED"));
@@ -86,7 +83,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(appStatus.isOnline()) {
+                if(AppStatus.isOnline()) {
                     Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this, userLoggedIn);
                     startActivity(intent);
                 }else{
@@ -176,7 +173,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
 
     @Override
     public void onListItemLongClicked(WorkItem workItem) {
-        if(appStatus.isOnline()) {
+        if(AppStatus.isOnline()) {
             Intent intent = DetailViewActivity.createIntentForUpdate(HomeScreenActivity.this, workItem);
             startActivity(intent);
         }else{

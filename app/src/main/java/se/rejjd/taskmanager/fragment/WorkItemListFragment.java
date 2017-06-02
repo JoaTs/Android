@@ -18,6 +18,7 @@ import se.rejjd.taskmanager.adapter.WorkItemAdapter;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
+import se.rejjd.taskmanager.service.AppStatus;
 
 public final class WorkItemListFragment extends Fragment {
     private static final String WORKITEM_STATUS = "workitemstatus";
