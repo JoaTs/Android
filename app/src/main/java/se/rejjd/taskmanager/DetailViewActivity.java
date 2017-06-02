@@ -16,6 +16,7 @@ public class DetailViewActivity extends AppCompatActivity {
     private final static String EXTRA_WORKITEM_ID = "detailWorkItem";
     private static final String TEAM_ID = "teamid";
     private static final String EXTRA_UPDATE_WORKITEM = "updateworkitem";
+    private String userLoggedIn;
 
     public static Intent createIntentWithWorkItem(Context context, WorkItem workItem) {
         Intent intent = new Intent(context, DetailViewActivity.class);
@@ -23,9 +24,10 @@ public class DetailViewActivity extends AppCompatActivity {
         return intent;
     }
 
-    public static Intent createIntentWithTeam(Context context, long id) {
+    public static Intent createIntentWithTeam(Context context, long id, String userLoggedIn) {
         Intent intent = new Intent(context, DetailViewActivity.class);
         intent.putExtra(TEAM_ID, id);
+        intent.putExtra(HomeScreenActivity.USER_ID,userLoggedIn);
         return intent;
     }
 
@@ -40,6 +42,8 @@ public class DetailViewActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        userLoggedIn = getIntent().getExtras().getString(HomeScreenActivity.USER_ID);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -71,7 +75,7 @@ public class DetailViewActivity extends AppCompatActivity {
             FragmentManager fm = getSupportFragmentManager();
             Fragment fragment = fm.findFragmentById(R.id.details_container);
             if (fragment == null) {
-                fragment = TeamDetailsFragment.newInstance(id);
+                fragment = TeamDetailsFragment.newInstance(id,userLoggedIn);
                 fm.beginTransaction()
                         .add(R.id.details_container, fragment)
                         .commit();

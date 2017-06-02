@@ -45,7 +45,6 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     private SqlLoader sqlLoader;
     private String userLoggedIn;
     private FragmentManager fm;
-    private AppStatus appStatus;
     private User user;
     private ChartFragment chartFragment;
 
@@ -69,14 +68,14 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         userLoggedIn = bundle.getString(USER_ID);
+
         sqlUserRepository = SqlUserRepository.getInstance(this);
         user = sqlUserRepository.getUser(userLoggedIn);
+        Log.d(TAG, "onCreate: " + user);
         sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
         userLoggedIn = getIntent().getExtras().getString(USER_ID);
         sqlLoader = new SqlLoader(this, userLoggedIn);
         sqlLoader.updateSqlFromHttp();
-        appStatus = AppStatus.getInstance(this);
-
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(WorkItemListFragment.newInstance("UNSTARTED"));
         fragments.add(WorkItemListFragment.newInstance("STARTED"));
@@ -118,7 +117,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(appStatus.isOnline()) {
+                if(AppStatus.isOnline()) {
                     Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this, userLoggedIn);
                     startActivity(intent);
                 }else{
@@ -189,7 +188,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
             case R.id.team_view:
                 User user = sqlUserRepository.getUser(userLoggedIn);
                 long teamId = user.getTeamId();
-                Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId);//TODO
+                Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId, userLoggedIn);//TODO
                 startActivity(intent);
                 break;
             case R.id.search:
@@ -208,7 +207,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
 
     @Override
     public void onListItemLongClicked(WorkItem workItem) {
-        if(appStatus.isOnline()) {
+        if(AppStatus.isOnline()) {
             Intent intent = DetailViewActivity.createIntentForUpdate(HomeScreenActivity.this, workItem);
             startActivity(intent);
         }else{
@@ -254,7 +253,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     }
 
     private void runAlert() {
-        AlertDialog.Builder alertWindow = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertWindow = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert);
         alertWindow.setMessage("Please connect to the internet");
         alertWindow.setNeutralButton("OK", new DialogInterface.OnClickListener() {
             @Override
