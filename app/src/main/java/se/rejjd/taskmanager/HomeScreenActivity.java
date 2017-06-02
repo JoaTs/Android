@@ -206,7 +206,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     }
 
     private void runAlert() {
-        AlertDialog.Builder alertWindow = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertWindow = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert);
         alertWindow.setMessage("Please connect to the internet");
         alertWindow.setNeutralButton("OK", new DialogInterface.OnClickListener() {
             @Override

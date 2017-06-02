@@ -104,7 +104,7 @@ public final class TeamDetailsFragment extends Fragment {
     }
 
     private void runAlert() {
-        AlertDialog.Builder alertWindow = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder alertWindow = new AlertDialog.Builder(getContext(), R.style.Theme_AppCompat_Light_Dialog_Alert);
         alertWindow.setMessage("Please connect to the internet");
         alertWindow.setNeutralButton("OK", new DialogInterface.OnClickListener() {
             @Override
