@@ -1,6 +1,7 @@
 package se.rejjd.taskmanager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -9,9 +10,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +32,7 @@ import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
+import se.rejjd.taskmanager.service.AppStatus;
 import se.rejjd.taskmanager.service.SqlLoader;
 
 public class HomeScreenActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks, ChartFragment.CallBacks {
@@ -42,6 +46,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     private SqlLoader sqlLoader;
     private String userLoggedIn;
     private FragmentManager fm;
+    private AppStatus appStatus;
 
 
     public static final String USER_ID = "userId";
@@ -63,26 +68,30 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         userLoggedIn = bundle.getString(USER_ID);
-List<Fragment> fragments = new ArrayList<>();
+        sqlUserRepository = SqlUserRepository.getInstance(this);
+        sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
+        userLoggedIn = getIntent().getExtras().getString(USER_ID);
+        sqlLoader = new SqlLoader(this, userLoggedIn);
+        sqlLoader.updateSqlFromHttp();
+        appStatus = AppStatus.getInstance(this);
+
+        List<Fragment> fragments = new ArrayList<>();
         fragments.add(WorkItemListFragment.newInstance("UNSTARTED"));
         fragments.add(WorkItemListFragment.newInstance("STARTED"));
         fragments.add(WorkItemListFragment.newInstance("DONE"));
         viewPager = (ViewPager) findViewById(R.id.vp_workitem_list);
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),fragments);
         viewPager.setAdapter(pagerAdapter);
-
-        sqlUserRepository = SqlUserRepository.getInstance(this);
-        sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
-        userLoggedIn = getIntent().getExtras().getString(USER_ID);
-        sqlLoader = new SqlLoader(this, userLoggedIn);
-        sqlLoader.updateSqlFromHttp();
-
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this, userLoggedIn);
-                startActivity(intent);
+                if(appStatus.isOnline()) {
+                    Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this, userLoggedIn);
+                    startActivity(intent);
+                }else{
+                    runAlert();
+                }
             }
         });
 
@@ -90,10 +99,10 @@ List<Fragment> fragments = new ArrayList<>();
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment == null){
-            fragment = workItemListFragment;
+//            fragment = workItemListFragment;
             Fragment chartFragment = ChartFragment.newInstance();
             fm.beginTransaction()
-                    .add(R.id.workitem_list_fragment,fragment)
+//                    .add(R.id.workitem_list_fragment,fragment)
                     .add(R.id.chart_fragment, chartFragment)
                     .commit();
         }
@@ -120,16 +129,16 @@ List<Fragment> fragments = new ArrayList<>();
         Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
         if(fragment != null){
-            Fragment listFragment = WorkItemListFragment.newInstance("STARTED");
+//            Fragment listFragment = WorkItemListFragment.newInstance("STARTED");
             Fragment chartFragment = ChartFragment.newInstance();
             fm.beginTransaction()
-                    .replace(R.id.workitem_list_fragment,listFragment)
+//                    .replace(R.id.workitem_list_fragment,listFragment)
                     .replace(R.id.chart_fragment, chartFragment)
                     .commit();
 
         }
         sqlLoader.updateSqlFromHttp();
-        workItemListFragment.updateAdapter(sqlWorkItemRepository.getWorkItems());
+//        workItemListFragment.updateAdapter(sqlWorkItemRepository.getWorkItems());
     }
 
     @Override
@@ -167,8 +176,12 @@ List<Fragment> fragments = new ArrayList<>();
 
     @Override
     public void onListItemLongClicked(WorkItem workItem) {
-        Intent intent = DetailViewActivity.createIntentForUpdate(HomeScreenActivity.this, workItem);
-        startActivity(intent);
+        if(appStatus.isOnline()) {
+            Intent intent = DetailViewActivity.createIntentForUpdate(HomeScreenActivity.this, workItem);
+            startActivity(intent);
+        }else{
+            runAlert();
+        }
     }
 
     @Override
@@ -193,6 +206,17 @@ List<Fragment> fragments = new ArrayList<>();
         public int getCount() {
             return fragments.size();
         }
+    }
+
+    private void runAlert() {
+        AlertDialog.Builder alertWindow = new AlertDialog.Builder(this);
+        alertWindow.setMessage("Please connect to the internet");
+        alertWindow.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertWindow.show();
     }
 }
 

@@ -3,26 +3,88 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="4sp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        style="@style/normal_text"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tv_detail_view_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        style="@style/normal_text"
+        android:paddingStart="5sp"
+        android:paddingEnd="5sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        android:background="@color/gray_light"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/description"
+        style="@style/normal_text"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tv_detail_view_description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        style="@style/normal_text"
+        android:paddingStart="5sp"
+        android:paddingEnd="5sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        android:background="@color/gray_light"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/workitem_status"
+        style="@style/normal_text"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tv_detail_view_status"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        style="@style/normal_text"
+        android:paddingStart="5sp"
+        android:paddingEnd="5sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        android:background="@color/gray_light"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/workitem_assigned_user"
+        style="@style/normal_text"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tv_detail_view_assignee"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        style="@style/normal_text"
+        android:paddingStart="5sp"
+        android:paddingEnd="5sp"/>
 
 </LinearLayout>

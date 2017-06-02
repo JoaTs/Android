@@ -37,7 +37,7 @@
 
                 <TextView
                     android:id="@+id/tv_unstarted_number"
-                    style="@style/chart_text"
+                    style="@style/normal_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -72,7 +72,7 @@
 
                 <TextView
                     android:id="@+id/tv_started_number"
-                    style="@style/chart_text"
+                    style="@style/normal_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -107,7 +107,7 @@
 
                 <TextView
                     android:id="@+id/tv_done_number"
-                    style="@style/chart_text"
+                    style="@style/normal_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -142,7 +142,7 @@
 
                 <TextView
                     android:id="@+id/tv_my_items_number"
-                    style="@style/chart_text"
+                    style="@style/normal_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
