@@ -1,18 +1,24 @@
 package se.rejjd.taskmanager.fragment;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import se.rejjd.taskmanager.HomeScreenActivity;
 import se.rejjd.taskmanager.R;
+import se.rejjd.taskmanager.model.Chart;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
@@ -32,6 +38,7 @@ public class ChartFragment extends Fragment {
     private ProgressBar startedItems;
     private ProgressBar doneItems;
     private ProgressBar myItems;
+    private List<Chart> progressbars;
 
     private ChartFragment.CallBacks callBacks;
 
@@ -40,7 +47,8 @@ public class ChartFragment extends Fragment {
     }
 
     public interface CallBacks{
-        void onListItemClicked();
+        void onListItemClicked(int position);
+        void onPageChange(int position);
     }
 
     @Override
@@ -92,10 +100,26 @@ public class ChartFragment extends Fragment {
 
         setProgress();
 
+        final Chart chartMyitems = new Chart(myItems,myItemsTitle,myItemsNumber);
+        final Chart chartUnstartedItems = new Chart(unstartedItems,unstartedTitle,unstartedNumber);
+        final Chart chartDoneItems = new Chart(doneItems,doneTitle,doneNumber);
+        final Chart chartStartedItems = new Chart(startedItems,startedTitle,startedNumber);
+
+        progressbars = new ArrayList<>();
+
+        progressbars.add(chartUnstartedItems);
+        progressbars.add(chartStartedItems);
+        progressbars.add(chartDoneItems);
+        progressbars.add(chartMyitems);
+
+        setIsActiveCharts(0);
+        activeChart();
         unstartedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeChart(unstartedItems, unstartedNumber, unstartedTitle);
+                callBacks.onListItemClicked(0);
+                setIsActiveCharts(0);
+                activeChart();
             }
         });
 
@@ -103,21 +127,29 @@ public class ChartFragment extends Fragment {
         startedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeChart(startedItems, startedNumber, startedTitle);
+                callBacks.onListItemClicked(1);
+                setIsActiveCharts(1);
+                activeChart();
             }
         });
 
         doneItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeChart(doneItems, doneNumber, doneTitle);
+                callBacks.onListItemClicked(2);
+                setIsActiveCharts(2);
+                activeChart();
+                Log.d("", "onClick: " + myItems.isSelected());
             }
         });
 
         myItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activeChart(myItems, myItemsNumber, myItemsTitle);
+                callBacks.onListItemClicked(3);
+                setIsActiveCharts(3);
+                activeChart();
+                Log.d("", "onClick: "+ myItems.isSelected());
             }
         });
 
@@ -138,13 +170,64 @@ public class ChartFragment extends Fragment {
         myItems.setProgress(workItemRepository.getWorkItemsByUser(String.valueOf(user.getId())).size());
     }
 
-    private void activeChart(ProgressBar bar, TextView number, TextView title){
-        bar.setScaleX(1.1F);
-        bar.setScaleY(1.1F);
-        number.setScaleX(1.1F);
-        number.setScaleY(1.1F);
-        title.setTextSize(14);
-        title.setTextColor(Color.parseColor("#FFA000"));
+    private boolean isActiveChart(ProgressBar progressBar){
+        if(progressBar.isSelected())
+        if(progressBar.getScaleX() == 1.1F && progressBar.getScaleY() == 1.1F){
+            return true;
+        }
+        return false;
+    }
+
+    public void activeChart(){
+
+        for(Chart chart:progressbars){
+            if(chart.getProgressBar().isSelected()){
+                chart.getProgressBar().setScaleX(1.1F);
+                chart.getProgressBar().setScaleY(1.1F);
+                chart.getNumber().setScaleX(1.1F);
+                chart.getNumber().setScaleY(1.1F);
+                chart.getTitle().setTextSize(14);
+                chart.getTitle().setTextColor(getResources().getColor(R.color.primary_orange));
+            } else{
+                chart.getProgressBar().setScaleX(1.0F);
+                chart.getProgressBar().setScaleY(1.0F);
+                chart.getNumber().setScaleX(1.0F);
+                chart.getNumber().setScaleY(1.0F);
+                chart.getTitle().setTextSize(12);
+                chart.getTitle().setTextColor(getResources().getColor(R.color.primary_gray));
+            }
+
+        }
+    }
+    public void activeChart(int position){
+        Chart chart = progressbars.get(position);
+
+        for (Chart charts : progressbars){
+            if(chart.getProgressBar().isSelected()) {
+                chart.getProgressBar().setScaleX(1.1F);
+                chart.getProgressBar().setScaleY(1.1F);
+                chart.getNumber().setScaleX(1.1F);
+                chart.getNumber().setScaleY(1.1F);
+                chart.getTitle().setTextSize(14);
+                chart.getTitle().setTextColor(getResources().getColor(R.color.primary_orange));
+            }
+
+        }
+    }
+
+    public void setIsActiveCharts(int position){
+        Chart chart = progressbars.get(position);
+        for (Chart c : progressbars){
+            if (c.equals(chart)){
+                c.getProgressBar().setSelected(true);
+            }else{
+                c.getProgressBar().setSelected(false);
+            }
+        }
+//        progressBar.setSelected(true);
+//        progressBar2.setSelected(false);
+//        progressBar3.setSelected(false);
+//        progressBar4.setSelected(false);
     }
 }
 

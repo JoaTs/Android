@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
@@ -47,6 +46,8 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     private String userLoggedIn;
     private FragmentManager fm;
     private AppStatus appStatus;
+    private User user;
+    private ChartFragment chartFragment;
 
 
     public static final String USER_ID = "userId";
@@ -69,6 +70,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         Bundle bundle = intent.getExtras();
         userLoggedIn = bundle.getString(USER_ID);
         sqlUserRepository = SqlUserRepository.getInstance(this);
+        user = sqlUserRepository.getUser(userLoggedIn);
         sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
         userLoggedIn = getIntent().getExtras().getString(USER_ID);
         sqlLoader = new SqlLoader(this, userLoggedIn);
@@ -79,9 +81,39 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         fragments.add(WorkItemListFragment.newInstance("UNSTARTED"));
         fragments.add(WorkItemListFragment.newInstance("STARTED"));
         fragments.add(WorkItemListFragment.newInstance("DONE"));
+        fragments.add(WorkItemListFragment.newInstanceWithUserId(String.valueOf(user.getId())));
+        Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
+
+        if(fragment == null){
+//            fragment = workItemListFragment;
+            chartFragment = (ChartFragment) ChartFragment.newInstance();
+            fm.beginTransaction()
+//                    .add(R.id.workitem_list_fragment,fragment)
+                    .add(R.id.chart_fragment, chartFragment)
+                    .commit();
+        }
+
         viewPager = (ViewPager) findViewById(R.id.vp_workitem_list);
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),fragments);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                chartFragment.setIsActiveCharts(position);
+                chartFragment.activeChart();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,16 +128,16 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         });
 
         workItemListFragment = (WorkItemListFragment) WorkItemListFragment.newInstance("UNSTARTED");
-        Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
+//        Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
-        if(fragment == null){
+//        if(fragment == null){
 //            fragment = workItemListFragment;
-            Fragment chartFragment = ChartFragment.newInstance();
-            fm.beginTransaction()
+//            chartFragment = (ChartFragment) ChartFragment.newInstance();
+//            fm.beginTransaction()
 //                    .add(R.id.workitem_list_fragment,fragment)
-                    .add(R.id.chart_fragment, chartFragment)
-                    .commit();
-        }
+//                    .add(R.id.chart_fragment, chartFragment)
+//                    .commit();
+//        }
 
     }
 
@@ -130,7 +162,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
 
         if(fragment != null){
 //            Fragment listFragment = WorkItemListFragment.newInstance("STARTED");
-            Fragment chartFragment = ChartFragment.newInstance();
+            chartFragment = (ChartFragment) ChartFragment.newInstance();
             fm.beginTransaction()
 //                    .replace(R.id.workitem_list_fragment,listFragment)
                     .replace(R.id.chart_fragment, chartFragment)
@@ -185,8 +217,13 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     }
 
     @Override
-    public void onListItemClicked() {
-        Toast.makeText(this, "Hello world!", Toast.LENGTH_LONG).show();
+    public void onListItemClicked(int position) {
+        viewPager.setCurrentItem(position);
+    }
+
+    @Override
+    public void onPageChange(int position) {
+
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -198,7 +235,15 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         }
 
         @Override
+        public int getItemPosition(Object object) {
+            Log.d(TAG, "getItemPosition: " + object);
+            return super.getItemPosition(object);
+
+        }
+
+        @Override
         public Fragment getItem(int position) {
+            Log.d(TAG, "getItem: " + position);
             return fragments.get(position);
         }
 

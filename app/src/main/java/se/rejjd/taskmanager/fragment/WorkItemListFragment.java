@@ -21,6 +21,7 @@ import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
 public final class WorkItemListFragment extends Fragment {
     private static final String WORKITEM_STATUS = "workitemstatus";
+    private static final String USER_ID = "userId";
     private WorkItemRepository workItemRepository;
     private WorkItemAdapter workItemAdapter;
     private CallBacks callBacks;
@@ -35,18 +36,26 @@ public final class WorkItemListFragment extends Fragment {
         return fragment;
     }
 
+    public static Fragment newInstanceWithUserId(String userId) {
+        Fragment fragment = new WorkItemListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(USER_ID, userId);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public static Fragment newInstance() {
         Fragment fragment = new WorkItemListFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(WORKITEM_STATUS,null);
+        bundle.putString(WORKITEM_STATUS, null);
         fragment.setArguments(bundle);
         return fragment;
     }
 
 
-    public interface CallBacks{
+    public interface CallBacks {
         void onListItemClicked(WorkItem workItem);
+
         void onListItemLongClicked(WorkItem workItem);
     }
 
@@ -88,16 +97,20 @@ public final class WorkItemListFragment extends Fragment {
         workItemRepository = SqlWorkItemRepository.getInstance(getActivity());
         Bundle bundle = getArguments();
         String status = bundle.getString(WORKITEM_STATUS);
-        if(status != null){
+        if (status != null) {
             workitems = workItemRepository.getWorkItemByStatus(status);
+        } else if (status == null){
+            String userId = bundle.getString(USER_ID);
+            if (userId != null) {
+                workitems = workItemRepository.getWorkItemsByUser(userId);
+            }
         }
     }
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.work_item_list_fragment,container,false);
+        View view = inflater.inflate(R.layout.work_item_list_fragment, container, false);
         workItemAdapter = new WorkItemAdapter(workitems, new WorkItemAdapter.onCLickResultListener() {
             @Override
             public void onClickResult(WorkItem workitem) {

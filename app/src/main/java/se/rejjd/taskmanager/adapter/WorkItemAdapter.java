@@ -2,6 +2,7 @@ package se.rejjd.taskmanager.adapter;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,8 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
             tvTitle.setText(workItem.getTitle());
             tvStatus.setText(workItem.getStatus());
             //TODO setText and background on tvStatus to actual user
-            tvStatus.setBackgroundColor(Color.parseColor("#979797"));
+            setupStatusText(tvStatus);
+//            tvStatus.setBackgroundColor(itemView.getResources().getColor(R.color.primary_gray));
             tvDescription.setText(workItem.getDescription());
             tvUser.setText("@Username");
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -92,5 +94,23 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
             });
 
         }
+        private void setupStatusText(TextView status){
+            switch (status.getText().toString()){
+                case "UNSTARTED" :{
+                    status.setBackgroundColor(itemView.getResources().getColor(R.color.primary_gray));
+                    break;
+                }
+                case "STARTED" :{
+                    status.setBackgroundColor(itemView.getResources().getColor(R.color.primary_orange));
+                    break;
+                }
+                case "DONE" :{
+                    status.setBackgroundColor(itemView.getResources().getColor(R.color.primary_green));
+                    break;
+                }
+            }
+        }
     }
+
+
 }
