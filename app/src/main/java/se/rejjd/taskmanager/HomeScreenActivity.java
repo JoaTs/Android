@@ -148,7 +148,7 @@ List<Fragment> fragments = new ArrayList<>();
             case R.id.team_view:
                 User user = sqlUserRepository.getUser(userLoggedIn);
                 long teamId = user.getTeamId();
-                Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId);//TODO
+                Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId, userLoggedIn);//TODO
                 startActivity(intent);
                 break;
             case R.id.search:

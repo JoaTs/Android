@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import se.rejjd.taskmanager.fragment.TeamDetailsFragment;
+import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
@@ -54,4 +56,5 @@ public final class AddWorkitemActivity extends AppCompatActivity {
             }
         });
     }
+
 }
