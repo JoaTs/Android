@@ -106,7 +106,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
     @Override
     public void onListItemLongClicked(WorkItem workItem) {
-        if(AppStatus.isOnline()) {
+        if(AppStatus.isOnline(this)) {
             Intent intent = DetailViewActivity.createIntentForUpdate(SearchActivity.this, workItem);
             startActivity(intent);
         }else{
