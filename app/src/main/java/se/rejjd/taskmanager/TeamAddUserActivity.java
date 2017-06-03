@@ -17,60 +17,93 @@ import android.widget.Toast;
 import java.util.List;
 
 import se.rejjd.taskmanager.model.User;
+import se.rejjd.taskmanager.repository.http.HttpTeamRepository;
 import se.rejjd.taskmanager.repository.http.HttpUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
+import se.rejjd.taskmanager.service.SqlLoader;
 
 public class TeamAddUserActivity extends AppCompatActivity {
 
     private static final String EXTRA_TEAM_ID = "teamId";
     private long teamId;
+    private HttpTeamRepository httpTeamRepository;
     private HttpUserRepository httpUserRepository;
     private SqlUserRepository sqlUserRepository;
     private RecyclerView rvUsers;
+    private UserListAdapter userListAdapter;
+    private SqlLoader sqlLoader;
+    private String userLoggedIn;
 
-
-    public static Intent createIntent(Context context, long teamId) {
+    public static Intent createIntent(Context context, long teamId,String userId) {
         Intent intent = new Intent(context, TeamAddUserActivity.class);
         intent.putExtra(EXTRA_TEAM_ID, teamId);
+        intent.putExtra(HomeScreenActivity.USER_ID, userId);
         return intent;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_add_user);
 
+        teamId = getIntent().getExtras().getLong(EXTRA_TEAM_ID);
+        userLoggedIn = getIntent().getExtras().getString(HomeScreenActivity.USER_ID);
+
+        httpTeamRepository = new HttpTeamRepository();
         httpUserRepository = new HttpUserRepository();
         sqlUserRepository = SqlUserRepository.getInstance(this);
-        teamId = getIntent().getExtras().getLong(EXTRA_TEAM_ID);
-
-        List<User> users = httpUserRepository.getUsers();
-
+        sqlLoader = new SqlLoader(this,userLoggedIn);
 
         rvUsers = (RecyclerView) findViewById(R.id.rv_users_add_to_team);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
+        userListAdapter = new UserListAdapter();
+        userListAdapter.setOnLingClickListener(new UserListAdapter.onLongClickListener() {
+            @Override
+            public void onLongClickResult(User user) {
 
-        updateAdapter();
+                Toast.makeText(TeamAddUserActivity.this, "Added!!!", Toast.LENGTH_SHORT).show();
+//                if(user.getTeamId() == teamId) {
+                    if(httpTeamRepository.addUserToTeam(String.valueOf(teamId), user.getUserId())){
+                          test();
+                    }
+//                }else{
+//
+//                    httpUserRepository.updateUser(user);
+//                }
+                test();
+            }
+        });
+        rvUsers.setAdapter(userListAdapter);
+        test();
     }
 
 
+//    @Override
+    protected void test() {
 
+        super.onResume();
+        sqlLoader.updateSqlFromHttp();
+        userListAdapter.updateAdapter(httpUserRepository.getUsers(),sqlUserRepository.getUsers());
 
-    private void updateAdapter() {
-        rvUsers.setAdapter(new UserListAdapter(httpUserRepository.getUsers(),sqlUserRepository.getUsers()));
     }
-
-
-
 
     private static class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
-        private final List<User> users;
-        private final List<User> inTeamList;
+        private List<User> users;
+        private List<User> inTeamList;
+        private onLongClickListener onLongClickListener;
 
-        UserListAdapter(List<User> users, List<User> inTeamList) {
+        void updateAdapter(List<User> users, List<User> inTeamList) {
             this.users = users;
             this.inTeamList = inTeamList;
+            notifyDataSetChanged();
+        }
+
+        void setOnLingClickListener(onLongClickListener onLongClickListener){
+            this.onLongClickListener = onLongClickListener;
+        }
+
+        public interface onLongClickListener {
+            void onLongClickResult(User user);
         }
 
         @Override
@@ -84,7 +117,7 @@ public class TeamAddUserActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(UserViewHolder holder, int position) {
             User user = users.get(position);
-            holder.bindView(user);
+            holder.bindView(user, onLongClickListener);
         }
 
         @Override
@@ -96,9 +129,11 @@ public class TeamAddUserActivity extends AppCompatActivity {
         public long getItemId(int position) {
             return users.get(position).getId();
         }
+
+
     }
 
-    private static class UserViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    private static class UserViewHolder extends RecyclerView.ViewHolder  {
         private final TextView tvFirstName;
         private final TextView tvLastName;
         private final TextView tvUsername;
@@ -112,10 +147,9 @@ public class TeamAddUserActivity extends AppCompatActivity {
             tvUsername = (TextView) itemView.findViewById(R.id.tv_username);
             tvAdded = (TextView) itemView.findViewById(R.id.tv_added);
             this.inTeamList = inTeamList;
-            itemView.setOnLongClickListener(this);
         }
 
-        public void bindView(User user) {
+        public void bindView(final User user, final UserListAdapter.onLongClickListener onLongClickListener) {
             tvFirstName.setText(user.getFirstname());
             tvLastName.setText(user.getLastname());
             tvUsername.setText(user.getUsername());
@@ -124,20 +158,16 @@ public class TeamAddUserActivity extends AppCompatActivity {
             }else{
                 tvAdded.setVisibility(View.INVISIBLE);
             }
-        }
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onLongClickListener.onLongClickResult(user);
+                    return true;
+                }
+            });
 
-        @Override
-        public boolean onLongClick(View v) {
-            v.showContextMenu();
-            TextView tvAdded = (TextView) v.findViewById(R.id.tv_added);
-            if (tvAdded.getVisibility() == View.VISIBLE) {
-                tvAdded.setVisibility(View.INVISIBLE);
-            } else {
-                tvAdded.setVisibility(View.VISIBLE);
-            }
-            return true;
+
         }
     }
-
 
 }

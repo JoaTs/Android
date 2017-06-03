@@ -48,6 +48,10 @@ public final class User {
         return teamId;
     }
 
+    public void setTeamId(long teamId) {
+        this.teamId = teamId;
+    }
+
     @Override
     public String toString() {
         return "User{" +

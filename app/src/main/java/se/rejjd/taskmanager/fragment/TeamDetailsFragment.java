@@ -95,7 +95,7 @@ public final class TeamDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (AppStatus.isOnline(getContext())) {
-                    Intent intent = TeamAddUserActivity.createIntent(getContext(), team.getId());
+                    Intent intent = TeamAddUserActivity.createIntent(getContext(), team.getId(),userLoggedIn);
                     startActivity(intent);
                 } else {
                     runAlert();
