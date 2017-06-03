@@ -18,6 +18,7 @@
     <string name="task">Uppgift</string>
     <string name="r">r</string>
     <string name="search_hint">Sök</string>
+    <string name="new_teamname">New Teamname</string>
     <string-array name="workitem_status">
         <item>Unstarted</item>
         <item>Started</item>

@@ -78,7 +78,7 @@ public final class TeamDetailsFragment extends Fragment {
             @Override
             public boolean onLongClick(View v) {
                 if(AppStatus.isOnline(getContext())) {
-                    Intent intent = TeamUpdateActivity.createUpdateTeamIntent(getContext(), team.getId());
+                    Intent intent = TeamUpdateActivity.createUpdateTeamIntent(getContext(), team.getId(),userLoggedIn);
                     startActivity(intent);
                 }else{
                     runAlert();
@@ -99,7 +99,7 @@ public final class TeamDetailsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         sqlLoader.updateSqlFromHttp();
-        team = teamRepository.getTeam(String.valueOf(team.getId()));
+        team = teamRepository.getTeams().get(0);
         tvTitle.setText(team.getTeamName());
     }
 

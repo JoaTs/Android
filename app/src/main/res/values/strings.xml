@@ -20,6 +20,8 @@
     <string name="search_hint">Search</string>
     <string name="log_out">Log Out</string>
     <string name="sig_out">Sig out!</string>
+    <string name="new_teamname">New Teamname</string>
+    <string name="create_team">Create new team</string>
     <string-array name="workitem_status">
         <item>Unstarted</item>
         <item>Started</item>

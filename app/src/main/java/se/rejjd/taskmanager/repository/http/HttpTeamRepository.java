@@ -62,6 +62,8 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
                 "\"activeTeam\": "+ team.isActiveTeam()+
                 "}";
 
+            Log.d("johanAddTeam65", body);
+
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
                 @Override
@@ -80,6 +82,22 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
             e.printStackTrace();
         }
         return -1L;
+    }
+
+    public boolean addUserToTeam(final String teamId,final String userId){
+        Log.d("johansAdUsToTe86", URL + "teams/"+ teamId +"/users/" + userId);
+        try {
+            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return put(URL + "teams/"+ teamId +"/users/" + userId, null);
+                }
+            }).execute().get();
+            return httpResponse.getStatusCode() == 200;
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     //TODO This one must customize => will it update Date and other final values
