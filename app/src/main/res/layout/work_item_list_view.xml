@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            style="@style/chart_text"
+            style="@style/normal_text"
             android:textColor="@color/black"/>
 
         <TextView
@@ -34,13 +34,13 @@
         android:id="@+id/tv_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/chart_text"/>
+        style="@style/normal_text"/>
 
     <TextView
         android:id="@+id/tv_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        style="@style/chart_text"
+        style="@style/normal_text"
         android:textSize="12sp"/>
 </LinearLayout>

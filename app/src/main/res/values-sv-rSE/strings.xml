@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Taskmanager</string>
+    <string name="team_details">Grupp detaljer</string>
+    <string name="title">Titel</string>
+    <string name="description">Beskrivning</string>
+    <string name="add_workitem_button">Lägg till</string>
+    <string name="slogan">Hantera arbetsuppgifter</string>
+    <string name="add_member">+ Lägg till användare</string>
+    <string name="update">Uppdatera</string>
+    <string name="workitem_assigned_user">Tilldelad användare</string>
+    <string name="workitem_status">Status</string>
+    <string name="unstarted">Ej påbörjad</string>
+    <string name="started">Påbörjad</string>
+    <string name="done">Klar</string>
+    <string name="my_items">Mina uppgifter</string>
+    <string name="teamname">Grupp</string>
+    <string name="users">Användare</string>
+    <string name="task">Uppgift</string>
+    <string name="r">r</string>
+    <string name="search_hint">Sök</string>
+    <string-array name="workitem_status">
+        <item>Unstarted</item>
+        <item>Started</item>
+        <item>Done</item>
+        <item>Archived</item>
+    </string-array>
+</resources>
+

@@ -1,9 +1,11 @@
 package se.rejjd.taskmanager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +19,7 @@ import se.rejjd.taskmanager.fragment.WorkItemListFragment;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
+import se.rejjd.taskmanager.service.AppStatus;
 import se.rejjd.taskmanager.service.SqlLoader;
 
 public class SearchActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks {
@@ -103,7 +106,22 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
     @Override
     public void onListItemLongClicked(WorkItem workItem) {
-        Intent intent = DetailViewActivity.createIntentForUpdate(SearchActivity.this, workItem);
-        startActivity(intent);
+        if(AppStatus.isOnline(this)) {
+            Intent intent = DetailViewActivity.createIntentForUpdate(SearchActivity.this, workItem);
+            startActivity(intent);
+        }else{
+            runAlert();
+        }
+    }
+
+    private void runAlert() {
+        AlertDialog.Builder alertWindow = new AlertDialog.Builder(this);
+        alertWindow.setMessage("Please connect to the internet");
+        alertWindow.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertWindow.show();
     }
 }

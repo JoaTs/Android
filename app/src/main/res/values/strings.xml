@@ -7,6 +7,8 @@
     <string name="slogan">Manage your work</string>
     <string name="add_member">+ Add user</string>
     <string name="update">Update</string>
+    <string name="workitem_assigned_user">Assigned user</string>
+    <string name="workitem_status">Status</string>
     <string name="unstarted">unstarted</string>
     <string name="started">started</string>
     <string name="done">done</string>
@@ -18,4 +20,10 @@
     <string name="search_hint">Search</string>
     <string name="log_out">Log Out</string>
     <string name="sig_out">Sig out!</string>
+    <string-array name="workitem_status">
+        <item>Unstarted</item>
+        <item>Started</item>
+        <item>Done</item>
+        <item>Archived</item>
+    </string-array>
 </resources>
