@@ -22,6 +22,9 @@
     <string name="sig_out">Sig out!</string>
     <string name="new_teamname">New Teamname</string>
     <string name="create_team">Create new team</string>
+    <string name="action_add_user">Add</string>
+    <string name="action_remove_user">Remove</string>
+    <string name="added">ADDED</string>
     <string-array name="workitem_status">
         <item>Unstarted</item>
         <item>Started</item>

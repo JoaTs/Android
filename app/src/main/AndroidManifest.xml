@@ -23,7 +23,8 @@
         <activity android:name=".DetailViewActivity" />
         <activity android:name=".AddWorkitemActivity" />
         <activity android:name=".SearchActivity" />
-        <activity android:name=".TeamUpdateActivity"></activity>
+        <activity android:name=".TeamUpdateActivity" />
+        <activity android:name=".TeamAddUserActivity"></activity>
     </application>
 
 </manifest>

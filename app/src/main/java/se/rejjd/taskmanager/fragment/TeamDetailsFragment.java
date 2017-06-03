@@ -17,6 +17,7 @@ import java.util.List;
 
 import se.rejjd.taskmanager.HomeScreenActivity;
 import se.rejjd.taskmanager.R;
+import se.rejjd.taskmanager.TeamAddUserActivity;
 import se.rejjd.taskmanager.TeamUpdateActivity;
 import se.rejjd.taskmanager.adapter.UserAdapter;
 import se.rejjd.taskmanager.model.Team;
@@ -60,7 +61,7 @@ public final class TeamDetailsFragment extends Fragment {
         //TODO TEST
         userRepository = SqlUserRepository.getInstance(getContext());
         teamRepository = SqlTeamRepository.getInstance(getContext());
-        Log.d("johanTeamDetails row47", "" +  teamRepository.getTeams());
+        Log.d("johanTeamDetails row47", "" + teamRepository.getTeams());
         String teamId = String.valueOf(getArguments().getLong(BUNDLE_TEAM_ID));
         team = teamRepository.getTeam(teamId);
     }
@@ -77,13 +78,28 @@ public final class TeamDetailsFragment extends Fragment {
         textView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if(AppStatus.isOnline(getContext())) {
-                    Intent intent = TeamUpdateActivity.createUpdateTeamIntent(getContext(), team.getId(),userLoggedIn);
+                if (AppStatus.isOnline(getContext())) {
+                    Intent intent = TeamUpdateActivity.createUpdateTeamIntent(getContext(), team.getId(), userLoggedIn);
                     startActivity(intent);
-                }else{
+                } else {
                     runAlert();
                 }
                 return false;
+            }
+        });
+
+
+        TextView tvAddUsersToTeam = (TextView) view.findViewById(R.id.tv_addmember);
+
+        tvAddUsersToTeam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AppStatus.isOnline(getContext())) {
+                    Intent intent = TeamAddUserActivity.createIntent(getContext(), team.getId());
+                    startActivity(intent);
+                } else {
+                    runAlert();
+                }
             }
         });
 

@@ -33,7 +33,7 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
     public interface onCLickResultListener {
         void onClickResult(WorkItem workitem);
     }
-
+    
     public interface onLongClickListener {
         void onLongClickResult(WorkItem workItem);
     }
