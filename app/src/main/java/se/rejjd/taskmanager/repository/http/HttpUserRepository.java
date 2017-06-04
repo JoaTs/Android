@@ -194,8 +194,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
 
                 long teamId = 0;
 
-                if(!jsonObject.isNull("team"));  //TODO MAKE NICER johan  (ADD TO CONSTRUCTOR)
-                {
+                if(!jsonObject.isNull("team")){
                     JSONObject jsonTeamObject = new JSONObject(jsonObject.getString("team"));
                      teamId = jsonTeamObject.getLong("id");
                 }
