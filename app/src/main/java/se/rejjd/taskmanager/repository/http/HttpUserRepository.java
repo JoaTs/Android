@@ -1,5 +1,7 @@
 package se.rejjd.taskmanager.repository.http;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,8 +93,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
             }).execute().get();
 
             if (httpResponse.getStatusCode() == 201) {
-                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/")
-                        ;
+                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/");
                 String returnValue = splitArray[splitArray.length - 1];
                 return Long.valueOf(returnValue);
             }
@@ -113,11 +114,14 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                     return put(URL + "users/"+ userId +"/workitems/" + workItemId, null);
                 }
             }).execute().get();
+            Log.d("johanHtpUser128", "" + httpResponse.getStatusCode());
             return httpResponse.getStatusCode() == 200;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return false;
+
+        //TODO RETURN AppInfo in BallBack...
 
     }
 

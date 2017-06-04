@@ -2,6 +2,7 @@ package se.rejjd.taskmanager.http;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -39,7 +40,13 @@ public class HttpHelper {
                 writeToOutputStream(inputStream, connection.getOutputStream());
             }
 
-            InputStream in = connection.getInputStream();
+            InputStream in = null;
+            try {
+                in = connection.getInputStream();
+
+            }catch (FileNotFoundException e){
+                in = connection.getErrorStream();
+            }
             return getAsHttpResponse(in, connection);
 
         } catch (IOException e) {

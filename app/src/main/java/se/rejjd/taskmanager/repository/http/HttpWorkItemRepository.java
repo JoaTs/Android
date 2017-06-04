@@ -98,10 +98,9 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                     return post(URL + "workitems", body);
                 }
             }).execute().get();
-
+Log.d("johanHttpWork101", httpResponse.getStatusCode() +"");
             if (httpResponse.getStatusCode() == 201) {
-                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/")
-                        ;
+                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/");
                 String returnValue = splitArray[splitArray.length - 1];
                 return Long.valueOf(returnValue);
             }
