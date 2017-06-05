@@ -1,5 +1,7 @@
 package se.rejjd.taskmanager.repository.http;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,6 +101,7 @@ public final class HttpUserRepository extends HttpHelper {
             new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
+                    Log.d("johanHttpUserRe104", URL + "users/"+ userId +"/workitems/" + workItemId);
                     return put(URL + "users/"+ userId +"/workitems/" + workItemId, null);
                 }
             },listener).execute();

@@ -135,6 +135,16 @@ public class HttpWorkItemRepository extends HttpHelper {
         return null;
     }
 
+    public Long getIdFromLocation(HttpResponse httpResponse){
+                    if (httpResponse.getStatusCode() == 201) {
+                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/")
+                        ;
+                String returnValue = splitArray[splitArray.length - 1];
+                return Long.valueOf(returnValue);
+            }
+            return 0L;
+    }
+
     public WorkItem parserWorkItem(String jsonString) {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);

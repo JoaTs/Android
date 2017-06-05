@@ -115,7 +115,6 @@ public final class SqlLoader {
                     }
                 });
 
-
                 httpUserRepository.getUsersFromTeam(user.getTeamId(), new GetTask.OnResultListener() {
                     @Override
                     public void onResult(HttpResponse result) {

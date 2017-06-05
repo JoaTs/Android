@@ -53,11 +53,11 @@ public final class AddWorkitemActivity extends AppCompatActivity {
                 String workitemDescription = description.getText().toString();
 
                 WorkItem workItem = new WorkItem(-1L, workitemTitle, workitemDescription, Long.valueOf(userLoggedIn));
-
+                Log.d("johanAddWorkItem56","Kommer vi hit? " + workItem.toString());
                 workItemRepository.addWorkItem(workItem, new GetTask.OnResultListener() {
                     @Override
                     public void onResult(HttpResponse httpResult) {
-                        long newId = Long.valueOf(httpResult.getResponseAsString());
+                        long newId = workItemRepository.getIdFromLocation(httpResult);//TODO This is wrong
                         userRepository.addUserToWorkItem(userLoggedIn, newId, new GetTask.OnResultListener() {
                             @Override
                             public void onResult(HttpResponse httpResult) {
