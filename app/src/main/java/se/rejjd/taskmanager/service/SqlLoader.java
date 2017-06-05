@@ -62,11 +62,7 @@ public final class SqlLoader {
     public boolean updateSqlFromHttp() {
         if (AppStatus.isOnline(context)) {
             Log.d("johanSqlLoader", "You got Internet!!!!");
-             //TODO REMOVE OLD DATA ON SQLite
-            database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.TEAM_TABLE_NAME);
-            database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.USERS_TABLE_NAME);
-            database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.WORK_ITEMS_TABLE_NAME);
-            database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.ISSUES_TABLE_NAME);
+
 
             update();
             return true;
@@ -76,49 +72,56 @@ public final class SqlLoader {
         return false;
     }
 
-    private void update(){
-                httpUserRepository.getUser(String.valueOf(userLoggedIn), new GetTask.OnResultListener() {
+    private void update() {
+
+        httpUserRepository.getUser(String.valueOf(userLoggedIn), new GetTask.OnResultListener() {
             @Override
             public void onResult(HttpResponse httpResult) {
-                User user = httpUserRepository.parserUser(httpResult.getResponseAsString());
+                final User user = httpUserRepository.parserUser(httpResult.getResponseAsString());
+                Log.d("johanSqlL84", user.toString());
+                //TODO REMOVE OLD DATA ON SQLite
+                database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.TEAM_TABLE_NAME);
+                database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.USERS_TABLE_NAME);
+                database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.WORK_ITEMS_TABLE_NAME);
+                database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.ISSUES_TABLE_NAME);
                 sqlUserRepository.addUser(user);
 
-            }
-        });
-        final User user = sqlUserRepository.getUser(userLoggedIn);
+//        final User user = sqlUserRepository.getUser(userLoggedIn);
+                Log.d("johanSqlL89", user.toString());
 
-        httpTeamRepository.getTeam(String.valueOf(user.getTeamId()), new GetTask.OnResultListener() {
-            @Override
-            public void onResult(HttpResponse result) {
-                Team team = httpTeamRepository.parserTeam(result.getResponseAsString());
-                sqlTeamRepository.addTeam(team);
-            }
-        });
-
-
-          //TODO Team dose not load on SQLite
-
-        List<WorkItem> workitemList = null;
-
-        httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId(), new GetTask.OnResultListener() {
-            @Override
-            public void onResult(HttpResponse result) {
-                List<WorkItem> workitemList = httpWorkItemRepository.parserWorkItems(String.valueOf(user.getTeamId()));
-                for(WorkItem w : workitemList){
-                    sqlWorkItemRepository.addWorkItem(w);
-                }
-            }
-        });
+                httpTeamRepository.getTeam(String.valueOf(user.getTeamId()), new GetTask.OnResultListener() {
+                    @Override
+                    public void onResult(HttpResponse result) {
+                        Team team = httpTeamRepository.parserTeam(result.getResponseAsString());
+                        sqlTeamRepository.addTeam(team);
+                    }
+                });
 
 
+                //TODO Team dose not load on SQLite
 
-        httpUserRepository.getUsersFromTeam(user.getTeamId(), new GetTask.OnResultListener() {
-            @Override
-            public void onResult(HttpResponse result) {
-                List<User> userList = httpUserRepository.parserUsers(result.getResponseAsString());
-                for(User u : userList){
-                    sqlUserRepository.addUser(u);
-                }
+                List<WorkItem> workitemList = null;
+
+                httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId(), new GetTask.OnResultListener() {
+                    @Override
+                    public void onResult(HttpResponse result) {
+                        List<WorkItem> workitemList = httpWorkItemRepository.parserWorkItems(result.getResponseAsString());
+                        for (WorkItem w : workitemList) {
+                            sqlWorkItemRepository.addWorkItem(w);
+                        }
+                    }
+                });
+
+
+                httpUserRepository.getUsersFromTeam(user.getTeamId(), new GetTask.OnResultListener() {
+                    @Override
+                    public void onResult(HttpResponse result) {
+                        List<User> userList = httpUserRepository.parserUsers(result.getResponseAsString());
+                        for (User u : userList) {
+                            sqlUserRepository.addUser(u);
+                        }
+                    }
+                });
             }
         });
 
