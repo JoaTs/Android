@@ -17,44 +17,37 @@ import se.rejjd.taskmanager.http.HttpResponse;
 import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.repository.TeamRepository;
 
-public final class HttpTeamRepository extends HttpHelper implements TeamRepository{
+public final class HttpTeamRepository extends HttpHelper {
     private final String URL = "http://10.0.2.2:8080/";
 
-    @Override
-    public List<Team> getTeams() {
+    public void getTeams(GetTask.OnResultListener listener) {
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return get(URL + "teams");
                 }
-            }).execute().get();
-            return parserTeams(httpResponse.getResponseAsString());
-        } catch (InterruptedException | ExecutionException e) {
+            },listener).execute();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
     }
 
-    @Override
-    public Team getTeam(final String id) {
+    public void getTeam(final String id, GetTask.OnResultListener listener) {
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return get(URL + "teams/" + id);
                 }
-            }).execute().get();
-            return parserTeam(httpResponse.getResponseAsString());
-        } catch (InterruptedException | ExecutionException e) {
+            },listener).execute();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    @Override
-    public Long addTeam(Team team) {
+    public void addTeam(Team team, GetTask.OnResultListener listener) {
         final String body =
                 "{"+
                 "\"id\": -1,"+
@@ -63,28 +56,26 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
                 "}";
 
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return post(URL + "teams", body);
                 }
-            }).execute().get();
+            },listener).execute();
 
-            if (httpResponse.getStatusCode() == 201) {
-                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/");
-                String returnValue = splitArray[splitArray.length - 1];
-                return Long.valueOf(returnValue);
-            }
+//            if (httpResponse.getStatusCode() == 201) {
+//                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/");
+//                String returnValue = splitArray[splitArray.length - 1];
+//                return Long.valueOf(returnValue);
+//            }
 
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return -1L;
     }
 
     //TODO This one must customize => will it update Date and other final values
-    @Override
-    public Team updateTeam(final Team team) {
+    public void updateTeam(final Team team, GetTask.OnResultListener listener) {
         final String body =
                         "{"+
                         "\"id\": "+team.getId()+","+
@@ -93,21 +84,20 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
                         "}";
 
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return put(URL + "teams/" + team.getId() , body);
                 }
-            }).execute().get();
+            },listener).execute();
 
-            return (httpResponse.getStatusCode() == 200)? team : null;
-        } catch (InterruptedException | ExecutionException e) {
+//            return (httpResponse.getStatusCode() == 200)? team : null;
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    private Team parserTeam(String jsonString) {
+    public Team parserTeam(String jsonString) {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
 
@@ -125,7 +115,7 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
         return null;
     }
 
-    private List<Team> parserTeams(String jsonString) {
+    public List<Team> parserTeams(String jsonString) {
         try {
             List<Team> teamItems = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(jsonString);

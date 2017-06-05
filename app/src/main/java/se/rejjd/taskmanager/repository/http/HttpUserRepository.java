@@ -15,63 +15,55 @@ import se.rejjd.taskmanager.http.HttpResponse;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.UserRepository;
 
-public final class HttpUserRepository extends HttpHelper implements UserRepository{
+public final class HttpUserRepository extends HttpHelper {
     private final String URL = "http://10.0.2.2:8080/";
 
-    @Override
-    public List<User> getUsers() {
+    public void getUsers(GetTask.OnResultListener listener) {
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return get(URL + "users");
                 }
-            }).execute().get();
-            return parserUsers(httpResponse.getResponseAsString());
-        } catch (InterruptedException | ExecutionException e) {
+            },listener).execute();
+//            return parserUsers(httpResponse.getResponseAsString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
 
     }
 
-    @Override
-    public List<User> getUsersFromTeam(final long teamId) {
+    public void getUsersFromTeam(final long teamId, GetTask.OnResultListener listener) {
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return get(URL + "teams/" + teamId + "/users");
                 }
-            }).execute().get();
-            return parserUsers(httpResponse.getResponseAsString());
-        } catch (InterruptedException | ExecutionException e) {
+            },listener).execute();
+//            return parserUsers(httpResponse.getResponseAsString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
-
     }
 
-    @Override
-    public User getUser(final String id) {
+    public void getUser(final String id, GetTask.OnResultListener listener) {
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return get(URL + "users/" + id);
                 }
-            }).execute().get();
-            return parserUser(httpResponse.getResponseAsString());
-        } catch (InterruptedException | ExecutionException e) {
+            },listener).execute();
+//            return parserUser(httpResponse.getResponseAsString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    @Override
-    public Long addUser(User user) {
+    public void addUser(User user, GetTask.OnResultListener listener) {
         final String body =
                 "{"+
                 "\"id\": "+user.getId()+","+
@@ -83,46 +75,41 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 "}" ;
 
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return post(URL + "users", body);
                 }
-            }).execute().get();
+            },listener).execute();
 
-            if (httpResponse.getStatusCode() == 201) {
-                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/")
-                        ;
-                String returnValue = splitArray[splitArray.length - 1];
-                return Long.valueOf(returnValue);
-            }
+//            if (httpResponse.getStatusCode() == 201) {
+//                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/");
+//                String returnValue = splitArray[splitArray.length - 1];
+//                return Long.valueOf(returnValue);
+//            }
 
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0L;
     }
 
-    @Override
-    public boolean addUserToWorkItem(final String userId,final long workItemId){
+    public void addUserToWorkItem(final String userId,final long workItemId, GetTask.OnResultListener listener){
 
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return put(URL + "users/"+ userId +"/workitems/" + workItemId, null);
                 }
-            }).execute().get();
-            return httpResponse.getStatusCode() == 200;
-        } catch (InterruptedException | ExecutionException e) {
+            },listener).execute();
+//            return httpResponse.getStatusCode() == 200;
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
 
     }
 
-    @Override
-    public User updateUser(final User user) {
+    public void updateUser(final User user, GetTask.OnResultListener listener) {
         final String body =
                 "{"+
                         "\"id\": "+user.getId()+","+
@@ -134,18 +121,17 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                         "}" ;
 
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return put(URL + "users/" + user.getUserId() , body);
                 }
-            }).execute().get();
+            },listener).execute().get();
 
-            return (httpResponse.getStatusCode() == 200)? user : null;
-        } catch (InterruptedException | ExecutionException e) {
+//            return (httpResponse.getStatusCode() == 200)? user : null;
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 
 

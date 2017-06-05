@@ -19,8 +19,8 @@ import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 
 public final class AddWorkitemActivity extends AppCompatActivity {
 
-    private UserRepository userRepository;
-    private WorkItemRepository workItemRepository;
+    private HttpUserRepository userRepository;
+    private HttpWorkItemRepository workItemRepository;
     private String userLoggedIn;
 
     public static Intent getIntent(Context context, String userId) {

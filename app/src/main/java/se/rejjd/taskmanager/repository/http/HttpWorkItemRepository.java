@@ -17,12 +17,11 @@ import se.rejjd.taskmanager.http.HttpResponse;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 
-public class HttpWorkItemRepository extends HttpHelper implements WorkItemRepository {
+public class HttpWorkItemRepository extends HttpHelper {
 
     private final String URL = "http://10.0.2.2:8080/";
 
-    @Override
-    public List<WorkItem> getWorkItems() {
+    public void getWorkItems(GetTask.OnResultListener listener) {
 
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
@@ -30,59 +29,50 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                 public HttpResponse execute() {
                     return get(URL + "workitems");
                 }
-            }).execute().get();
-            return parserWorkItems(httpResponse.getResponseAsString());
+            },listener).execute().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
-        return null;
     }
 
-    @Override
-    public List<WorkItem> getWorkItemsFromTeam(final long teamId) {
+    public void getWorkItemsFromTeam(final long teamId, GetTask.OnResultListener listener) {
 
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return get(URL + "teams/" + teamId + "/workitems");
                 }
-            }).execute().get();
-            return parserWorkItems(httpResponse.getResponseAsString());
-        } catch (InterruptedException | ExecutionException e) {
+            },listener).execute();
+//            return parserWorkItems(httpResponse.getResponseAsString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
     }
 
-    @Override
     public List<WorkItem> getWorkItemsByUser(String userId) {
-        //TODO getWorkItemByUser
         return null;
     }
 
 
-    @Override
-    public WorkItem getWorkItem(final String id) {
+    public void getWorkItem(final String id, GetTask.OnResultListener listener) {
 
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return get(URL + "workitems/" + id);
                 }
-            }).execute().get();
-            return parserWorkItem(httpResponse.getResponseAsString());
-        } catch (InterruptedException | ExecutionException e) {
+            },listener).execute();
+//            return parserWorkItem(httpResponse.getResponseAsString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    @Override
-    public Long addWorkItem(WorkItem workItem) {
+    public void addWorkItem(WorkItem workItem, GetTask.OnResultListener listener) {
 
         final String body =
                 "{" +
@@ -92,43 +82,27 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                         "}";
 
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return post(URL + "workitems", body);
                 }
-            }).execute().get();
+            },listener).execute();
 
-            if (httpResponse.getStatusCode() == 201) {
-                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/")
-                        ;
-                String returnValue = splitArray[splitArray.length - 1];
-                return Long.valueOf(returnValue);
-            }
+//            if (httpResponse.getStatusCode() == 201) {
+//                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/")
+//                        ;
+//                String returnValue = splitArray[splitArray.length - 1];
+//                return Long.valueOf(returnValue);
+//            }
 
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0L;
     }
 
     //This method update only the workItems status
-    @Override
-    public WorkItem updateWorkItem(final WorkItem workItem) {
-
-//        final String body =
-//                "{" +
-//                "\"id\": \"" + ": \"82\","+
-//                "\"createdDate\": \"2017-05-17\","+
-//                "\"createdBy\": \"DreamierTeam\","+
-//                "\"lastModifiedDate\": \"2017-05-17\","+
-//                "\"lastModifiedBy\": \"DreamierTeam\","+
-//                "\"title\": \"en title\","+
-//                "\"description\": \"Uppdate?\","+
-//                "\"status\": \""+ workItem.getStatus() +"\","+
-//                "\"user\": null,"+
-//                "\"dateOfCompletion\": \"\""+
-//                "}";
+    public void updateWorkItem(final WorkItem workItem, GetTask.OnResultListener listener) {
 
         final String body =
                 "{" +
@@ -143,21 +117,19 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         Log.d("johanHttpWorkRepRow127",body);
 
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return put(URL + "workitems/" + workItem.getId() , body);
                 }
-            }).execute().get();
-            Log.d("johan", "updateWorkItem: " + httpResponse.getStatusCode());
-            return (httpResponse.getStatusCode() == 200)? workItem : null;
-        } catch (InterruptedException | ExecutionException e) {
+            },listener).execute();
+//            Log.d("johan", "updateWorkItem: " + httpResponse.getStatusCode());
+//            return (httpResponse.getStatusCode() == 200)? workItem : null;
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    @Override
     public List<WorkItem> getWorkItemByStatus(String status) {
         //TODO: getWorkItemsByStatus
         return null;
