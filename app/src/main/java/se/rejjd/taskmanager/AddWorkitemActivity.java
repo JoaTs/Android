@@ -52,6 +52,7 @@ public final class AddWorkitemActivity extends AppCompatActivity {
                 WorkItem workItem = new WorkItem(-1L,workitemTitle,workitemDescription,Long.valueOf(userLoggedIn));
                 long newId =  workItemRepository.addWorkItem(workItem);
                 userRepository.addUserToWorkItem(userLoggedIn, newId);
+                setResult(RESULT_OK);
                 finish();
             }
         });

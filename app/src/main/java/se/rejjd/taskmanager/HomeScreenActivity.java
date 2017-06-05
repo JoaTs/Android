@@ -25,6 +25,7 @@ import java.util.List;
 
 import se.rejjd.taskmanager.fragment.ChartFragment;
 import se.rejjd.taskmanager.fragment.WorkItemListFragment;
+import se.rejjd.taskmanager.fragment.WorkItemUpdateFragment;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
@@ -36,6 +37,7 @@ import se.rejjd.taskmanager.service.SqlLoader;
 
 public class HomeScreenActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks, ChartFragment.CallBacks {
     private static final String TAG = HomeScreenActivity.class.getSimpleName();
+    private static final int REQUEST_CODE_UPDATE_WORKITEM = 101;
 
     private SqlWorkItemRepository sqlWorkItemRepository;
     private WorkItemListFragment workItemListFragment;
@@ -47,6 +49,8 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     private FragmentManager fm;
     private User user;
     private ChartFragment chartFragment;
+    private List<Fragment> fragments = new ArrayList<>();
+    private static int REQUEST_CODE_ADD_WORKITEM = 100;
 
 
     public static final String USER_ID = "userId";
@@ -76,7 +80,6 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         userLoggedIn = getIntent().getExtras().getString(USER_ID);
         sqlLoader = new SqlLoader(this, userLoggedIn);
         sqlLoader.updateSqlFromHttp();
-        List<Fragment> fragments = new ArrayList<>();
         fragments.add(WorkItemListFragment.newInstance("UNSTARTED"));
         fragments.add(WorkItemListFragment.newInstance("STARTED"));
         fragments.add(WorkItemListFragment.newInstance("DONE"));
@@ -88,7 +91,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
             chartFragment = (ChartFragment) ChartFragment.newInstance();
             fm.beginTransaction()
 //                    .add(R.id.workitem_list_fragment,fragment)
-                    .add(R.id.chart_fragment, chartFragment)
+                    .replace(R.id.chart_fragment, chartFragment)
                     .commit();
         }
 
@@ -119,7 +122,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
             public void onClick(View v) {
                 if(AppStatus.isOnline(HomeScreenActivity.this)) {
                     Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this, userLoggedIn);
-                    startActivity(intent);
+                    startActivityForResult(intent,REQUEST_CODE_ADD_WORKITEM);
                 }else{
                     runAlert();
                 }
@@ -150,27 +153,30 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     }
 
     //temp Solution
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //TODO Update WorkItemAdapter
-//        WorkItemListFragment.updateAdapter();
-
-        new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
-        Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
-
-        if(fragment != null){
-//            Fragment listFragment = WorkItemListFragment.newInstance("STARTED");
-            chartFragment = (ChartFragment) ChartFragment.newInstance();
-            fm.beginTransaction()
-//                    .replace(R.id.workitem_list_fragment,listFragment)
-                    .replace(R.id.chart_fragment, chartFragment)
-                    .commit();
-
-        }
-        sqlLoader.updateSqlFromHttp();
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        //TODO Update WorkItemAdapter
+////        WorkItemListFragment.updateAdapter();
+//
+//        new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
+//        Fragment fragment = fm.findFragmentById(R.id.chart_fragment);
+//
+//        if(fragment != null){
+////            Fragment listFragment = WorkItemListFragment.newInstance("STARTED");
+//            chartFragment = (ChartFragment) ChartFragment.newInstance();
+//            fm.beginTransaction()
+////                    .replace(R.id.workitem_list_fragment,listFragment)
+//                    .replace(R.id.chart_fragment, chartFragment)
+//                    .commit();
+//
+//        }
+//        sqlLoader.updateSqlFromHttp();
+//        int item = viewPager.getCurrentItem();
+//        viewPager.setAdapter(pagerAdapter);
+//        viewPager.setCurrentItem(item);
 //        workItemListFragment.updateAdapter(sqlWorkItemRepository.getWorkItems());
-    }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -209,20 +215,15 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     public void onListItemLongClicked(WorkItem workItem) {
         if(AppStatus.isOnline(HomeScreenActivity.this)) {
             Intent intent = DetailViewActivity.createIntentForUpdate(HomeScreenActivity.this, workItem);
-            startActivity(intent);
+            startActivityForResult(intent,REQUEST_CODE_UPDATE_WORKITEM);
         }else{
             runAlert();
         }
     }
 
     @Override
-    public void onListItemClicked(int position) {
+    public void onChartClicked(int position) {
         viewPager.setCurrentItem(position);
-    }
-
-    @Override
-    public void onPageChange(int position) {
-
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -261,6 +262,29 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
             }
         });
         alertWindow.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_ADD_WORKITEM){
+            if(resultCode == RESULT_OK){
+             updateInformation();
+            }
+        }
+        if (requestCode == REQUEST_CODE_UPDATE_WORKITEM){
+            if(resultCode == RESULT_OK){
+                updateInformation();
+            }
+        }
+    }
+    private void updateInformation(){
+        chartFragment = (ChartFragment) ChartFragment.newInstance();
+        fm.beginTransaction()
+                .replace(R.id.chart_fragment, chartFragment)
+                .commit();
+        new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
+        viewPager.setAdapter(pagerAdapter);
     }
 }
 

@@ -1,8 +1,6 @@
 package se.rejjd.taskmanager.fragment;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,13 +14,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.rejjd.taskmanager.HomeScreenActivity;
 import se.rejjd.taskmanager.R;
 import se.rejjd.taskmanager.model.Chart;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
-import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
@@ -40,15 +36,14 @@ public class ChartFragment extends Fragment {
     private ProgressBar myItems;
     private List<Chart> progressbars;
 
-    private ChartFragment.CallBacks callBacks;
+    private CallBacks callBacks;
 
     public static Fragment newInstance(){
         return new ChartFragment();
     }
 
     public interface CallBacks{
-        void onListItemClicked(int position);
-        void onPageChange(int position);
+        void onChartClicked(int position);
     }
 
     @Override
@@ -117,7 +112,7 @@ public class ChartFragment extends Fragment {
         unstartedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callBacks.onListItemClicked(0);
+                callBacks.onChartClicked(0);
                 setIsActiveCharts(0);
                 activeChart();
             }
@@ -127,7 +122,7 @@ public class ChartFragment extends Fragment {
         startedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callBacks.onListItemClicked(1);
+                callBacks.onChartClicked(1);
                 setIsActiveCharts(1);
                 activeChart();
             }
@@ -136,7 +131,7 @@ public class ChartFragment extends Fragment {
         doneItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callBacks.onListItemClicked(2);
+                callBacks.onChartClicked(2);
                 setIsActiveCharts(2);
                 activeChart();
                 Log.d("", "onClick: " + myItems.isSelected());
@@ -146,7 +141,7 @@ public class ChartFragment extends Fragment {
         myItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callBacks.onListItemClicked(3);
+                callBacks.onChartClicked(3);
                 setIsActiveCharts(3);
                 activeChart();
                 Log.d("", "onClick: "+ myItems.isSelected());

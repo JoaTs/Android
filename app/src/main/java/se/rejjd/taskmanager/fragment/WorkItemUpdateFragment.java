@@ -1,5 +1,7 @@
 package se.rejjd.taskmanager.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -124,8 +126,8 @@ public final class WorkItemUpdateFragment extends Fragment {
                 httpWorkItemRepository.updateWorkItem(workItemToUpdate);
                 UserRepository httpUserRepository = new HttpUserRepository();
                 httpUserRepository.addUserToWorkItem(getUserFromSpinnerSelectedItem().getUserId(),workItemToUpdate.getId());
-                getActivity().onBackPressed();
-
+                getActivity().setResult(Activity.RESULT_OK);
+                getActivity().finish();
             }
         });
         return view;
