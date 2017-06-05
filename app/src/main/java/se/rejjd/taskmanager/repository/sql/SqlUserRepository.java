@@ -15,7 +15,7 @@ import se.rejjd.taskmanager.repository.sql.wrapper.UserCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseContract;
 import se.rejjd.taskmanager.sql.DatabaseHelper;
 
-public class SqlUserRepository implements UserRepository {
+public final class SqlUserRepository implements UserRepository {
 
     private static SqlUserRepository instance;
 
@@ -50,6 +50,19 @@ public class SqlUserRepository implements UserRepository {
     @Override
     public User getUser(String id) {
         UserCursorWrapper cursor = queryUsers(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USER_ID + " = ?", new String[]{id});
+        if(cursor.getCount() > 0){
+            User user = cursor.getFirstUser();
+            cursor.close();
+            return user;
+
+        }
+        cursor.close();
+        return null;
+    }
+
+    @Override
+    public User getUserById(long id){
+        UserCursorWrapper cursor = queryUsers(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ID + " = ?", new String[]{String.valueOf(id)});
         if(cursor.getCount() > 0){
             User user = cursor.getFirstUser();
             cursor.close();

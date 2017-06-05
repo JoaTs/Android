@@ -1,7 +1,5 @@
 package se.rejjd.taskmanager.repository.http;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +15,7 @@ import se.rejjd.taskmanager.http.HttpResponse;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 
-public class HttpWorkItemRepository extends HttpHelper implements WorkItemRepository {
+public final class HttpWorkItemRepository extends HttpHelper implements WorkItemRepository {
 
     private final String URL = "http://10.0.2.2:8080/";
 
@@ -59,10 +57,8 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
 
     @Override
     public List<WorkItem> getWorkItemsByUser(String userId) {
-        //TODO getWorkItemByUser
         return null;
     }
-
 
     @Override
     public WorkItem getWorkItem(final String id) {
@@ -112,23 +108,8 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
         return 0L;
     }
 
-    //This method update only the workItems status
     @Override
     public WorkItem updateWorkItem(final WorkItem workItem) {
-
-//        final String body =
-//                "{" +
-//                "\"id\": \"" + ": \"82\","+
-//                "\"createdDate\": \"2017-05-17\","+
-//                "\"createdBy\": \"DreamierTeam\","+
-//                "\"lastModifiedDate\": \"2017-05-17\","+
-//                "\"lastModifiedBy\": \"DreamierTeam\","+
-//                "\"title\": \"en title\","+
-//                "\"description\": \"Uppdate?\","+
-//                "\"status\": \""+ workItem.getStatus() +"\","+
-//                "\"user\": null,"+
-//                "\"dateOfCompletion\": \"\""+
-//                "}";
 
         final String body =
                 "{" +
@@ -136,11 +117,8 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                         "\"title\": \"" + workItem.getTitle() + "\"," +
                         "\"description\": \"" + workItem.getDescription() + "\"," +
                         "\"status\": \"" + workItem.getStatus() + "\"," +
-                        "\"user\": null,"+
-                        "\"dateOfCompletion\": null"+
+                        "\"user\": null"+
                 "}";
-
-        Log.d("johanHttpWorkRepRow127",body);
 
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
@@ -149,7 +127,6 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
                     return put(URL + "workitems/" + workItem.getId() , body);
                 }
             }).execute().get();
-            Log.d("johan", "updateWorkItem: " + httpResponse.getStatusCode());
             return (httpResponse.getStatusCode() == 200)? workItem : null;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -159,7 +136,6 @@ public class HttpWorkItemRepository extends HttpHelper implements WorkItemReposi
 
     @Override
     public List<WorkItem> getWorkItemByStatus(String status) {
-        //TODO: getWorkItemsByStatus
         return null;
     }
 

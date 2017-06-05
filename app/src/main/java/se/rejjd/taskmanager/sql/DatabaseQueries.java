@@ -6,7 +6,7 @@ class DatabaseQueries {
 
     static final String CREATE_TABLES_USERS =
             "CREATE TABLE " + ModelEntry.USERS_TABLE_NAME + "( "
-                    + ModelEntry.USERS_COLUMN_NAME_ID + " INTERGER PRIMARY KEY, "
+                    + ModelEntry.USERS_COLUMN_NAME_ID + " INTEGER PRIMARY KEY, "
                     + ModelEntry.USERS_COLUMN_NAME_USERNAME + " TEXT NOT NULL, "
                     + ModelEntry.USERS_COLUMN_NAME_FIRSTNAME + " TEXT NOT NULL, "
                     + ModelEntry.USERS_COLUMN_NAME_LASTNAME + " TEXT NOT NULL, "

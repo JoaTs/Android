@@ -8,7 +8,7 @@ import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.sql.DatabaseContract.ModelEntry;
 
 
-public class WorkItemCursorWrapper extends CursorWrapper{
+public final class WorkItemCursorWrapper extends CursorWrapper{
 
     public WorkItemCursorWrapper(Cursor cursor) {
         super(cursor);

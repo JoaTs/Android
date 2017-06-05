@@ -6,7 +6,7 @@ import android.database.CursorWrapper;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.sql.DatabaseContract;
 
-public class UserCursorWrapper extends CursorWrapper{
+public final class UserCursorWrapper extends CursorWrapper{
 
     public User getUser() {
 

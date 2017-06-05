@@ -17,7 +17,7 @@ public final class AppStatus {
                     networkInfo.isConnected();
 
         } catch (Exception e) {
-            System.out.println("CheckConnectivity Exception: " + e.getMessage());
+            Log.e("", "CheckConnectivity Exception: " + e.getMessage());
             Log.v("connectivity", e.toString());
         }
         return false;

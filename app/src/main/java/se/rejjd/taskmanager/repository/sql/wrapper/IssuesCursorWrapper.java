@@ -7,7 +7,7 @@ import se.rejjd.taskmanager.model.Issue;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.sql.DatabaseContract;
 
-public class IssuesCursorWrapper extends CursorWrapper {
+public final class IssuesCursorWrapper extends CursorWrapper {
 
     public IssuesCursorWrapper(Cursor cursor) {
         super(cursor);

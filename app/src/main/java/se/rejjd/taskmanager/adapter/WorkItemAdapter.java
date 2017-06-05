@@ -1,25 +1,27 @@
 package se.rejjd.taskmanager.adapter;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Map;
 
 import se.rejjd.taskmanager.R;
+import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
 
 public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkItemViewHolder> {
 
+    private Map<WorkItem, User> users;
     private List<WorkItem> workItems;
     private onCLickResultListener onCLickResultListener;
     private onLongClickListener onLongClickListener;
 
-    public WorkItemAdapter(List<WorkItem> workItems, onCLickResultListener onCLickResultListener, onLongClickListener onLongClickListener) {
+    public WorkItemAdapter(Map<WorkItem, User> users, List<WorkItem> workItems, onCLickResultListener onCLickResultListener, onLongClickListener onLongClickListener) {
+        this.users = users;
         this.workItems = workItems;
         this.onCLickResultListener = onCLickResultListener;
         this.onLongClickListener = onLongClickListener;
@@ -48,7 +50,8 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
     @Override
     public void onBindViewHolder(WorkItemAdapter.WorkItemViewHolder holder, int position) {
         WorkItem workItem = workItems.get(position);
-        holder.bindView(workItem, onCLickResultListener, onLongClickListener);
+        User user = users.get(workItem);
+        holder.bindView(user, workItem, onCLickResultListener, onLongClickListener);
     }
 
     @Override
@@ -57,6 +60,7 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
     }
 
     public static class WorkItemViewHolder extends RecyclerView.ViewHolder {
+
         private final TextView tvTitle;
         private final TextView tvStatus;
         private final TextView tvDescription;
@@ -71,14 +75,12 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
             this.tvUser = (TextView) itemView.findViewById(R.id.tv_user);
         }
 
-        void bindView(final WorkItem workItem, final onCLickResultListener onCLickResultListener, final WorkItemAdapter.onLongClickListener onLongClickListener) {
+        void bindView(User user, final WorkItem workItem, final onCLickResultListener onCLickResultListener, final WorkItemAdapter.onLongClickListener onLongClickListener) {
             tvTitle.setText(workItem.getTitle());
             tvStatus.setText(workItem.getStatus());
-            //TODO setText and background on tvStatus to actual user
             setupStatusText(tvStatus);
-//            tvStatus.setBackgroundColor(itemView.getResources().getColor(R.color.primary_gray));
             tvDescription.setText(workItem.getDescription());
-            tvUser.setText("@Username");
+            tvUser.setText(user.getUsername());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -94,6 +96,7 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
             });
 
         }
+
         private void setupStatusText(TextView status){
             switch (status.getText().toString()){
                 case "UNSTARTED" :{
@@ -111,6 +114,4 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
             }
         }
     }
-
-
 }

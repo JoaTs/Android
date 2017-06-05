@@ -6,7 +6,7 @@ import android.database.CursorWrapper;
 import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.sql.DatabaseContract;
 
-public class TeamCursorWrapper extends CursorWrapper {
+public final class TeamCursorWrapper extends CursorWrapper {
 
     public TeamCursorWrapper(Cursor cursor) {
         super(cursor);

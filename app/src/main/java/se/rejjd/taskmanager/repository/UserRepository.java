@@ -10,6 +10,8 @@ public interface UserRepository {
 
     User getUser(String id);
 
+    User getUserById(long id);
+
     Long addUser(User user);
 
     User updateUser(User user);

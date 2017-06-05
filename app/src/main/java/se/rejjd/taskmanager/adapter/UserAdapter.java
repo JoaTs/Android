@@ -45,7 +45,6 @@ public final class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserView
             tvFirstName = (TextView) itemView.findViewById(R.id.tv_firstName);
             tvLastName = (TextView) itemView.findViewById(R.id.tv_lastName);
             tvUsername = (TextView) itemView.findViewById(R.id.tv_username);
-
         }
 
         public void bindView(User user) {
