@@ -15,7 +15,7 @@ import se.rejjd.taskmanager.repository.sql.wrapper.UserCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseContract;
 import se.rejjd.taskmanager.sql.DatabaseHelper;
 
-public class SqlUserRepository implements UserRepository {
+public final class SqlUserRepository implements UserRepository {
 
     private static SqlUserRepository instance;
 
@@ -72,7 +72,6 @@ public class SqlUserRepository implements UserRepository {
         cursor.close();
         return null;
     }
-
 
     @Override
     public Long addUser(User user) {

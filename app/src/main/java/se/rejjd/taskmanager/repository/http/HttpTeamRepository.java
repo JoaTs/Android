@@ -1,7 +1,5 @@
 package se.rejjd.taskmanager.repository.http;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +31,6 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -82,7 +79,6 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
         return -1L;
     }
 
-    //TODO This one must customize => will it update Date and other final values
     @Override
     public Team updateTeam(final Team team) {
         final String body =
@@ -115,10 +111,7 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
             String teamName = jsonObject.getString("teamName");
             boolean activeTeam = jsonObject.getBoolean("activeTeam");
 
-            //(long id, String teamName, boolean activeTeam
             return new Team(id, teamName, activeTeam);
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -145,5 +138,4 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
         }
         return null;
     }
-
 }

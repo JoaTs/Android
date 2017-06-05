@@ -49,12 +49,10 @@ public class HttpHelper {
                 connection.disconnect();
             }
         }
-
         return null;
     }
 
     private HttpResponse getAsHttpResponse(InputStream inputStream, HttpURLConnection connection) throws IOException {
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         writeToOutputStream(inputStream, outputStream);
         final int statusCode = connection.getResponseCode();
@@ -79,5 +77,4 @@ public class HttpHelper {
             os.close();
         }
     }
-
 }

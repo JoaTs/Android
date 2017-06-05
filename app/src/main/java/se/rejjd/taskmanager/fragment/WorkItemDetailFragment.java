@@ -18,10 +18,9 @@ import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
 
 public final class WorkItemDetailFragment extends Fragment {
-    private UserRepository userRepository;
 
+    private UserRepository userRepository;
     private WorkItem workitem;
-    private User user;
     private static final String BUNDLE_WORKITEM = "bundle_Workitem";
 
     public static Fragment newInstance(long id){
@@ -57,5 +56,4 @@ public final class WorkItemDetailFragment extends Fragment {
 
         return view;
     }
-
 }

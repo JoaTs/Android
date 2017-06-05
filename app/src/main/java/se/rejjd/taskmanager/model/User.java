@@ -53,7 +53,7 @@ public final class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", firstaname='" + firstname + '\'' +
+                ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", userId='" + userId + '\'' +
                 ", activeUser=" + activeUser +
@@ -69,7 +69,6 @@ public final class User {
         User user = (User) o;
 
         return id == user.id;
-
     }
 
     @Override

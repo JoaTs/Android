@@ -8,11 +8,8 @@ public final class WorkItem implements Parcelable{
     private long id;
     private String title;
     private String description;
-//    private Status status;
     private String status;
     private long userId;
-
-
 
     public WorkItem(long id, String title, String description, long userId) {
         this.id = id;
@@ -83,11 +80,6 @@ public final class WorkItem implements Parcelable{
         dest.writeString(description);
     }
 
-
-    public enum Status {
-        DONE, UNSTARTED, STARTED, ARCHIVED
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,7 +90,6 @@ public final class WorkItem implements Parcelable{
         if (id != workItem.id) return false;
         if (title != null ? !title.equals(workItem.title) : workItem.title != null) return false;
         return description != null ? description.equals(workItem.description) : workItem.description == null;
-
     }
 
     @Override

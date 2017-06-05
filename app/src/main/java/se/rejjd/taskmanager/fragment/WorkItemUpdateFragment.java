@@ -26,22 +26,20 @@ import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
 public final class WorkItemUpdateFragment extends Fragment {
 
+    private static final String BUNDLE_WORKITEM_ID = "workitemId";
     private UserRepository userRepository;
     private List<User> users;
     private String[] usernames;
     private int userSpinnerIndexOfOwner;
-    Spinner userSpinner;
-
-    private static final String BUNDLE_WORKITEM_ID = "workitemId";
-    private WorkItemRepository workItemRepository;
+    private Spinner userSpinner;
     private WorkItem workItemSql;
+
     public static Fragment getInstance(long id){
         Fragment fragment = new WorkItemUpdateFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_WORKITEM_ID, id);
         fragment.setArguments(bundle);
         return fragment;
-
     }
 
     @Override
@@ -59,10 +57,8 @@ public final class WorkItemUpdateFragment extends Fragment {
             usernames[i] = users.get(i).getUsername();
             if(users.get(i).getId() == workItemSql.getUserId()){
                 userSpinnerIndexOfOwner = i;
-                Log.d("johansIdex",""+userSpinnerIndexOfOwner);
             }
         }
-
     }
 
     @Nullable
@@ -76,8 +72,6 @@ public final class WorkItemUpdateFragment extends Fragment {
 
         final EditText editTextDescription = (EditText) view.findViewById(R.id.ed_update_description);
         editTextDescription.setText(workItemSql.getDescription());
-
-
 
         final Spinner statusSpinner = (Spinner) view.findViewById(R.id.spinner_status);
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(getContext(),
@@ -99,7 +93,6 @@ public final class WorkItemUpdateFragment extends Fragment {
                 statusSpinner.setSelection(3);
                 break;
         }
-
 
         userSpinner = (Spinner) view.findViewById(R.id.spinner_users);
         ArrayAdapter<String> userAdapter = new ArrayAdapter(getContext(),

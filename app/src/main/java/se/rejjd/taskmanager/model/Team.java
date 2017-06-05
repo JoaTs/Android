@@ -6,7 +6,6 @@ public final class Team {
     private String teamName;
     private boolean activeTeam;
 
-
     public Team(long id, String teamName, boolean activeTeam) {
         this.id = id;
         this.teamName = teamName;
@@ -53,7 +52,6 @@ public final class Team {
         if (id != team.id) return false;
         if (activeTeam != team.activeTeam) return false;
         return teamName != null ? teamName.equals(team.teamName) : team.teamName == null;
-
     }
 
     @Override

@@ -15,7 +15,7 @@ import se.rejjd.taskmanager.repository.sql.wrapper.TeamCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseContract;
 import se.rejjd.taskmanager.sql.DatabaseHelper;
 
-public class SqlTeamRepository implements TeamRepository {
+public final class SqlTeamRepository implements TeamRepository {
 
     private static SqlTeamRepository instance;
 
@@ -23,7 +23,6 @@ public class SqlTeamRepository implements TeamRepository {
         if(instance == null) {
             instance = new SqlTeamRepository(context);
         }
-
         return instance;
     }
 
@@ -71,7 +70,6 @@ public class SqlTeamRepository implements TeamRepository {
     public Team updateTeam(Team team) {
         return null;
     }
-
 
     private ContentValues getContentValues(Team team) {
         ContentValues cv = new ContentValues();

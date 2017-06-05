@@ -29,15 +29,14 @@ import se.rejjd.taskmanager.service.AppStatus;
 import se.rejjd.taskmanager.service.SqlLoader;
 
 public final class TeamDetailsFragment extends Fragment {
-    private static final String BUNDLE_TEAM_ID = "team_id";
 
+    private static final String BUNDLE_TEAM_ID = "team_id";
     private UserRepository userRepository;
     private TeamRepository teamRepository;
     private Team team;
     private TextView tvTitle;
     private SqlLoader sqlLoader;
     private String userLoggedIn;
-    private AppStatus appStatus;
 
     public static Fragment newInstance(long id, String userLoggedIn) {
         Fragment fragment = new TeamDetailsFragment();
@@ -56,11 +55,9 @@ public final class TeamDetailsFragment extends Fragment {
 
         sqlLoader = new SqlLoader(getContext(), userLoggedIn);
 
-        Log.d("johan", "" + getContext());
         //TODO TEST
         userRepository = SqlUserRepository.getInstance(getContext());
         teamRepository = SqlTeamRepository.getInstance(getContext());
-        Log.d("johanTeamDetails row47", "" +  teamRepository.getTeams());
         String teamId = String.valueOf(getArguments().getLong(BUNDLE_TEAM_ID));
         team = teamRepository.getTeam(teamId);
     }
@@ -73,8 +70,7 @@ public final class TeamDetailsFragment extends Fragment {
         RecyclerView rvUsers = (RecyclerView) view.findViewById(R.id.rv_users);
         List<User> users = userRepository.getUsers();
 
-        TextView textView = (TextView) view.findViewById(R.id.tv_team_detail_title);
-        textView.setOnLongClickListener(new View.OnLongClickListener() {
+        tvTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if(AppStatus.isOnline(getContext())) {

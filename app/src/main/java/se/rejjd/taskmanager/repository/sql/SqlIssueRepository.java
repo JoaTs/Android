@@ -15,7 +15,7 @@ import se.rejjd.taskmanager.repository.sql.wrapper.IssuesCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseContract;
 import se.rejjd.taskmanager.sql.DatabaseHelper;
 
-public class SqlIssueRepository implements IssueRepository {
+public final class SqlIssueRepository implements IssueRepository {
 
     private static SqlIssueRepository instance;
 

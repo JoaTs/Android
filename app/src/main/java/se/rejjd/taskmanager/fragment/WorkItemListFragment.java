@@ -30,11 +30,10 @@ public final class WorkItemListFragment extends Fragment {
     private static final String USER_ID = "userId";
     private UserRepository userRepository;
     private User user;
-    Map<WorkItem, User> users;
+    private Map<WorkItem, User> users;
     private WorkItemRepository workItemRepository;
     private WorkItemAdapter workItemAdapter;
     private CallBacks callBacks;
-    private List<WorkItem> workItemList;
     private List<WorkItem> workitems;
 
     public static Fragment newInstance(String status) {
@@ -61,15 +60,13 @@ public final class WorkItemListFragment extends Fragment {
         return fragment;
     }
 
-
     public interface CallBacks {
         void onListItemClicked(WorkItem workItem);
-
         void onListItemLongClicked(WorkItem workItem);
     }
 
     public void updateAdapter(List<WorkItem> workItemList) {
-        this.workItemList = workItemList;
+        this.workitems = workItemList;
         workItemAdapter.setAdapter(workItemList);
     }
 
@@ -84,22 +81,6 @@ public final class WorkItemListFragment extends Fragment {
         }
     }
 
-    public void updateAdapter() {
-        //TODO: updateAdapter
-        workItemAdapter = new WorkItemAdapter(null, workItemRepository.getWorkItems(), new WorkItemAdapter.onCLickResultListener() {
-            @Override
-            public void onClickResult(WorkItem workitem) {
-                callBacks.onListItemClicked(workitem);
-            }
-        }, new WorkItemAdapter.onLongClickListener() {
-            @Override
-            public void onLongClickResult(WorkItem workItem) {
-                callBacks.onListItemLongClicked(workItem);
-            }
-        });
-        workItemAdapter.notifyDataSetChanged();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +89,7 @@ public final class WorkItemListFragment extends Fragment {
         users = new HashMap<>();
         Bundle bundle = getArguments();
         String status = bundle.getString(WORKITEM_STATUS);
+
         if (status != null) {
             workitems = workItemRepository.getWorkItemByStatus(status);
         } else if (status == null) {

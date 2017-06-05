@@ -15,7 +15,6 @@ import se.rejjd.taskmanager.model.WorkItem;
 
 public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkItemViewHolder> {
 
-    private User user;
     private Map<WorkItem, User> users;
     private List<WorkItem> workItems;
     private onCLickResultListener onCLickResultListener;
@@ -61,6 +60,7 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
     }
 
     public static class WorkItemViewHolder extends RecyclerView.ViewHolder {
+
         private final TextView tvTitle;
         private final TextView tvStatus;
         private final TextView tvDescription;
@@ -96,6 +96,7 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
             });
 
         }
+
         private void setupStatusText(TextView status){
             switch (status.getText().toString()){
                 case "UNSTARTED" :{
@@ -113,6 +114,4 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
             }
         }
     }
-
-
 }

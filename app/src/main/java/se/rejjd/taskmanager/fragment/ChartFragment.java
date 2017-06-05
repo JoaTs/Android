@@ -1,8 +1,6 @@
 package se.rejjd.taskmanager.fragment;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,32 +14,29 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.rejjd.taskmanager.HomeScreenActivity;
 import se.rejjd.taskmanager.R;
-import se.rejjd.taskmanager.SignInActivity;
 import se.rejjd.taskmanager.model.Chart;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
-import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
 public class ChartFragment extends Fragment {
 
-    private WorkItemRepository workItemRepository;
-    private UserRepository userRepository;
+    private final static String USER_ID = "2002";
+    private final static int MAX_WORKITEMS = 5;
     private final String unstarted = "UNSTARTED";
     private final String started = "STARTED";
     private final String done = "DONE";
-    private final static String USER_ID = "2002";
+    private WorkItemRepository workItemRepository;
+    private UserRepository userRepository;
     private User user;
     private ProgressBar unstartedItems;
     private ProgressBar startedItems;
     private ProgressBar doneItems;
     private ProgressBar myItems;
     private List<Chart> progressbars;
-
     private ChartFragment.CallBacks callBacks;
 
     public static Fragment newInstance(){
@@ -50,7 +45,6 @@ public class ChartFragment extends Fragment {
 
     public interface CallBacks{
         void onListItemClicked(int position);
-        void onPageChange(int position);
     }
 
     @Override
@@ -139,7 +133,6 @@ public class ChartFragment extends Fragment {
                 callBacks.onListItemClicked(2);
                 setIsActiveCharts(2);
                 activeChart();
-                Log.d("", "onClick: " + myItems.isSelected());
             }
         });
 
@@ -149,7 +142,6 @@ public class ChartFragment extends Fragment {
                 callBacks.onListItemClicked(3);
                 setIsActiveCharts(3);
                 activeChart();
-                Log.d("", "onClick: "+ myItems.isSelected());
             }
         });
 
@@ -160,7 +152,7 @@ public class ChartFragment extends Fragment {
         unstartedItems.setMax(workItemRepository.getWorkItems().size());
         startedItems.setMax(workItemRepository.getWorkItems().size());
         doneItems.setMax(workItemRepository.getWorkItems().size());
-        myItems.setMax(5);
+        myItems.setMax(MAX_WORKITEMS);
     }
 
     private void setProgress() {
@@ -199,6 +191,7 @@ public class ChartFragment extends Fragment {
 
         }
     }
+
     public void activeChart(int position){
         Chart chart = progressbars.get(position);
 
@@ -211,7 +204,6 @@ public class ChartFragment extends Fragment {
                 chart.getTitle().setTextSize(14);
                 chart.getTitle().setTextColor(getResources().getColor(R.color.primary_orange));
             }
-
         }
     }
 
@@ -224,10 +216,6 @@ public class ChartFragment extends Fragment {
                 c.getProgressBar().setSelected(false);
             }
         }
-//        progressBar.setSelected(true);
-//        progressBar2.setSelected(false);
-//        progressBar3.setSelected(false);
-//        progressBar4.setSelected(false);
     }
 }
 

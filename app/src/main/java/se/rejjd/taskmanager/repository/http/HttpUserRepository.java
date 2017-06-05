@@ -33,7 +33,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
         }
 
         return null;
-
     }
 
     @Override
@@ -51,7 +50,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
         }
 
         return null;
-
     }
 
     @Override
@@ -70,7 +68,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
         return null;
     }
 
-    //TODO getUser by long id
     @Override
     public User getUserById(long id) {
         return null;
@@ -124,7 +121,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
             e.printStackTrace();
         }
         return false;
-
     }
 
     @Override
@@ -195,7 +191,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 String lastname = jsonObject.getString("lastname");
                 String userId = jsonObject.getString("userId");
                 boolean activeUser = jsonObject.getBoolean("activeUser");
-
 
                 long teamId = 0;
 
