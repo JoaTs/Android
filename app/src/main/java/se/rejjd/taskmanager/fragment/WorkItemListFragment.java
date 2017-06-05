@@ -11,18 +11,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import se.rejjd.taskmanager.R;
 import se.rejjd.taskmanager.adapter.WorkItemAdapter;
+import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
+import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
+import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.AppStatus;
 
 public final class WorkItemListFragment extends Fragment {
     private static final String WORKITEM_STATUS = "workitemstatus";
     private static final String USER_ID = "userId";
+    private UserRepository userRepository;
+    private User user;
+    Map<WorkItem, User> users;
     private WorkItemRepository workItemRepository;
     private WorkItemAdapter workItemAdapter;
     private CallBacks callBacks;
@@ -78,7 +86,7 @@ public final class WorkItemListFragment extends Fragment {
 
     public void updateAdapter() {
         //TODO: updateAdapter
-        workItemAdapter = new WorkItemAdapter(workItemRepository.getWorkItems(), new WorkItemAdapter.onCLickResultListener() {
+        workItemAdapter = new WorkItemAdapter(null, workItemRepository.getWorkItems(), new WorkItemAdapter.onCLickResultListener() {
             @Override
             public void onClickResult(WorkItem workitem) {
                 callBacks.onListItemClicked(workitem);
@@ -96,11 +104,13 @@ public final class WorkItemListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         workItemRepository = SqlWorkItemRepository.getInstance(getActivity());
+        userRepository = SqlUserRepository.getInstance(getActivity());
+        users = new HashMap<>();
         Bundle bundle = getArguments();
         String status = bundle.getString(WORKITEM_STATUS);
         if (status != null) {
             workitems = workItemRepository.getWorkItemByStatus(status);
-        } else if (status == null){
+        } else if (status == null) {
             String userId = bundle.getString(USER_ID);
             if (userId != null) {
                 workitems = workItemRepository.getWorkItemsByUser(userId);
@@ -112,7 +122,12 @@ public final class WorkItemListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.work_item_list_fragment, container, false);
-        workItemAdapter = new WorkItemAdapter(workitems, new WorkItemAdapter.onCLickResultListener() {
+        for (WorkItem w : workitems) {
+            user = userRepository.getUserById(w.getUserId());
+            users.put(w, user);
+        }
+
+        workItemAdapter = new WorkItemAdapter(users, workitems, new WorkItemAdapter.onCLickResultListener() {
             @Override
             public void onClickResult(WorkItem workitem) {
                 callBacks.onListItemClicked(workitem);

@@ -61,6 +61,20 @@ public class SqlUserRepository implements UserRepository {
     }
 
     @Override
+    public User getUserById(long id){
+        UserCursorWrapper cursor = queryUsers(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ID + " = ?", new String[]{String.valueOf(id)});
+        if(cursor.getCount() > 0){
+            User user = cursor.getFirstUser();
+            cursor.close();
+            return user;
+
+        }
+        cursor.close();
+        return null;
+    }
+
+
+    @Override
     public Long addUser(User user) {
 //        TODO: IF PERSIST
         ContentValues cv = getContentValues(user);

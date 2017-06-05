@@ -10,7 +10,7 @@ import android.widget.Button;
 
 public class SignInActivity extends AppCompatActivity{
 
-    private final String userId = "2002";
+    private final static String USER_ID = "2002";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class SignInActivity extends AppCompatActivity{
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = HomeScreenActivity.createIntentMainActivity(SignInActivity.this, userId);
+                Intent intent = HomeScreenActivity.createIntentMainActivity(SignInActivity.this, USER_ID);
                 startActivity(intent);
                 finish();
             }

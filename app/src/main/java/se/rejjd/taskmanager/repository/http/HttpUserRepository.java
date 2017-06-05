@@ -70,6 +70,12 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
         return null;
     }
 
+    //TODO getUser by long id
+    @Override
+    public User getUserById(long id) {
+        return null;
+    }
+
     @Override
     public Long addUser(User user) {
         final String body =

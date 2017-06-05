@@ -18,6 +18,7 @@ import java.util.List;
 
 import se.rejjd.taskmanager.HomeScreenActivity;
 import se.rejjd.taskmanager.R;
+import se.rejjd.taskmanager.SignInActivity;
 import se.rejjd.taskmanager.model.Chart;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.UserRepository;
@@ -33,6 +34,7 @@ public class ChartFragment extends Fragment {
     private final String unstarted = "UNSTARTED";
     private final String started = "STARTED";
     private final String done = "DONE";
+    private final static String USER_ID = "2002";
     private User user;
     private ProgressBar unstartedItems;
     private ProgressBar startedItems;
@@ -67,8 +69,7 @@ public class ChartFragment extends Fragment {
         super.onCreate(savedInstanceState);
         workItemRepository = SqlWorkItemRepository.getInstance(getContext());
         userRepository = SqlUserRepository.getInstance(getContext());
-        //TODO hårdkodning
-        user = userRepository.getUser("2002");
+        user = userRepository.getUser(USER_ID);
     }
 
     @Nullable
@@ -123,7 +124,6 @@ public class ChartFragment extends Fragment {
             }
         });
 
-        //TODO set actual progressnumbers
         startedItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

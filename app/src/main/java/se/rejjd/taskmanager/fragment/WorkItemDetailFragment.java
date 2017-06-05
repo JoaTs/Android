@@ -52,7 +52,7 @@ public final class WorkItemDetailFragment extends Fragment {
         tvTitle.setText(workitem.getTitle());
         tvStatus.setText(workitem.getStatus());
         tvDescription.setText(workitem.getDescription());
-        tvUser.setText("@Username");
+        tvUser.setText(userRepository.getUserById(workitem.getUserId()).getUsername());
         getActivity().setTitle(workitem.getTitle());
 
         return view;
