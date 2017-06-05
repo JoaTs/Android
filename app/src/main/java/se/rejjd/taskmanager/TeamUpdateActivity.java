@@ -39,17 +39,18 @@ public class TeamUpdateActivity extends AppCompatActivity {
 
         final Team teamFrDb = sqlTeamRepository.getTeam(String.valueOf(getIntent().getExtras().getLong(EXTRA_TEAM_ID)));
         edTitle.setText(teamFrDb.getTeamName());
-
+        Log.d("johanTeamUpdateAc42", "kom vi hit?");
         Button updateButton = (Button) findViewById(R.id.team_update_btn);
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.d("johanTeamUpdateAc47", "Before Team Update " + teamFrDb.toString());
                 teamFrDb.setTeamName(edTitle.getText().toString());
                 teamRepository.updateTeam(teamFrDb, new GetTask.OnResultListener() {
                     @Override
                     public void onResult(HttpResponse result) {
-                        Log.d("johanTeamUpdateAc52", "Team is now updated");
+
+                        Log.d("johanTeamUpdateAc52", "Team is now updated" + result.getStatusCode());
                     }
                 });
 

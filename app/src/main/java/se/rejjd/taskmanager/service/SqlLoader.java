@@ -77,16 +77,19 @@ public final class SqlLoader {
         httpUserRepository.getUser(String.valueOf(userLoggedIn), new GetTask.OnResultListener() {
             @Override
             public void onResult(HttpResponse httpResult) {
-                final User user = httpUserRepository.parserUser(httpResult.getResponseAsString());
-                Log.d("johanSqlL84", user.toString());
-                //TODO REMOVE OLD DATA ON SQLite
+
                 database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.TEAM_TABLE_NAME);
                 database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.USERS_TABLE_NAME);
                 database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.WORK_ITEMS_TABLE_NAME);
                 database.execSQL("DELETE FROM " + DatabaseContract.ModelEntry.ISSUES_TABLE_NAME);
+
+                final User user = httpUserRepository.parserUser(httpResult.getResponseAsString());
+                Log.d("johanSqlL84", user.toString());
+                //TODO REMOVE OLD DATA ON SQLite
+
                 sqlUserRepository.addUser(user);
 
-//        final User user = sqlUserRepository.getUser(userLoggedIn);
+                //final User user = sqlUserRepository.getUser(userLoggedIn);
                 Log.d("johanSqlL89", user.toString());
 
                 httpTeamRepository.getTeam(String.valueOf(user.getTeamId()), new GetTask.OnResultListener() {
