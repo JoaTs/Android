@@ -24,13 +24,13 @@ public class HttpWorkItemRepository extends HttpHelper {
     public void getWorkItems(GetTask.OnResultListener listener) {
 
         try {
-            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+            new GetTask(new HttpHelperCommand() {
                 @Override
                 public HttpResponse execute() {
                     return get(URL + "workitems");
                 }
-            },listener).execute().get();
-        } catch (InterruptedException | ExecutionException e) {
+            },listener).execute();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -135,7 +135,7 @@ public class HttpWorkItemRepository extends HttpHelper {
         return null;
     }
 
-    private WorkItem parserWorkItem(String jsonString) {
+    public WorkItem parserWorkItem(String jsonString) {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
 
@@ -159,7 +159,7 @@ public class HttpWorkItemRepository extends HttpHelper {
         return null;
     }
 
-    private List<WorkItem> parserWorkItems(String jsonString) {
+    public List<WorkItem> parserWorkItems(String jsonString) {
         try {
             List<WorkItem> workItems = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(jsonString);

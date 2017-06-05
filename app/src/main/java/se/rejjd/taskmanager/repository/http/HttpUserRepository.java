@@ -135,7 +135,7 @@ public final class HttpUserRepository extends HttpHelper {
     }
 
 
-    private User parserUser(String jsonString) {
+    public User parserUser(String jsonString) {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
 
@@ -162,7 +162,7 @@ public final class HttpUserRepository extends HttpHelper {
         return null;
     }
 
-    private List<User> parserUsers(String jsonString) {
+    public List<User> parserUsers(String jsonString) {
         try {
             List<User> userItems = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(jsonString);

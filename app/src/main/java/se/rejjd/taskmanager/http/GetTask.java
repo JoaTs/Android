@@ -2,8 +2,6 @@ package se.rejjd.taskmanager.http;
 
 import android.os.AsyncTask;
 
-import java.util.List;
-
 public final class GetTask extends AsyncTask<Void, Void, HttpResponse> {
     private final HttpHelperCommand httpHelperCommand;
     private final OnResultListener listener;
@@ -13,8 +11,8 @@ public final class GetTask extends AsyncTask<Void, Void, HttpResponse> {
         this.listener = listener;
     }
 
-    public interface OnResultListener<T> {
-        void onResult(HttpResponse httpResult);
+    public interface OnResultListener {
+        void onResult(HttpResponse result);
     }
 
     @Override
@@ -23,7 +21,7 @@ public final class GetTask extends AsyncTask<Void, Void, HttpResponse> {
     }
 
     @Override
-    protected void onPostExecute(HttpResponse httpResponse) {
-        listener.onResult(httpResponse);
+    protected void onPostExecute(HttpResponse result) {
+        listener.onResult(result);
     }
 }

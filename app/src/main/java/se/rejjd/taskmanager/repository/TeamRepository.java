@@ -7,13 +7,13 @@ import se.rejjd.taskmanager.model.Team;
 
 public interface TeamRepository {
 
-    List<Team> getTeams(GetTask.OnResultListener listener);
+    List<Team> getTeams();
 
-    Team getTeam(String id, GetTask.OnResultListener listener);
+    Team getTeam(String id);
 
-    Long addTeam(Team team, GetTask.OnResultListener listener);
+    Long addTeam(Team team);
 
-    Team updateTeam(Team team, GetTask.OnResultListener listener);
+    Team updateTeam(Team team);
 
 }
 

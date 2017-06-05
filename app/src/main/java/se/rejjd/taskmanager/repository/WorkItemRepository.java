@@ -7,17 +7,17 @@ import se.rejjd.taskmanager.model.WorkItem;
 
 public interface WorkItemRepository {
 
-    List<WorkItem> getWorkItems(GetTask.OnResultListener listener);
+    List<WorkItem> getWorkItems();
 
-    WorkItem getWorkItem(String id, GetTask.OnResultListener listener);
+    WorkItem getWorkItem(String id);
 
-    Long addWorkItem(WorkItem workItem, GetTask.OnResultListener listener);
+    Long addWorkItem(WorkItem workItem);
 
-    WorkItem updateWorkItem(WorkItem workItem, GetTask.OnResultListener listener);
+    WorkItem updateWorkItem(WorkItem workItem);
 
     List<WorkItem> getWorkItemByStatus(String status);
 
-    List<WorkItem> getWorkItemsFromTeam(final long teamId, GetTask.OnResultListener listener);
+    List<WorkItem> getWorkItemsFromTeam(final long teamId);
 
     List<WorkItem> getWorkItemsByUser(String userId);
 }

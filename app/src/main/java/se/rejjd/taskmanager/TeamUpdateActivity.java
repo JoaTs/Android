@@ -4,19 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import se.rejjd.taskmanager.http.GetTask;
+import se.rejjd.taskmanager.http.HttpResponse;
 import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.repository.TeamRepository;
 import se.rejjd.taskmanager.repository.http.HttpTeamRepository;
+import se.rejjd.taskmanager.repository.sql.SqlTeamRepository;
 
 public class TeamUpdateActivity extends AppCompatActivity {
 
     private static final String EXTRA_TEAM_ID = "teamId";
-    private TeamRepository teamRepository;
-    private Team teamFrDb;
+    private HttpTeamRepository teamRepository;
+    private TeamRepository sqlTeamRepository;
 
     public static Intent createUpdateTeamIntent(Context context, long teamId) {
         Intent intent = new Intent(context, TeamUpdateActivity.class);
@@ -29,10 +33,11 @@ public class TeamUpdateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_update);
 
-        teamRepository = new HttpTeamRepository();
-        teamFrDb = teamRepository.getTeam(String.valueOf(getIntent().getExtras().getLong(EXTRA_TEAM_ID)));
-
         final EditText edTitle = (EditText) findViewById(R.id.ed_team_update);
+
+        sqlTeamRepository = SqlTeamRepository.getInstance(this);
+
+        final Team teamFrDb = sqlTeamRepository.getTeam(String.valueOf(getIntent().getExtras().getLong(EXTRA_TEAM_ID)));
         edTitle.setText(teamFrDb.getTeamName());
 
         Button updateButton = (Button) findViewById(R.id.team_update_btn);
@@ -41,7 +46,13 @@ public class TeamUpdateActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 teamFrDb.setTeamName(edTitle.getText().toString());
-                teamRepository.updateTeam(teamFrDb);
+                teamRepository.updateTeam(teamFrDb, new GetTask.OnResultListener() {
+                    @Override
+                    public void onResult(HttpResponse result) {
+                        Log.d("johanTeamUpdateAc52", "Team is now updated");
+                    }
+                });
+
                 finish();
             }
         });

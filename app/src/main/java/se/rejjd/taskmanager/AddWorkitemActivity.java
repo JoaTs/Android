@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import se.rejjd.taskmanager.fragment.TeamDetailsFragment;
+import se.rejjd.taskmanager.http.GetTask;
+import se.rejjd.taskmanager.http.HttpResponse;
 import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.UserRepository;
@@ -49,9 +52,25 @@ public final class AddWorkitemActivity extends AppCompatActivity {
                 String workitemTitle = title.getText().toString();
                 String workitemDescription = description.getText().toString();
 
-                WorkItem workItem = new WorkItem(-1L,workitemTitle,workitemDescription,Long.valueOf(userLoggedIn));
-                long newId =  workItemRepository.addWorkItem(workItem);
-                userRepository.addUserToWorkItem(userLoggedIn, newId);
+                WorkItem workItem = new WorkItem(-1L, workitemTitle, workitemDescription, Long.valueOf(userLoggedIn));
+
+                workItemRepository.addWorkItem(workItem, new GetTask.OnResultListener() {
+                    @Override
+                    public void onResult(HttpResponse httpResult) {
+                        long newId = Long.valueOf(httpResult.getResponseAsString());
+                        userRepository.addUserToWorkItem(userLoggedIn, newId, new GetTask.OnResultListener() {
+                            @Override
+                            public void onResult(HttpResponse httpResult) {
+                                if (httpResult.getStatusCode() == 200) {
+                                    Log.d("johanAddWorkItem65","userAddedToTeam");
+                                } else {
+                                    Log.d("johanAddWorkItem65","userNotAddedTeam");
+                                }
+                            }
+                        });
+                    }
+                });
+
                 finish();
             }
         });

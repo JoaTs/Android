@@ -15,6 +15,8 @@ import android.widget.Spinner;
 import java.util.List;
 
 import se.rejjd.taskmanager.R;
+import se.rejjd.taskmanager.http.GetTask;
+import se.rejjd.taskmanager.http.HttpResponse;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.UserRepository;
@@ -120,10 +122,20 @@ public final class WorkItemUpdateFragment extends Fragment {
                 final WorkItem workItemToUpdate = new WorkItem(workItemSql.getId(),editTextTitle.getText().toString(),editTextDescription.getText().toString(), getUserFromSpinnerSelectedItem().getId());
                 workItemToUpdate.setStatus(statusSpinner.getSelectedItem().toString().toUpperCase());
 
-                WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
-                httpWorkItemRepository.updateWorkItem(workItemToUpdate);
-                UserRepository httpUserRepository = new HttpUserRepository();
-                httpUserRepository.addUserToWorkItem(getUserFromSpinnerSelectedItem().getUserId(),workItemToUpdate.getId());
+                HttpWorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
+                httpWorkItemRepository.updateWorkItem(workItemToUpdate, new GetTask.OnResultListener() {
+                    @Override
+                    public void onResult(HttpResponse result) {
+                        Log.d("johanWorkItemUpdFr129", "updateWorkItem "+result.getStatusCode());
+                    }
+                });
+                HttpUserRepository httpUserRepository = new HttpUserRepository();
+                httpUserRepository.addUserToWorkItem(getUserFromSpinnerSelectedItem().getUserId(), workItemToUpdate.getId(), new GetTask.OnResultListener() {
+                    @Override
+                    public void onResult(HttpResponse result) {
+                        Log.d("johanWorkItemUpdFr136", "addUserToWorkItem "+result.getStatusCode());
+                    }
+                });
                 getActivity().onBackPressed();
 
             }

@@ -6,6 +6,8 @@ import android.util.Log;
 
 import java.util.List;
 
+import se.rejjd.taskmanager.http.GetTask;
+import se.rejjd.taskmanager.http.HttpResponse;
 import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
@@ -28,13 +30,13 @@ public final class SqlLoader {
     private final String userLoggedIn;
     private final Context context;
 
-    private final UserRepository httpUserRepository;
+    private final HttpUserRepository httpUserRepository;
     private final UserRepository sqlUserRepository;
 
-    private final TeamRepository httpTeamRepository;
+    private final HttpTeamRepository httpTeamRepository;
     private final TeamRepository sqlTeamRepository;
 
-    private final WorkItemRepository httpWorkItemRepository;
+    private final HttpWorkItemRepository httpWorkItemRepository;
     private final WorkItemRepository sqlWorkItemRepository;
 
     //TODO. ONLY ONE INSTANCE OF THIS SHOULD BE ALLOWED
@@ -75,19 +77,50 @@ public final class SqlLoader {
     }
 
     private void update(){
-        User user = httpUserRepository.getUser(String.valueOf(userLoggedIn));
+                httpUserRepository.getUser(String.valueOf(userLoggedIn), new GetTask.OnResultListener() {
+            @Override
+            public void onResult(HttpResponse httpResult) {
+                User user = httpUserRepository.parserUser(httpResult.getResponseAsString());
+                sqlUserRepository.addUser(user);
 
-        Team team = httpTeamRepository.getTeam(String.valueOf(user.getTeamId()));
-        sqlTeamRepository.addTeam(team);  //TODO Team dose not load on SQLite
+            }
+        });
+        final User user = sqlUserRepository.getUser(userLoggedIn);
 
-        List<WorkItem> workitemList = httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId());
-        for(WorkItem w : workitemList){
-            sqlWorkItemRepository.addWorkItem(w);
-        }
+        httpTeamRepository.getTeam(String.valueOf(user.getTeamId()), new GetTask.OnResultListener() {
+            @Override
+            public void onResult(HttpResponse result) {
+                Team team = httpTeamRepository.parserTeam(result.getResponseAsString());
+                sqlTeamRepository.addTeam(team);
+            }
+        });
 
-        List<User> userList = httpUserRepository.getUsersFromTeam(team.getId());
-        for(User u : userList){
-            sqlUserRepository.addUser(u);
-        }
+
+          //TODO Team dose not load on SQLite
+
+        List<WorkItem> workitemList = null;
+
+        httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId(), new GetTask.OnResultListener() {
+            @Override
+            public void onResult(HttpResponse result) {
+                List<WorkItem> workitemList = httpWorkItemRepository.parserWorkItems(String.valueOf(user.getTeamId()));
+                for(WorkItem w : workitemList){
+                    sqlWorkItemRepository.addWorkItem(w);
+                }
+            }
+        });
+
+
+
+        httpUserRepository.getUsersFromTeam(user.getTeamId(), new GetTask.OnResultListener() {
+            @Override
+            public void onResult(HttpResponse result) {
+                List<User> userList = httpUserRepository.parserUsers(result.getResponseAsString());
+                for(User u : userList){
+                    sqlUserRepository.addUser(u);
+                }
+            }
+        });
+
     }
 }

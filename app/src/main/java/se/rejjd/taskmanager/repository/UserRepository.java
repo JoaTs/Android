@@ -7,16 +7,16 @@ import se.rejjd.taskmanager.model.User;
 
 public interface UserRepository {
 
-    List<User> getUsers(GetTask.OnResultListener listener);
+    List<User> getUsers();
 
-    User getUser(String id, GetTask.OnResultListener listener);
+    User getUser(String id);
 
-    Long addUser(User user, GetTask.OnResultListener listener);
+    Long addUser(User user);
 
-    User updateUser(User user, GetTask.OnResultListener listener);
+    User updateUser(User user);
 
-    boolean addUserToWorkItem(final String userId,final long workItemId, GetTask.OnResultListener listener);
+    boolean addUserToWorkItem(final String userId,final long workItemId);
 
-    List<User> getUsersFromTeam(final long teamId, GetTask.OnResultListener listenere);
+    List<User> getUsersFromTeam(final long teamId);
 
 }

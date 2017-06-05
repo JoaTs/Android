@@ -39,7 +39,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
 
     private SqlWorkItemRepository sqlWorkItemRepository;
     private WorkItemListFragment workItemListFragment;
-    private WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
+    private HttpWorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
     private SqlUserRepository sqlUserRepository;
     private RecyclerView recyclerView;
     private SqlLoader sqlLoader;
