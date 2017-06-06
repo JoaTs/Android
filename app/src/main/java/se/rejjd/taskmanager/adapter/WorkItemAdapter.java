@@ -27,7 +27,8 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
         this.onLongClickListener = onLongClickListener;
     }
 
-    public void setAdapter(List<WorkItem> workItemList) {
+    public void setAdapter(List<WorkItem> workItemList, Map<WorkItem, User> users) {
+        this.users = users;
         this.workItems = workItemList;
         this.notifyDataSetChanged();
     }

@@ -67,9 +67,10 @@ public final class WorkItemListFragment extends Fragment {
         void onListItemLongClicked(WorkItem workItem);
     }
 
-    public void updateAdapter(List<WorkItem> workItemList) {
-        workitems = workItemList;
-        workItemAdapter.setAdapter(workItemList);
+    public void updateAdapter(List<WorkItem> workItemList, Map<WorkItem, User> users) {
+        this.users = users;
+        this.workitems = workItemList;
+        workItemAdapter.setAdapter(workItemList, users);
     }
 
     @Override

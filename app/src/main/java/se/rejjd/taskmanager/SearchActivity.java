@@ -13,11 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import se.rejjd.taskmanager.fragment.WorkItemListFragment;
+import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
+import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
+import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.AppStatus;
 import se.rejjd.taskmanager.service.SqlLoader;
@@ -31,6 +36,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
     private EditText etSearchValue;
     private SqlLoader sqlLoader;
     private final WorkItemRepository sqlWorkItemRepository = SqlWorkItemRepository.getInstance(this);
+    private final UserRepository sqlUserRepository = SqlUserRepository.getInstance(this);
 
     public static Intent getIntent(Context context, String userLoggedIn) {
         Intent intent = new Intent(context, SearchActivity.class);
@@ -70,7 +76,8 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
                 String searchValue = etSearchValue.getText().toString();
                 resultList.clear();
                 resultList = getFilteredList(workItemList, searchValue);
-                workItemListFragment.updateAdapter(resultList);
+                updateSqlAndFragment();
+
             }
         });
     }
@@ -89,13 +96,22 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
     @Override
     protected void onResume() {
         super.onResume();
+        updateSqlAndFragment();
+    }
+
+    private void updateSqlAndFragment(){
         sqlLoader.updateSqlFromHttp();
         workItemList = sqlWorkItemRepository.getWorkItems();
         List<WorkItem> updatedResultList = new ArrayList<>();
         for(WorkItem w: resultList){
             updatedResultList.add(sqlWorkItemRepository.getWorkItem(String.valueOf(w.getId())));
         }
-        workItemListFragment.updateAdapter(updatedResultList);
+        Map<WorkItem, User> users = new HashMap<>();
+        for(WorkItem w: updatedResultList){
+            users.put(w, sqlUserRepository.getUserById(w.getUserId()));
+        }
+
+        workItemListFragment.updateAdapter(updatedResultList,users);
     }
 
     @Override
