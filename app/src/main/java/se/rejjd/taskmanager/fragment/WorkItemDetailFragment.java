@@ -23,7 +23,7 @@ public final class WorkItemDetailFragment extends Fragment {
     private WorkItem workitem;
     private static final String BUNDLE_WORKITEM = "bundle_Workitem";
 
-    public static Fragment newInstance(long id){
+    public static Fragment newInstance(long id) {
         Fragment fragment = new WorkItemDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_WORKITEM, id);
@@ -43,7 +43,7 @@ public final class WorkItemDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.work_item_details_fragment,container,false);
+        View view = inflater.inflate(R.layout.work_item_details_fragment, container, false);
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_detail_view_title);
         TextView tvStatus = (TextView) view.findViewById(R.id.tv_detail_view_status);
         TextView tvDescription = (TextView) view.findViewById(R.id.tv_detail_view_description);
