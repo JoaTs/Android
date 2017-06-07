@@ -3,17 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="4sp">
+    android:orientation="vertical"
+    android:padding="4sp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -27,6 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="10sp"
+                android:paddingEnd="10sp"
                 android:textSize="32sp"/>
 
             <View
@@ -66,8 +58,5 @@
                 android:id="@+id/rv_users"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="10sp"/>
-
-        </LinearLayout>
-    </ScrollView>
+                android:paddingStart="10sp"/>
 </LinearLayout>

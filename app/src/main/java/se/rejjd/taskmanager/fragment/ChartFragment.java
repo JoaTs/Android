@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,23 +23,26 @@ import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
 public class ChartFragment extends Fragment {
 
-    private final static String USER_ID = "2002";
+    private final static String USER_ID = "userId";
     private final static int MAX_WORKITEMS = 5;
     private final String unstarted = "UNSTARTED";
     private final String started = "STARTED";
     private final String done = "DONE";
     private WorkItemRepository workItemRepository;
-    private UserRepository userRepository;
     private User user;
     private ProgressBar unstartedItems;
     private ProgressBar startedItems;
     private ProgressBar doneItems;
     private ProgressBar myItems;
-    private List<Chart> progressbars;
+    private List<Chart> progressBars;
     private CallBacks callBacks;
 
-    public static Fragment newInstance(){
-        return new ChartFragment();
+    public static Fragment newInstance(String id){
+        Fragment fragment = new ChartFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(USER_ID, id);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     public interface CallBacks{
@@ -62,8 +64,8 @@ public class ChartFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         workItemRepository = SqlWorkItemRepository.getInstance(getContext());
-        userRepository = SqlUserRepository.getInstance(getContext());
-        user = userRepository.getUser(USER_ID);
+        UserRepository userRepository = SqlUserRepository.getInstance(getContext());
+        user = userRepository.getUser(getArguments().getString(USER_ID));
     }
 
     @Nullable
@@ -92,7 +94,6 @@ public class ChartFragment extends Fragment {
         myItemsNumber.setText(String.valueOf(workItemRepository.getWorkItemsByUser(String.valueOf(user.getId())).size()));
 
         setMaxProgress();
-
         setProgress();
 
         final Chart chartMyitems = new Chart(myItems,myItemsTitle,myItemsNumber);
@@ -100,12 +101,12 @@ public class ChartFragment extends Fragment {
         final Chart chartDoneItems = new Chart(doneItems,doneTitle,doneNumber);
         final Chart chartStartedItems = new Chart(startedItems,startedTitle,startedNumber);
 
-        progressbars = new ArrayList<>();
+        progressBars = new ArrayList<>();
 
-        progressbars.add(chartUnstartedItems);
-        progressbars.add(chartStartedItems);
-        progressbars.add(chartDoneItems);
-        progressbars.add(chartMyitems);
+        progressBars.add(chartUnstartedItems);
+        progressBars.add(chartStartedItems);
+        progressBars.add(chartDoneItems);
+        progressBars.add(chartMyitems);
 
         setIsActiveCharts(0);
         activeChart();
@@ -162,17 +163,9 @@ public class ChartFragment extends Fragment {
         myItems.setProgress(workItemRepository.getWorkItemsByUser(String.valueOf(user.getId())).size());
     }
 
-    private boolean isActiveChart(ProgressBar progressBar){
-        if(progressBar.isSelected())
-        if(progressBar.getScaleX() == 1.1F && progressBar.getScaleY() == 1.1F){
-            return true;
-        }
-        return false;
-    }
-
     public void activeChart(){
 
-        for(Chart chart:progressbars){
+        for(Chart chart: progressBars){
             if(chart.getProgressBar().isSelected()){
                 chart.getProgressBar().setScaleX(1.1F);
                 chart.getProgressBar().setScaleY(1.1F);
@@ -192,24 +185,9 @@ public class ChartFragment extends Fragment {
         }
     }
 
-    public void activeChart(int position){
-        Chart chart = progressbars.get(position);
-
-        for (Chart charts : progressbars){
-            if(chart.getProgressBar().isSelected()) {
-                chart.getProgressBar().setScaleX(1.1F);
-                chart.getProgressBar().setScaleY(1.1F);
-                chart.getNumber().setScaleX(1.1F);
-                chart.getNumber().setScaleY(1.1F);
-                chart.getTitle().setTextSize(14);
-                chart.getTitle().setTextColor(getResources().getColor(R.color.primary_orange));
-            }
-        }
-    }
-
     public void setIsActiveCharts(int position){
-        Chart chart = progressbars.get(position);
-        for (Chart c : progressbars){
+        Chart chart = progressBars.get(position);
+        for (Chart c : progressBars){
             if (c.equals(chart)){
                 c.getProgressBar().setSelected(true);
             }else{
@@ -218,4 +196,3 @@ public class ChartFragment extends Fragment {
         }
     }
 }
-

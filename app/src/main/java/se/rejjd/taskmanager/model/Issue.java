@@ -6,7 +6,7 @@ public final class Issue {
     private String description;
     private boolean openIssue;
 
-    public Issue(long id, String description, boolean openIssue) {
+    public Issue(long id, String description) {
         this.id = id;
         this.description = description;
         this.openIssue = true;
@@ -39,10 +39,8 @@ public final class Issue {
 
         Issue issue = (Issue) o;
 
-        if (id != issue.id) return false;
-        if (openIssue != issue.openIssue) return false;
-        return description != null ? description.equals(issue.description) : issue.description == null;
-
+        return id == issue.id && openIssue == issue.openIssue &&
+                (description != null ? description.equals(issue.description) : issue.description == null);
     }
 
     @Override

@@ -61,7 +61,6 @@ public final class SqlTeamRepository implements TeamRepository {
 
     @Override
     public Long addTeam(Team team) {
-        //        TODO: IF PERSIST
         ContentValues cv = getContentValues(team);
         return database.insert(DatabaseContract.ModelEntry.TEAM_TABLE_NAME, null, cv);
     }

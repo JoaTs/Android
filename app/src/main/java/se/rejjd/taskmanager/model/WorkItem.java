@@ -1,9 +1,8 @@
 package se.rejjd.taskmanager.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
-public final class WorkItem implements Parcelable{
+public final class WorkItem{
 
     private long id;
     private String title;
@@ -23,18 +22,6 @@ public final class WorkItem implements Parcelable{
         title = in.readString();
         description = in.readString();
     }
-
-    public static final Creator<WorkItem> CREATOR = new Creator<WorkItem>() {
-        @Override
-        public WorkItem createFromParcel(Parcel in) {
-            return new WorkItem(in);
-        }
-
-        @Override
-        public WorkItem[] newArray(int size) {
-            return new WorkItem[size];
-        }
-    };
 
     public long getId() {
         return id;
@@ -69,27 +56,14 @@ public final class WorkItem implements Parcelable{
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(title);
-        dest.writeString(description);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         WorkItem workItem = (WorkItem) o;
 
-        if (id != workItem.id) return false;
-        if (title != null ? !title.equals(workItem.title) : workItem.title != null) return false;
-        return description != null ? description.equals(workItem.description) : workItem.description == null;
+        return id == workItem.id && (title != null ? title.equals(workItem.title) : workItem.title == null &&
+                (description != null ? description.equals(workItem.description) : workItem.description == null));
     }
 
     @Override

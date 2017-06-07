@@ -151,7 +151,7 @@ public final class HttpWorkItemRepository extends HttpHelper implements WorkItem
 
             if(!jsonObject.isNull("user")) {
                 JSONObject jsonUserObject = new JSONObject(jsonObject.getString("user"));
-                userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
+                userLongId = jsonUserObject.getLong("id");
             }
             WorkItem workItem = new WorkItem(id, title, description, userLongId);
             workItem.setStatus(status);
@@ -178,7 +178,7 @@ public final class HttpWorkItemRepository extends HttpHelper implements WorkItem
 
                 if(!jsonObject.isNull("user")) {
                     JSONObject jsonUserObject = new JSONObject(jsonObject.getString("user"));
-                    userLongId = jsonUserObject.getLong("id"); //TODO MAKE NICER johan
+                    userLongId = jsonUserObject.getLong("id");
                 }
                 WorkItem workItem = new WorkItem(id, title, description, userLongId);
                 workItem.setStatus(status);
@@ -193,4 +193,3 @@ public final class HttpWorkItemRepository extends HttpHelper implements WorkItem
         return null;
     }
 }
-

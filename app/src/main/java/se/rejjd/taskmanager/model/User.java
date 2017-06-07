@@ -4,17 +4,17 @@ public final class User {
 
     private long id;
     private String username;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String userId;
     private boolean activeUser;
-    private long teamId; //TODO Test Johan
+    private long teamId;
 
-    public User(long id, String username, String firstname, String lastname, String userId, boolean activeUser, long teamId) {
+    public User(long id, String username, String firstName, String lastName, String userId, long teamId) {
         this.id = id;
         this.username = username;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.userId = userId;
         this.activeUser = true;
         this.teamId =teamId;
@@ -28,12 +28,12 @@ public final class User {
         return username;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getUserId() {
@@ -53,8 +53,8 @@ public final class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", userId='" + userId + '\'' +
                 ", activeUser=" + activeUser +
                 ", team=" + teamId +

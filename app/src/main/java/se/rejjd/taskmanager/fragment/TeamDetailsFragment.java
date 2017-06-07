@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,19 +29,19 @@ import se.rejjd.taskmanager.service.SqlLoader;
 
 public final class TeamDetailsFragment extends Fragment {
 
-    private static final String BUNDLE_TEAM_ID = "team_id";
+    private static final String TEAM_ID = "teamId";
+    private static final String USER_ID = "userId";
     private UserRepository userRepository;
     private TeamRepository teamRepository;
     private Team team;
     private TextView tvTitle;
     private SqlLoader sqlLoader;
-    private String userLoggedIn;
 
     public static Fragment newInstance(long id, String userLoggedIn) {
         Fragment fragment = new TeamDetailsFragment();
         Bundle bundle = new Bundle();
-        bundle.putLong(BUNDLE_TEAM_ID, id);
-        bundle.putString(HomeScreenActivity.USER_ID, userLoggedIn);
+        bundle.putLong(TEAM_ID, id);
+        bundle.putString(USER_ID, userLoggedIn);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -51,14 +50,11 @@ public final class TeamDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userLoggedIn = getActivity().getIntent().getExtras().getString(HomeScreenActivity.USER_ID);
-
+        String userLoggedIn = getActivity().getIntent().getExtras().getString(USER_ID);
         sqlLoader = new SqlLoader(getContext(), userLoggedIn);
-
-        //TODO TEST
         userRepository = SqlUserRepository.getInstance(getContext());
         teamRepository = SqlTeamRepository.getInstance(getContext());
-        String teamId = String.valueOf(getArguments().getLong(BUNDLE_TEAM_ID));
+        String teamId = String.valueOf(getArguments().getLong(TEAM_ID));
         team = teamRepository.getTeam(teamId);
     }
 

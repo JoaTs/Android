@@ -15,7 +15,7 @@ import se.rejjd.taskmanager.repository.sql.wrapper.IssuesCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseContract;
 import se.rejjd.taskmanager.sql.DatabaseHelper;
 
-public final class SqlIssueRepository implements IssueRepository {
+final class SqlIssueRepository implements IssueRepository {
 
     private static SqlIssueRepository instance;
 
@@ -23,7 +23,6 @@ public final class SqlIssueRepository implements IssueRepository {
         if(instance == null) {
             instance = new SqlIssueRepository(context);
         }
-
         return instance;
     }
 
@@ -62,7 +61,6 @@ public final class SqlIssueRepository implements IssueRepository {
 
     @Override
     public Long addIssue(Issue issue) {
-        //        TODO: IF PERSIST
         ContentValues cv = getContentValues(issue);
         return database.insert(DatabaseContract.ModelEntry.ISSUES_TABLE_NAME, null, cv);
     }

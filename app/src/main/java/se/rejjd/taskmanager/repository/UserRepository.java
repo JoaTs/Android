@@ -19,5 +19,4 @@ public interface UserRepository {
     boolean addUserToWorkItem(final String userId,final long workItemId);
 
     List<User> getUsersFromTeam(final long teamId);
-
 }

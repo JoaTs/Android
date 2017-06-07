@@ -86,5 +86,4 @@
         style="@style/normal_text"
         android:paddingStart="5sp"
         android:paddingEnd="5sp"/>
-
 </LinearLayout>

@@ -13,6 +13,4 @@ public interface TeamRepository {
     Long addTeam(Team team);
 
     Team updateTeam(Team team);
-
 }
-

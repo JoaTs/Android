@@ -3,11 +3,10 @@ package se.rejjd.taskmanager.sql;
 import android.provider.BaseColumns;
 
 public class DatabaseContract {
+
     private DatabaseContract() {
     }
-
     public static class ModelEntry implements BaseColumns {
-
 
         public static final String USERS_TABLE_NAME = "users";
         public static final String USERS_COLUMN_NAME_ID = "id";
@@ -34,6 +33,5 @@ public class DatabaseContract {
         public static final String TEAM_COLUMN_NAME_ID = "id";
         public static final String TEAM_COLUMN_NAME_TEAM_NAME = "teamName";
         public static final String TEAM_COLUMN_NAME_ACTIVE_TEAM = "activeTeam";
-
     }
 }

@@ -40,16 +40,16 @@ public final class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserView
         private final TextView tvLastName;
         private final TextView tvUsername;
 
-        public UserViewHolder(View itemView) {
+        UserViewHolder(View itemView) {
             super(itemView);
             tvFirstName = (TextView) itemView.findViewById(R.id.tv_firstName);
             tvLastName = (TextView) itemView.findViewById(R.id.tv_lastName);
             tvUsername = (TextView) itemView.findViewById(R.id.tv_username);
         }
 
-        public void bindView(User user) {
-            tvFirstName.setText(user.getFirstname());
-            tvLastName.setText(user.getLastname());
+        void bindView(User user) {
+            tvFirstName.setText(user.getFirstName());
+            tvLastName.setText(user.getLastName());
             tvUsername.setText(user.getUsername());
         }
     }

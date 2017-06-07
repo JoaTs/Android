@@ -1,6 +1,5 @@
 package se.rejjd.taskmanager.model;
 
-
 import android.widget.ProgressBar;
 import android.widget.TextView;
 

@@ -31,7 +31,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -48,7 +47,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -79,8 +77,8 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 "{"+
                 "\"id\": "+user.getId()+","+
                 "\"username\": \""+user.getUsername()+"\","+
-                "\"firstname\": \""+user.getFirstname()+"\","+
-                "\"lastname\": \""+user.getLastname()+"\","+
+                "\"firstname\": \""+user.getFirstName()+"\","+
+                "\"lastname\": \""+user.getLastName()+"\","+
                 "\"userId\": \""+user.getUserId()+"\","+
                 "\"activeUser\": "+ user.isActiveUser() +
                 "}" ;
@@ -94,8 +92,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
             }).execute().get();
 
             if (httpResponse.getStatusCode() == 201) {
-                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/")
-                        ;
+                String[] splitArray = httpResponse.getHeaders().get("Location").get(0).split("/");
                 String returnValue = splitArray[splitArray.length - 1];
                 return Long.valueOf(returnValue);
             }
@@ -129,8 +126,8 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 "{"+
                         "\"id\": "+user.getId()+","+
                         "\"username\": \""+user.getUsername()+"\","+
-                        "\"firstname\": \""+user.getFirstname()+"\","+
-                        "\"lastname\": \""+user.getLastname()+"\","+
+                        "\"firstname\": \""+user.getFirstName()+"\","+
+                        "\"lastname\": \""+user.getLastName()+"\","+
                         "\"userId\": \""+user.getUserId()+"\","+
                         "\"activeUser\": "+ user.isActiveUser() +
                         "}" ;
@@ -160,7 +157,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
             String firstname = jsonObject.getString("firstname");
             String lastname = jsonObject.getString("lastname");
             String userId = jsonObject.getString("userId");
-            boolean activeUser = jsonObject.getBoolean("activeUser");
 
             long teamId = 0;
 
@@ -169,9 +165,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 teamId = jsonTeamObject.getLong("id");
             }
 
-            User user = new User(id,username,firstname,lastname,userId,activeUser, teamId);
-
-            return user;
+            return new User(id,username,firstname,lastname,userId, teamId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -190,7 +184,6 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                 String firstname = jsonObject.getString("firstname");
                 String lastname = jsonObject.getString("lastname");
                 String userId = jsonObject.getString("userId");
-                boolean activeUser = jsonObject.getBoolean("activeUser");
 
                 long teamId = 0;
 
@@ -199,7 +192,7 @@ public final class HttpUserRepository extends HttpHelper implements UserReposito
                      teamId = jsonTeamObject.getLong("id");
                 }
 
-                User user = new User(id,username,firstname,lastname,userId,activeUser, teamId);
+                User user = new User(id,username,firstname,lastname,userId, teamId);
 
                 userItems.add(user);
             }

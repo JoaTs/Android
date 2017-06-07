@@ -17,7 +17,8 @@ public class SignInActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         ActionBar bar = getSupportActionBar();
-        bar.hide();
+        if (bar != null) {
+        bar.hide(); }
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.activity_sign_in);

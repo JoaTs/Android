@@ -20,4 +20,3 @@ public interface WorkItemRepository {
 
     List<WorkItem> getWorkItemsByUser(String userId);
 }
-

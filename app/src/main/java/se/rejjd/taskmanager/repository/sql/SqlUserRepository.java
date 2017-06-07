@@ -23,7 +23,6 @@ public final class SqlUserRepository implements UserRepository {
         if(instance == null) {
             instance = new SqlUserRepository(context);
         }
-
         return instance;
     }
 
@@ -75,7 +74,6 @@ public final class SqlUserRepository implements UserRepository {
 
     @Override
     public Long addUser(User user) {
-//        TODO: IF PERSIST
         ContentValues cv = getContentValues(user);
         return database.insert(DatabaseContract.ModelEntry.USERS_TABLE_NAME, null, cv);
     }
@@ -100,8 +98,8 @@ public final class SqlUserRepository implements UserRepository {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ID, user.getId());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USERNAME, user.getUsername());
-        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_FIRSTNAME, user.getFirstname());
-        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_LASTNAME, user.getLastname());
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_FIRSTNAME, user.getFirstName());
+        cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_LASTNAME, user.getLastName());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_USER_ID, user.getUserId());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_ACTIVE_USER, user.isActiveUser());
         cv.put(DatabaseContract.ModelEntry.USERS_COLUMN_NAME_TEAM_ID,user.getTeamId());

@@ -45,7 +45,5 @@ public class TeamUpdateActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
-
 }
