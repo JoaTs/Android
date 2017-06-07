@@ -31,6 +31,8 @@ import se.rejjd.taskmanager.service.SqlLoader;
 
 public final class TeamDetailsFragment extends Fragment {
     private static final String BUNDLE_TEAM_ID = "team_id";
+    private static final int REQUEST_CODE_UPDATE_TEAM = 568;
+    private static final int REQUEST_CODE_UPDATE_TEAM_WITH_USERS = 964;
 
     private UserRepository userRepository;
     private TeamRepository teamRepository;
@@ -80,7 +82,7 @@ public final class TeamDetailsFragment extends Fragment {
             public boolean onLongClick(View v) {
                 if (AppStatus.isOnline(getContext())) {
                     Intent intent = TeamUpdateActivity.createUpdateTeamIntent(getContext(), team.getId(), userLoggedIn);
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_CODE_UPDATE_TEAM);
                 } else {
                     runAlert();
                 }
@@ -96,7 +98,7 @@ public final class TeamDetailsFragment extends Fragment {
             public void onClick(View v) {
                 if (AppStatus.isOnline(getContext())) {
                     Intent intent = TeamAddUserActivity.createIntent(getContext(), team.getId(),userLoggedIn);
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_CODE_UPDATE_TEAM_WITH_USERS);
                 } else {
                     runAlert();
                 }
@@ -109,6 +111,21 @@ public final class TeamDetailsFragment extends Fragment {
         rvUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
         getActivity().setTitle(team.getTeamName());
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_UPDATE_TEAM){
+            if(resultCode == RESULT_OK){
+
+            }
+        }
+        if(requestCode == REQUEST_CODE_UPDATE_TEAM_WITH_USERS){
+            if(resultCode == RESULT_OK){
+
+            }
+        }
     }
 
     @Override
