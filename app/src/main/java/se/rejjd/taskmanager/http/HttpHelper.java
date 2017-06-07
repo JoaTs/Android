@@ -56,13 +56,12 @@ public class HttpHelper {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         writeToOutputStream(inputStream, outputStream);
         final int statusCode = connection.getResponseCode();
-        final String responseMessage = connection.getResponseMessage();
         final Map<String, List<String>> headers = connection.getHeaderFields();
         final byte[] response = outputStream.toByteArray();
 
         outputStream.close();
 
-        return new HttpResponse(responseMessage, statusCode, headers, response);
+        return new HttpResponse(statusCode, headers, response);
     }
 
     private void writeToOutputStream(InputStream is, OutputStream os) throws IOException {

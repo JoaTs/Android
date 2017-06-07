@@ -2,7 +2,6 @@ package se.rejjd.taskmanager.service;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.List;
 
@@ -36,9 +35,6 @@ public final class SqlLoader {
 
     private final WorkItemRepository httpWorkItemRepository;
     private final WorkItemRepository sqlWorkItemRepository;
-
-    //TODO. ONLY ONE INSTANCE OF THIS SHOULD BE ALLOWED
-    //CREATE GET INSTANCE OF. STATIC LOGGED IN
 
     public SqlLoader(Context context, String userLoggedIn) {
 
@@ -74,7 +70,7 @@ public final class SqlLoader {
         User user = httpUserRepository.getUser(String.valueOf(userLoggedIn));
 
         Team team = httpTeamRepository.getTeam(String.valueOf(user.getTeamId()));
-        sqlTeamRepository.addTeam(team);  //TODO Team dose not load on SQLite
+        sqlTeamRepository.addTeam(team);
 
         List<WorkItem> workitemList = httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId());
         for(WorkItem w : workitemList){

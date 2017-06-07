@@ -29,7 +29,7 @@ import se.rejjd.taskmanager.service.SqlLoader;
 
 public class SearchActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks {
 
-    public static final int SEARCH_RESULT = 15;
+    private static final String USER_ID = "userId";
     private WorkItemListFragment workItemListFragment;
     private List<WorkItem> workItemList = new ArrayList<>();
     private List<WorkItem> resultList = new ArrayList<>();
@@ -40,7 +40,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
     public static Intent getIntent(Context context, String userLoggedIn) {
         Intent intent = new Intent(context, SearchActivity.class);
-        intent.putExtra(HomeScreenActivity.USER_ID, userLoggedIn);
+        intent.putExtra(USER_ID, userLoggedIn);
         return intent;
     }
 
@@ -49,7 +49,7 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        String userLoggedIn = getIntent().getExtras().getString(HomeScreenActivity.USER_ID);
+        String userLoggedIn = getIntent().getExtras().getString(USER_ID);
 
         sqlLoader = new SqlLoader(this, userLoggedIn);
 
@@ -80,13 +80,15 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
             }
         });
+        setResult(RESULT_OK);
     }
 
     private List<WorkItem> getFilteredList(List<WorkItem> list, String searchValue){
         List<WorkItem> result = new ArrayList<>();
         for(WorkItem w:  list){
             if(w.getTitle().toLowerCase().contains(searchValue.toLowerCase()) ||
-                    w.getDescription().toLowerCase().contains(searchValue.toLowerCase())){
+                    w.getDescription().toLowerCase().contains(searchValue.toLowerCase())
+                            || w.getStatus().toLowerCase().equals(searchValue.toLowerCase())){
                 result.add(w);
             }
         }
@@ -116,14 +118,14 @@ public class SearchActivity extends AppCompatActivity implements WorkItemListFra
 
     @Override
     public void onListItemClicked(WorkItem workItem) {
-        Intent intent =  DetailViewActivity.createIntentWithWorkItem(SearchActivity.this,workItem);
+        Intent intent =  DetailViewActivity.createIntentWithWorkItem(SearchActivity.this,workItem.getId());
         startActivity(intent);
     }
 
     @Override
     public void onListItemLongClicked(WorkItem workItem) {
         if(AppStatus.isOnline(this)) {
-            Intent intent = DetailViewActivity.createIntentForUpdate(SearchActivity.this, workItem);
+            Intent intent = DetailViewActivity.createIntentForUpdate(SearchActivity.this, workItem.getId());
             startActivity(intent);
         }else{
             runAlert();

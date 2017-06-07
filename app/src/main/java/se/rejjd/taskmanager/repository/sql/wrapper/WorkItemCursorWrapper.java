@@ -2,7 +2,6 @@ package se.rejjd.taskmanager.repository.sql.wrapper;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
-import android.widget.Switch;
 
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.sql.DatabaseContract.ModelEntry;
@@ -21,7 +20,6 @@ public final class WorkItemCursorWrapper extends CursorWrapper{
         String description = getString(getColumnIndexOrThrow(ModelEntry.WORK_ITEMS_COLUMN_NAME_DESCRIPTION));
         String status = getString(getColumnIndexOrThrow(ModelEntry.WORK_ITEMS_COLUMN_NAME_STATUS));
         long userId = getLong(getColumnIndexOrThrow(ModelEntry.WORK_ITEMS_COLUMN_NAME_USER_ID));
-
 
         WorkItem workItem = new WorkItem(id, title, description,userId);
 

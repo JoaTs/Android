@@ -13,7 +13,7 @@ import se.rejjd.taskmanager.R;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
 
-public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkItemViewHolder> {
+public final class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkItemViewHolder> {
 
     private Map<WorkItem, User> users;
     private List<WorkItem> workItems;
@@ -60,7 +60,7 @@ public class WorkItemAdapter extends RecyclerView.Adapter<WorkItemAdapter.WorkIt
         return this.workItems.size();
     }
 
-    public static class WorkItemViewHolder extends RecyclerView.ViewHolder {
+    static class WorkItemViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvTitle;
         private final TextView tvStatus;

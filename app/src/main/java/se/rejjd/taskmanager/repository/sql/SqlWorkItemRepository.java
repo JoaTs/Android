@@ -11,14 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.rejjd.taskmanager.model.WorkItem;
-import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
-import se.rejjd.taskmanager.repository.sql.wrapper.UserCursorWrapper;
 import se.rejjd.taskmanager.repository.sql.wrapper.WorkItemCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseHelper;
 import se.rejjd.taskmanager.sql.DatabaseContract.ModelEntry;
 
-public class SqlWorkItemRepository implements WorkItemRepository{
+public final class SqlWorkItemRepository implements WorkItemRepository{
 
     private static SqlWorkItemRepository instance;
 
@@ -26,7 +24,6 @@ public class SqlWorkItemRepository implements WorkItemRepository{
         if(instance == null) {
             instance = new SqlWorkItemRepository(context);
         }
-
         return instance;
     }
 
@@ -52,7 +49,8 @@ public class SqlWorkItemRepository implements WorkItemRepository{
 
     @Override
     public WorkItem getWorkItem(String id) {
-        WorkItemCursorWrapper cursor = queryWorkItems(ModelEntry.WORK_ITEMS_COLUMN_NAME_ID + " = ?", new String[]{id});
+        WorkItemCursorWrapper cursor = queryWorkItems(ModelEntry.WORK_ITEMS_COLUMN_NAME_ID +
+                " = ?", new String[]{id});
         if(cursor.getCount() > 0){
             WorkItem workItem = cursor.getFirstWorkItem();
             cursor.close();
@@ -65,21 +63,19 @@ public class SqlWorkItemRepository implements WorkItemRepository{
 
     @Override
     public Long addWorkItem(WorkItem workItem) {
-//        TODO: IF PERSIST
         ContentValues cv = getContentValues(workItem);
         return database.insert(ModelEntry.WORK_ITEMS_TABLE_NAME, null, cv);
     }
 
     @Override
     public WorkItem updateWorkItem(WorkItem workItem) {
-//        TODO: UPDATE
         return null;
     }
 
     @Override
     public List<WorkItem> getWorkItemByStatus(String status) {
-        WorkItemCursorWrapper cursor = queryWorkItems(ModelEntry.WORK_ITEMS_COLUMN_NAME_STATUS + " = ?", new String []{status});
-
+        WorkItemCursorWrapper cursor = queryWorkItems(ModelEntry.WORK_ITEMS_COLUMN_NAME_STATUS +
+                " = ?", new String []{status});
         List<WorkItem> workItems = new ArrayList<>();
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -90,13 +86,14 @@ public class SqlWorkItemRepository implements WorkItemRepository{
         return workItems;
     }
 
-
     @Override
-    public List<WorkItem> getWorkItemsFromTeam(long teamId) {return null;}
+    public List<WorkItem> getWorkItemsFromTeam(long teamId) {
+        return null;}
 
     @Override
     public List<WorkItem> getWorkItemsByUser(String userId) {
-        WorkItemCursorWrapper cursor = queryWorkItems(ModelEntry.WORK_ITEMS_COLUMN_NAME_USER_ID + " = ?", new String []{userId});
+        WorkItemCursorWrapper cursor = queryWorkItems(ModelEntry.WORK_ITEMS_COLUMN_NAME_USER_ID +
+                " = ?", new String []{userId});
         Log.d("TEST", "getWorkItemsByUser: " + cursor);
         List<WorkItem> workItems = new ArrayList<>();
         if (cursor.getCount() > 0) {

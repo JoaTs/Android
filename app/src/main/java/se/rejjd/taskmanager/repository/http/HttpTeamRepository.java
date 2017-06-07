@@ -58,7 +58,6 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
                 "\"teamName\": \""+team.getTeamName()+"\","+
                 "\"activeTeam\": "+ team.isActiveTeam()+
                 "}";
-
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
                 @Override
@@ -87,7 +86,6 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
                         "\"teamName\": \""+team.getTeamName()+"\","+
                         "\"activeTeam\": "+ team.isActiveTeam()+
                         "}";
-
         try {
             HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
                 @Override
@@ -109,9 +107,8 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
 
             long id = jsonObject.getLong("id");
             String teamName = jsonObject.getString("teamName");
-            boolean activeTeam = jsonObject.getBoolean("activeTeam");
 
-            return new Team(id, teamName, activeTeam);
+            return new Team(id, teamName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -127,9 +124,8 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
 
                 long id = jsonObject.getLong("id");
                 String teamName = jsonObject.getString("teamName");
-                boolean activeTeam = jsonObject.getBoolean("activeTeam");
 
-                teamItems.add(new Team(id, teamName, activeTeam));
+                teamItems.add(new Team(id, teamName));
             }
 
             return teamItems;

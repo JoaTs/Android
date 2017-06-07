@@ -9,19 +9,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import se.rejjd.taskmanager.R;
-import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
-
 public final class WorkItemDetailFragment extends Fragment {
 
+    private static final String BUNDLE_WORKITEM = "bundleWorkItem";
     private UserRepository userRepository;
     private WorkItem workitem;
-    private static final String BUNDLE_WORKITEM = "bundle_Workitem";
 
     public static Fragment newInstance(long id) {
         Fragment fragment = new WorkItemDetailFragment();

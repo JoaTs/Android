@@ -3,7 +3,6 @@ package se.rejjd.taskmanager.repository;
 import java.util.List;
 
 import se.rejjd.taskmanager.model.Issue;
-import se.rejjd.taskmanager.model.Team;
 
 public interface IssueRepository {
 
@@ -14,6 +13,4 @@ public interface IssueRepository {
     Long addIssue(Issue issue);
 
     Issue updateIssue(Issue issue);
-
 }
-

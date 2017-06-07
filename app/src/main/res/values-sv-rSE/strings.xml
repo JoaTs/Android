@@ -24,5 +24,7 @@
         <item>Done</item>
         <item>Archived</item>
     </string-array>
+    <string name="enter_title_here">Skriv titel här</string>
+    <string name="search">Sök</string>
 </resources>
 

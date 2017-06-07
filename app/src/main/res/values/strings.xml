@@ -18,6 +18,8 @@
     <string name="task">Task</string>
     <string name="r">r</string>
     <string name="search_hint">Search</string>
+    <string name="enter_title_here">Enter title here!</string>
+    <string name="search">Search</string>
     <string-array name="workitem_status">
         <item>Unstarted</item>
         <item>Started</item>

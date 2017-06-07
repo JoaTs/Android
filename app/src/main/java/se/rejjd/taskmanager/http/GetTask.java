@@ -13,5 +13,4 @@ public final class GetTask extends AsyncTask<Void, Void, HttpResponse> {
     protected HttpResponse doInBackground(Void... params) {
         return httpHelperCommand.execute();
     }
-
 }

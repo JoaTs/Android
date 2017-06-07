@@ -6,11 +6,10 @@ public final class Team {
     private String teamName;
     private boolean activeTeam;
 
-    public Team(long id, String teamName, boolean activeTeam) {
+    public Team(long id, String teamName) {
         this.id = id;
         this.teamName = teamName;
         this.activeTeam = true;
-
     }
 
     public long getId() {
@@ -29,10 +28,6 @@ public final class Team {
         this.teamName = teamName;
     }
 
-    public void setActiveTeam(boolean activeTeam) {
-        this.activeTeam = activeTeam;
-    }
-
     @Override
     public String toString() {
         return "Team{" +
@@ -49,9 +44,8 @@ public final class Team {
 
         Team team = (Team) o;
 
-        if (id != team.id) return false;
-        if (activeTeam != team.activeTeam) return false;
-        return teamName != null ? teamName.equals(team.teamName) : team.teamName == null;
+        return id == team.id && activeTeam == team.activeTeam &&
+                (teamName != null ? teamName.equals(team.teamName) : team.teamName == null);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package se.rejjd.taskmanager.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,8 +27,7 @@ import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 
 public final class WorkItemUpdateFragment extends Fragment {
 
-    private static final String BUNDLE_WORKITEM_ID = "workitemId";
-    private UserRepository userRepository;
+    private static final String BUNDLE_WORKITEM_ID = "workItemId";
     private List<User> users;
     private String[] usernames;
     private int userSpinnerIndexOfOwner;
@@ -51,7 +49,7 @@ public final class WorkItemUpdateFragment extends Fragment {
         long id = getArguments().getLong(BUNDLE_WORKITEM_ID);
         workItemSql = workItemRepository.getWorkItem(String.valueOf(id));
 
-        userRepository = SqlUserRepository.getInstance(getContext());
+        UserRepository userRepository = SqlUserRepository.getInstance(getContext());
         users = userRepository.getUsers();
 
         usernames = new String[users.size()];
@@ -97,7 +95,7 @@ public final class WorkItemUpdateFragment extends Fragment {
         }
 
         userSpinner = (Spinner) view.findViewById(R.id.spinner_users);
-        ArrayAdapter<String> userAdapter = new ArrayAdapter(getContext(),
+        ArrayAdapter<String> userAdapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, usernames);
         userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userSpinner.setAdapter(userAdapter);
@@ -110,15 +108,16 @@ public final class WorkItemUpdateFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                User userSelected = getUserFromSpinnerSelectedItem();
-
                 final WorkItem workItemToUpdate = new WorkItem(workItemSql.getId(),editTextTitle.getText().toString(),editTextDescription.getText().toString(), getUserFromSpinnerSelectedItem().getId());
                 workItemToUpdate.setStatus(statusSpinner.getSelectedItem().toString().toUpperCase());
 
                 WorkItemRepository httpWorkItemRepository = new HttpWorkItemRepository();
                 httpWorkItemRepository.updateWorkItem(workItemToUpdate);
                 UserRepository httpUserRepository = new HttpUserRepository();
-                httpUserRepository.addUserToWorkItem(getUserFromSpinnerSelectedItem().getUserId(),workItemToUpdate.getId());
+                if(getUserFromSpinnerSelectedItem().getId() != workItemToUpdate.getUserId()){
+                    httpUserRepository.addUserToWorkItem(getUserFromSpinnerSelectedItem().getUserId(),workItemToUpdate.getId());
+                }
+
                 getActivity().setResult(Activity.RESULT_OK);
                 getActivity().finish();
             }
@@ -127,6 +126,6 @@ public final class WorkItemUpdateFragment extends Fragment {
     }
 
     public User getUserFromSpinnerSelectedItem(){
-     return   users.get(userSpinner.getSelectedItemPosition());
+     return users.get(userSpinner.getSelectedItemPosition());
     }
 }

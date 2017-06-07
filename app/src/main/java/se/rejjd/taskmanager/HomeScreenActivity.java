@@ -12,39 +12,32 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import se.rejjd.taskmanager.fragment.ChartFragment;
 import se.rejjd.taskmanager.fragment.WorkItemListFragment;
-import se.rejjd.taskmanager.fragment.WorkItemUpdateFragment;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
-import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.AppStatus;
 import se.rejjd.taskmanager.service.SqlLoader;
 
 public class HomeScreenActivity extends AppCompatActivity implements WorkItemListFragment.CallBacks, ChartFragment.CallBacks {
-    private static final String TAG = HomeScreenActivity.class.getSimpleName();
+    private static final String USER_ID = "userId";
     private static final int REQUEST_CODE_UPDATE_WORKITEM = 101;
-    public static final String USER_ID = "userId";
-    private static int REQUEST_CODE_ADD_WORKITEM = 100;
+    private static final int REQUEST_CODE_ADD_WORKITEM = 100;
+    private static final int REQUEST_CODE_SEARCH = 102;
     private SqlUserRepository sqlUserRepository;
-    private SqlLoader sqlLoader;
     private String userLoggedIn;
     private FragmentManager fm;
-    private User user;
     private ChartFragment chartFragment;
     private List<Fragment> fragments = new ArrayList<>();
     private ViewPager viewPager;
@@ -66,27 +59,30 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         userLoggedIn = bundle.getString(USER_ID);
 
         sqlUserRepository = SqlUserRepository.getInstance(this);
-        user = sqlUserRepository.getUser(userLoggedIn);
-        userLoggedIn = getIntent().getExtras().getString(USER_ID);
-        sqlLoader = new SqlLoader(this, userLoggedIn);
-        sqlLoader.updateSqlFromHttp();
-        fragments.add(WorkItemListFragment.newInstance("UNSTARTED"));
-        fragments.add(WorkItemListFragment.newInstance("STARTED"));
-        fragments.add(WorkItemListFragment.newInstance("DONE"));
-        fragments.add(WorkItemListFragment.newInstanceWithUserId(String.valueOf(user.getId())));
-        Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
+        User user = sqlUserRepository.getUser(userLoggedIn);
+        if (user != null) {
+            userLoggedIn = getIntent().getExtras().getString(USER_ID);
+            SqlLoader sqlLoader = new SqlLoader(this, userLoggedIn);
+            sqlLoader.updateSqlFromHttp();
+            fragments.add(WorkItemListFragment.newInstanceWithWorkItemStatus("UNSTARTED"));
+            fragments.add(WorkItemListFragment.newInstanceWithWorkItemStatus("STARTED"));
+            fragments.add(WorkItemListFragment.newInstanceWithWorkItemStatus("DONE"));
+            fragments.add(WorkItemListFragment.newInstanceWithUserId(String.valueOf(user.getId())));
+            Fragment fragment = fm.findFragmentById(R.id.workitem_list_container);
 
-        if (fragment == null) {
-            chartFragment = (ChartFragment) ChartFragment.newInstance();
-            fm.beginTransaction()
-                    .replace(R.id.chart_fragment, chartFragment)
-                    .commit();
+            if (fragment == null) {
+                chartFragment = (ChartFragment) ChartFragment.newInstance(userLoggedIn);
+                fm.beginTransaction()
+                        .replace(R.id.chart_fragment, chartFragment)
+                        .commit();
+            }
         }
 
         viewPager = (ViewPager) findViewById(R.id.vp_workitem_list);
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -109,10 +105,19 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
             @Override
             public void onClick(View v) {
                 if (AppStatus.isOnline(HomeScreenActivity.this)) {
-                    Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this, userLoggedIn);
-                    startActivityForResult(intent, REQUEST_CODE_ADD_WORKITEM);
+                    User user = sqlUserRepository.getUser(userLoggedIn);
+                    WorkItemRepository workItemRepository = SqlWorkItemRepository.getInstance(HomeScreenActivity.this);
+                    int workitemAmount = workItemRepository.getWorkItemsByUser(String.valueOf(user.getId())).size();
+                    if(workitemAmount < 5){
+                        Intent intent = AddWorkitemActivity.getIntent(HomeScreenActivity.this, userLoggedIn);
+                        startActivityForResult(intent, REQUEST_CODE_ADD_WORKITEM);
+                    }else{
+                        runAlert("You cannot have more than 5 workitems");
+
+                    }
+
                 } else {
-                    runAlert();
+                    runAlert("Please connect to the internet");
                 }
             }
         });
@@ -126,7 +131,6 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -143,13 +147,15 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         switch (item.getItemId()) {
             case R.id.team_view:
                 User user = sqlUserRepository.getUser(userLoggedIn);
-                long teamId = user.getTeamId();
-                Intent intent = DetailViewActivity.createIntentWithTeam(this, teamId, userLoggedIn);
-                startActivity(intent);
+                if (user != null) {
+                    long teamId = user.getTeamId();
+                    Intent intent = DetailViewActivity.createIntentWithTeam(this, teamId, userLoggedIn);
+                    startActivity(intent);
+                }
                 break;
             case R.id.search:
                 Intent intentSearch = SearchActivity.getIntent(this, userLoggedIn);
-                startActivityForResult(intentSearch, SearchActivity.SEARCH_RESULT);
+                startActivityForResult(intentSearch, REQUEST_CODE_SEARCH);
                 break;
         }
         return true;
@@ -157,17 +163,17 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
 
     @Override
     public void onListItemClicked(WorkItem workItem) {
-        Intent intent = DetailViewActivity.createIntentWithWorkItem(HomeScreenActivity.this, workItem);
+        Intent intent = DetailViewActivity.createIntentWithWorkItem(HomeScreenActivity.this, workItem.getId());
         startActivity(intent);
     }
 
     @Override
     public void onListItemLongClicked(WorkItem workItem) {
         if (AppStatus.isOnline(HomeScreenActivity.this)) {
-            Intent intent = DetailViewActivity.createIntentForUpdate(HomeScreenActivity.this, workItem);
+            Intent intent = DetailViewActivity.createIntentForUpdate(HomeScreenActivity.this, workItem.getId());
             startActivityForResult(intent, REQUEST_CODE_UPDATE_WORKITEM);
         } else {
-            runAlert();
+            runAlert("Please connect to the internet");
         }
     }
 
@@ -179,21 +185,18 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> fragments;
 
-        public ScreenSlidePagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+        ScreenSlidePagerAdapter(FragmentManager fm, List<Fragment> fragments) {
             super(fm);
             this.fragments = fragments;
         }
 
         @Override
         public int getItemPosition(Object object) {
-            Log.d(TAG, "getItemPosition: " + object);
             return super.getItemPosition(object);
-
         }
 
         @Override
         public Fragment getItem(int position) {
-            Log.d(TAG, "getItem: " + position);
             return fragments.get(position);
         }
 
@@ -203,9 +206,9 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         }
     }
 
-    private void runAlert() {
+    private void runAlert(String alertMessage) {
         AlertDialog.Builder alertWindow = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert);
-        alertWindow.setMessage("Please connect to the internet");
+        alertWindow.setMessage(alertMessage);
         alertWindow.setNeutralButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -227,10 +230,15 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
                 updateInformation();
             }
         }
+        if(requestCode == REQUEST_CODE_SEARCH){
+            if (resultCode == RESULT_OK){
+                updateInformation();
+            }
+        }
     }
 
     private void updateInformation() {
-        chartFragment = (ChartFragment) ChartFragment.newInstance();
+        chartFragment = (ChartFragment) ChartFragment.newInstance(userLoggedIn);
         fm.beginTransaction()
                 .replace(R.id.chart_fragment, chartFragment)
                 .commit();
@@ -238,4 +246,3 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         viewPager.setAdapter(pagerAdapter);
     }
 }
-
