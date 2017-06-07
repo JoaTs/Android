@@ -15,6 +15,11 @@ public final class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserView
 
     private List<User> users;
 
+    public void updateData(List<User> users){
+        this.users = users;
+        notifyDataSetChanged();
+    }
+
     public void setData(List<User> users){this.users = users;}
 
     @Override

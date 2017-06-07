@@ -6,9 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -61,29 +59,19 @@ public class TeamAddUserActivity extends AppCompatActivity {
             @Override
             public void onLongClickResult(User user) {
 
-                Toast.makeText(TeamAddUserActivity.this, "Added!!!", Toast.LENGTH_SHORT).show();
-//                if(user.getTeamId() == teamId) {
                     if(httpTeamRepository.addUserToTeam(String.valueOf(teamId), user.getUserId())){
-                          test();
+                        Toast.makeText(TeamAddUserActivity.this, "Added!!!", Toast.LENGTH_SHORT).show();
+                        updateUserListAdapter();
                     }
-//                }else{
-//
-//                    httpUserRepository.updateUser(user);
-//                }
-                test();
             }
         });
-        rvUsers.setAdapter(userListAdapter);
-        test();
+        updateUserListAdapter();
     }
 
-
-//    @Override
-    protected void test() {
-
-        super.onResume();
+    protected void updateUserListAdapter() {
         sqlLoader.updateSqlFromHttp();
         userListAdapter.updateAdapter(httpUserRepository.getUsers(),sqlUserRepository.getUsers());
+        rvUsers.setAdapter(userListAdapter);
 
     }
 
@@ -129,8 +117,6 @@ public class TeamAddUserActivity extends AppCompatActivity {
         public long getItemId(int position) {
             return users.get(position).getId();
         }
-
-
     }
 
     private static class UserViewHolder extends RecyclerView.ViewHolder  {
@@ -165,8 +151,6 @@ public class TeamAddUserActivity extends AppCompatActivity {
                     return true;
                 }
             });
-
-
         }
     }
 

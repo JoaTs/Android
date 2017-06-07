@@ -1,5 +1,6 @@
 package se.rejjd.taskmanager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +47,7 @@ public class TeamUpdateActivity extends AppCompatActivity {
 
                 teamFrDb.setTeamName(edTitle.getText().toString());
                 teamRepository.updateTeam(teamFrDb);
+                setResult(Activity.RESULT_OK);
                 finish();
             }
         });
@@ -63,11 +65,10 @@ public class TeamUpdateActivity extends AppCompatActivity {
                 Team teamFrDb = teamRepository.getTeam(String.valueOf(teamId));
 
                 teamRepository.addUserToTeam(String.valueOf(teamFrDb.getId()), userLoggedIn);
+                setResult(Activity.RESULT_OK);
                 finish();
             }
         });
-
-
 
     }
 

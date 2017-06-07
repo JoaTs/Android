@@ -1,5 +1,6 @@
 package se.rejjd.taskmanager.fragment;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public final class TeamDetailsFragment extends Fragment {
     private SqlLoader sqlLoader;
     private String userLoggedIn;
     private AppStatus appStatus;
+    private UserAdapter userAdapter;
 
     public static Fragment newInstance(long id, String userLoggedIn) {
         Fragment fragment = new TeamDetailsFragment();
@@ -105,7 +107,7 @@ public final class TeamDetailsFragment extends Fragment {
             }
         });
 
-        UserAdapter userAdapter = new UserAdapter();
+        userAdapter = new UserAdapter();
         userAdapter.setData(users);
         rvUsers.setAdapter(userAdapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -117,13 +119,18 @@ public final class TeamDetailsFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE_UPDATE_TEAM){
-            if(resultCode == RESULT_OK){
-
+            if(resultCode == Activity.RESULT_OK){
+                sqlLoader.updateSqlFromHttp();
+                team = teamRepository.getTeams().get(0);
+                tvTitle.setText(team.getTeamName());
+                userAdapter.updateData(userRepository.getUsers());
             }
         }
         if(requestCode == REQUEST_CODE_UPDATE_TEAM_WITH_USERS){
-            if(resultCode == RESULT_OK){
-
+            if(resultCode == Activity.RESULT_OK){
+                //TODO Update RecyclerView
+                sqlLoader.updateSqlFromHttp();
+                userAdapter.updateData(userRepository.getUsers());
             }
         }
     }
@@ -134,6 +141,7 @@ public final class TeamDetailsFragment extends Fragment {
         sqlLoader.updateSqlFromHttp();
         team = teamRepository.getTeams().get(0);
         tvTitle.setText(team.getTeamName());
+        userAdapter.updateData(userRepository.getUsers());
     }
 
     private void runAlert() {
