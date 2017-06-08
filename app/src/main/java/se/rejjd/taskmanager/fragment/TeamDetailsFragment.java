@@ -86,7 +86,7 @@ public final class TeamDetailsFragment extends Fragment {
                     Intent intent = TeamUpdateActivity.createUpdateTeamIntent(getContext(), team.getId(), userLoggedIn);
                     startActivityForResult(intent, REQUEST_CODE_UPDATE_TEAM);
                 } else {
-                    runAlert();
+                    runAlert("Please connect to the internet");
                 }
                 return false;
             }
@@ -102,7 +102,7 @@ public final class TeamDetailsFragment extends Fragment {
                     Intent intent = TeamAddUserActivity.createIntent(getContext(), team.getId(),userLoggedIn);
                     startActivityForResult(intent, REQUEST_CODE_UPDATE_TEAM_WITH_USERS);
                 } else {
-                    runAlert();
+                    runAlert("Please connect to the internet");
                 }
             }
         });
@@ -124,6 +124,8 @@ public final class TeamDetailsFragment extends Fragment {
                 team = teamRepository.getTeams().get(0);
                 tvTitle.setText(team.getTeamName());
                 userAdapter.updateData(userRepository.getUsers());
+            }else{
+                runAlert("Please contact your IT-support");
             }
         }
         if(requestCode == REQUEST_CODE_UPDATE_TEAM_WITH_USERS){
@@ -144,9 +146,9 @@ public final class TeamDetailsFragment extends Fragment {
         userAdapter.updateData(userRepository.getUsers());
     }
 
-    private void runAlert() {
+    private void runAlert(String message) {
         AlertDialog.Builder alertWindow = new AlertDialog.Builder(getContext(), R.style.Theme_AppCompat_Light_Dialog_Alert);
-        alertWindow.setMessage("Please connect to the internet");
+        alertWindow.setMessage(message);
         alertWindow.setNeutralButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

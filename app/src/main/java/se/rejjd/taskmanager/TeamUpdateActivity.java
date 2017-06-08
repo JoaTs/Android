@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import se.rejjd.taskmanager.model.Team;
-import se.rejjd.taskmanager.repository.TeamRepository;
 import se.rejjd.taskmanager.repository.http.HttpTeamRepository;
 
 public class TeamUpdateActivity extends AppCompatActivity {
@@ -64,12 +63,12 @@ public class TeamUpdateActivity extends AppCompatActivity {
                 long teamId = teamRepository.addTeam(teamCreate);
                 Team teamFrDb = teamRepository.getTeam(String.valueOf(teamId));
 
-                teamRepository.addUserToTeam(String.valueOf(teamFrDb.getId()), userLoggedIn);
-                setResult(Activity.RESULT_OK);
+                if (teamFrDb != null) {
+                    teamRepository.addUserToTeam(String.valueOf(teamFrDb.getId()), userLoggedIn);
+                    setResult(Activity.RESULT_OK);
+                }
                 finish();
             }
         });
-
     }
-
 }

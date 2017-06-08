@@ -30,7 +30,6 @@ public class TeamAddUserActivity extends AppCompatActivity {
     private RecyclerView rvUsers;
     private UserListAdapter userListAdapter;
     private SqlLoader sqlLoader;
-    private String userLoggedIn;
 
     public static Intent createIntent(Context context, long teamId,String userId) {
         Intent intent = new Intent(context, TeamAddUserActivity.class);
@@ -45,7 +44,7 @@ public class TeamAddUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_team_add_user);
 
         teamId = getIntent().getExtras().getLong(EXTRA_TEAM_ID);
-        userLoggedIn = getIntent().getExtras().getString(HomeScreenActivity.USER_ID);
+        String userLoggedIn = getIntent().getExtras().getString(HomeScreenActivity.USER_ID);
 
         httpTeamRepository = new HttpTeamRepository();
         httpUserRepository = new HttpUserRepository();
@@ -72,7 +71,6 @@ public class TeamAddUserActivity extends AppCompatActivity {
         sqlLoader.updateSqlFromHttp();
         userListAdapter.updateAdapter(httpUserRepository.getUsers(),sqlUserRepository.getUsers());
         rvUsers.setAdapter(userListAdapter);
-
     }
 
     private static class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
@@ -90,7 +88,7 @@ public class TeamAddUserActivity extends AppCompatActivity {
             this.onLongClickListener = onLongClickListener;
         }
 
-        public interface onLongClickListener {
+        interface onLongClickListener {
             void onLongClickResult(User user);
         }
 
@@ -126,7 +124,7 @@ public class TeamAddUserActivity extends AppCompatActivity {
         private List<User> inTeamList;
         private final TextView tvAdded;
 
-        public UserViewHolder(View itemView, List<User> inTeamList) {
+        UserViewHolder(View itemView, List<User> inTeamList) {
             super(itemView);
             tvFirstName = (TextView) itemView.findViewById(R.id.tv_firstName);
             tvLastName = (TextView) itemView.findViewById(R.id.tv_lastName);
@@ -135,7 +133,7 @@ public class TeamAddUserActivity extends AppCompatActivity {
             this.inTeamList = inTeamList;
         }
 
-        public void bindView(final User user, final UserListAdapter.onLongClickListener onLongClickListener) {
+        void bindView(final User user, final UserListAdapter.onLongClickListener onLongClickListener) {
             tvFirstName.setText(user.getFirstname());
             tvLastName.setText(user.getLastname());
             tvUsername.setText(user.getUsername());
