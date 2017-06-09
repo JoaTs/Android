@@ -2,6 +2,7 @@ package se.rejjd.taskmanager.service;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.List;
 
@@ -69,17 +70,28 @@ public final class SqlLoader {
     private void update(){
         User user = httpUserRepository.getUser(String.valueOf(userLoggedIn));
 
-        Team team = httpTeamRepository.getTeam(String.valueOf(user.getTeamId()));
-        sqlTeamRepository.addTeam(team);
+        if(sqlUserRepository.getUser(userLoggedIn) == null){
+            sqlUserRepository.addUser(user);
+        }
+        if(user.getTeamId() != 0){
+            Team team = httpTeamRepository.getTeam(String.valueOf(user.getTeamId()));
+            sqlTeamRepository.addTeam(team);
+            List<WorkItem> workitemList = httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId());
+            if(workitemList != null){
+                for(WorkItem w : workitemList){
+                    sqlWorkItemRepository.addWorkItem(w);
+                }
+            }
+            List<User> userList = httpUserRepository.getUsersFromTeam(user.getTeamId());
+            for(User u : userList){
+                Log.d("hej", "update: " + user);
+                if(u != user){
+                    sqlUserRepository.addUser(u);
+                }
+            }
 
-        List<WorkItem> workitemList = httpWorkItemRepository.getWorkItemsFromTeam(user.getTeamId());
-        for(WorkItem w : workitemList){
-            sqlWorkItemRepository.addWorkItem(w);
         }
 
-        List<User> userList = httpUserRepository.getUsersFromTeam(team.getId());
-        for(User u : userList){
-            sqlUserRepository.addUser(u);
-        }
+
     }
 }

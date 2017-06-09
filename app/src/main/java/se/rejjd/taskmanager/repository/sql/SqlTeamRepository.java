@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.rejjd.taskmanager.model.Team;
+import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.TeamRepository;
 import se.rejjd.taskmanager.repository.sql.wrapper.TeamCursorWrapper;
 import se.rejjd.taskmanager.sql.DatabaseContract;
@@ -68,6 +69,11 @@ public final class SqlTeamRepository implements TeamRepository {
     @Override
     public Team updateTeam(Team team) {
         return null;
+    }
+
+    @Override
+    public boolean addUserToTeam(User user, Team team) {
+        return false;
     }
 
     private ContentValues getContentValues(Team team) {

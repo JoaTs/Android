@@ -41,8 +41,8 @@
                     android:text="@string/users"
                     android:textSize="20sp"/>
 
-                <TextView
-                    android:id="@+id/tv_addmember"
+                <Button
+                    android:id="@+id/btn_addmember"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -51,7 +51,9 @@
                     android:textAllCaps="true"
                     android:textColor="@color/primary_orange"
                     android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:background="@null"
+                    />
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView

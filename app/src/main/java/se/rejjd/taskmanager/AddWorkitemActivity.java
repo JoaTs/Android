@@ -9,11 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
 import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
 import se.rejjd.taskmanager.repository.http.HttpUserRepository;
 import se.rejjd.taskmanager.repository.http.HttpWorkItemRepository;
+import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 
 public final class AddWorkitemActivity extends AppCompatActivity {
 
@@ -48,7 +50,9 @@ public final class AddWorkitemActivity extends AppCompatActivity {
                 String workitemTitle = title.getText().toString();
                 String workitemDescription = description.getText().toString();
 
-                WorkItem workItem = new WorkItem(-1L,workitemTitle,workitemDescription,Long.valueOf(userLoggedIn));
+                UserRepository sqlUserrepository = SqlUserRepository.getInstance(AddWorkitemActivity.this);
+                User user = sqlUserrepository.getUser(userLoggedIn);
+                WorkItem workItem = new WorkItem(-1L,workitemTitle,workitemDescription,user.getId());
                 long newId =  workItemRepository.addWorkItem(workItem);
                 userRepository.addUserToWorkItem(userLoggedIn, newId);
                 setResult(RESULT_OK);

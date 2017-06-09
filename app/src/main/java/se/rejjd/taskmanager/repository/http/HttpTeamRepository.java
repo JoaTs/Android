@@ -1,5 +1,7 @@
 package se.rejjd.taskmanager.repository.http;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +15,7 @@ import se.rejjd.taskmanager.http.HttpHelper;
 import se.rejjd.taskmanager.http.HttpHelperCommand;
 import se.rejjd.taskmanager.http.HttpResponse;
 import se.rejjd.taskmanager.model.Team;
+import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.repository.TeamRepository;
 
 public final class HttpTeamRepository extends HttpHelper implements TeamRepository{
@@ -99,6 +102,30 @@ public final class HttpTeamRepository extends HttpHelper implements TeamReposito
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean addUserToTeam(final User user, final Team team) {
+        final String body = "{\"user\":{"+
+                "\"id\": "+user.getId()+","+
+                "\"userId\": \""+user.getUserId()+"\"" +
+                "}," +
+                "\"team\" :{"+
+                "\"id\": "+team.getId()+
+                "}}";
+        try {
+            HttpResponse httpResponse = new GetTask(new HttpHelperCommand() {
+                @Override
+                public HttpResponse execute() {
+                    return put(URL + "teams/" + team.getId() + "/users/" + user.getId(), body);
+
+                }
+            }).execute().get();
+        }catch (InterruptedException | ExecutionException e){
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     private Team parserTeam(String jsonString) {

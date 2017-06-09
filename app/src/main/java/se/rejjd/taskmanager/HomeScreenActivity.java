@@ -12,19 +12,31 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import se.rejjd.taskmanager.fragment.ChartFragment;
 import se.rejjd.taskmanager.fragment.WorkItemListFragment;
+import se.rejjd.taskmanager.model.Team;
 import se.rejjd.taskmanager.model.User;
 import se.rejjd.taskmanager.model.WorkItem;
+import se.rejjd.taskmanager.repository.TeamRepository;
+import se.rejjd.taskmanager.repository.UserRepository;
 import se.rejjd.taskmanager.repository.WorkItemRepository;
+import se.rejjd.taskmanager.repository.http.HttpTeamRepository;
+import se.rejjd.taskmanager.repository.http.HttpUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlUserRepository;
 import se.rejjd.taskmanager.repository.sql.SqlWorkItemRepository;
 import se.rejjd.taskmanager.service.AppStatus;
@@ -57,13 +69,13 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         userLoggedIn = bundle.getString(USER_ID);
-
+        userLoggedIn = getIntent().getExtras().getString(USER_ID);
+        final SqlLoader sqlLoader = new SqlLoader(this, userLoggedIn);
+        sqlLoader.updateSqlFromHttp();
         sqlUserRepository = SqlUserRepository.getInstance(this);
-        User user = sqlUserRepository.getUser(userLoggedIn);
+        final User user = sqlUserRepository.getUser(userLoggedIn);
+        Log.d("hej", "onCreate: " + user);
         if (user != null) {
-            userLoggedIn = getIntent().getExtras().getString(USER_ID);
-            SqlLoader sqlLoader = new SqlLoader(this, userLoggedIn);
-            sqlLoader.updateSqlFromHttp();
             fragments.add(WorkItemListFragment.newInstanceWithWorkItemStatus("UNSTARTED"));
             fragments.add(WorkItemListFragment.newInstanceWithWorkItemStatus("STARTED"));
             fragments.add(WorkItemListFragment.newInstanceWithWorkItemStatus("DONE"));
@@ -76,6 +88,28 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
                         .replace(R.id.chart_fragment, chartFragment)
                         .commit();
             }
+        }
+        if(user.getTeamId() == 0){
+            AlertDialog.Builder alertTeam = new AlertDialog.Builder(this,R.style.Theme_AppCompat_Light_Dialog_Alert);
+            final EditText editText = new EditText(this);
+            alertTeam.setMessage("You don't seem to be in a team want to create one");
+            editText.setInputType(InputType.TYPE_CLASS_TEXT);
+            editText.setHint("Team Name");
+            alertTeam.setView(editText);
+            alertTeam.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Team team = new Team(-1,editText.getText().toString());
+                    TeamRepository teamRepository = new HttpTeamRepository();
+                    Log.d("hej", "onClick: " + team);
+                    long newTeamId = teamRepository.addTeam(team);
+                    Team newTeam = new Team(newTeamId,team.getTeamName());
+                    teamRepository.addUserToTeam(user,newTeam);
+                    updateInformation();
+                }
+            });
+
+            alertTeam.show();
         }
 
         viewPager = (ViewPager) findViewById(R.id.vp_workitem_list);
@@ -157,6 +191,11 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
                 Intent intentSearch = SearchActivity.getIntent(this, userLoggedIn);
                 startActivityForResult(intentSearch, REQUEST_CODE_SEARCH);
                 break;
+            case R.id.sign_out:
+                Intent intentSignout = SignInActivity.getSignInIntent(this,true);
+                startActivity(intentSignout);
+                break;
+
         }
         return true;
     }

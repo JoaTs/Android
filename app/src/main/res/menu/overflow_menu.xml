@@ -6,4 +6,9 @@
         android:title="@string/team_details"
         app:showAsAction="never"
         android:id="@+id/team_view"/>
+    <item
+        android:title="@string/sign_out"
+        app:showAsAction="never"
+        android:id="@+id/sign_out"
+        />
 </menu>
