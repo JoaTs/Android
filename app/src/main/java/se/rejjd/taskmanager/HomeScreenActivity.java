@@ -65,7 +65,7 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
         return intent;
     }
 
-    @Override
+    @Override  //TODO Get GoogleApiClient
     protected void onStart() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -170,7 +170,6 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
     @Override
     protected void onResume() {
         super.onResume();
-        //TODO Update WorkItemAdapter
 //        WorkItemListFragment.updateAdapter();
 
         new SqlLoader(this, userLoggedIn).updateSqlFromHttp();
@@ -205,14 +204,14 @@ public class HomeScreenActivity extends AppCompatActivity implements WorkItemLis
             case R.id.team_view:
                 User user = sqlUserRepository.getUser(userLoggedIn);
                 long teamId = user.getTeamId();
-                Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId, userLoggedIn);//TODO
+                Intent intent = DetailViewActivity.createIntentWithTeam(this,teamId, userLoggedIn);
                 startActivity(intent);
                 break;
-            case R.id.log_out:
+            case R.id.log_out:  //TODO LogOut
                 Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        Intent intentSignIn = SignInActivity.getIntent(HomeScreenActivity.this);//TODO
+                        Intent intentSignIn = SignInActivity.getIntent(HomeScreenActivity.this);
                         startActivity(intentSignIn);
                         finish();
                     }
